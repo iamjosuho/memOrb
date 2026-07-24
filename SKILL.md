@@ -14,7 +14,7 @@ description: Agent-Agnostic Second Brain memory framework inspired by cognitive 
 `memorb` provides a gateway router that delegates operations to modular core and extension skills.
 
 ### Key Features
-- **Gateway Hub**: Entry router (`.claude/skills/memorb/SKILL.md`) for all note management.
+- **Gateway Hub**: Entry router (`skills/memorb/SKILL.md`) for all note management.
 - **Vault Conventions**: Standardized directory structure (`memorbs/`, `Inbox/`, `DailyNotes/`), frontmatter metadata, and wiki-linking rules.
 - **Memory Lifecycle**: Ingestion (`memorb-ingest`), Querying (`memorb-query`), Health check (`memorb-lint`), and Archiving (`memorb-forgetter`).
 - **Rituals**: Daily Notes logging (`daily-note`), Inbox Triage (`inbox-triage`), Weekly Retros (`weekly-retro`), and Session Closeout (`session-closeout`).
@@ -22,20 +22,27 @@ description: Agent-Agnostic Second Brain memory framework inspired by cognitive 
 ## Skill Routing Directory
 
 For detailed skill execution protocols, refer to:
-- **Gateway Router**: [memorb Gateway](file://./.claude/skills/memorb/SKILL.md)
-- **Core Skills**: [Core Skills Index](file://./.claude/skills/core/)
-  - [vault-conventions](file://./.claude/skills/core/vault-conventions/SKILL.md)
-  - [born](file://./.claude/skills/core/born/SKILL.md)
-  - [daily-note](file://./.claude/skills/core/daily-note/SKILL.md)
-  - [inbox-triage](file://./.claude/skills/core/inbox-triage/SKILL.md)
-  - [area-creation](file://./.claude/skills/core/area-creation/SKILL.md)
-  - [weekly-retro](file://./.claude/skills/core/weekly-retro/SKILL.md)
-  - [memorb-ingest](file://./.claude/skills/core/memorb-ingest/SKILL.md)
-  - [memorb-query](file://./.claude/skills/core/memorb-query/SKILL.md)
-  - [memorb-lint](file://./.claude/skills/core/memorb-lint/SKILL.md)
-  - [memorb-forgetter](file://./.claude/skills/core/memorb-forgetter/SKILL.md)
-  - [session-closeout](file://./.claude/skills/core/session-closeout/SKILL.md)
-  - [writing-memorb-skills](file://./.claude/skills/core/writing-memorb-skills/SKILL.md)
+- **Gateway Router**: [memorb Gateway](file://./skills/memorb/SKILL.md)
+- **Core Skills**: [Core Skills Index](file://./skills/core/)
+  - [vault-conventions](file://./skills/core/vault-conventions/SKILL.md)
+  - [born](file://./skills/core/born/SKILL.md)
+  - [daily-note](file://./skills/core/daily-note/SKILL.md)
+  - [inbox-triage](file://./skills/core/inbox-triage/SKILL.md)
+  - [area-creation](file://./skills/core/area-creation/SKILL.md)
+  - [weekly-retro](file://./skills/core/weekly-retro/SKILL.md)
+  - [memorb-ingest](file://./skills/core/memorb-ingest/SKILL.md)
+  - [memorb-query](file://./skills/core/memorb-query/SKILL.md)
+  - [memorb-lint](file://./skills/core/memorb-lint/SKILL.md)
+  - [memorb-forgetter](file://./skills/core/memorb-forgetter/SKILL.md)
+  - [session-closeout](file://./skills/core/session-closeout/SKILL.md)
+  - [writing-memorb-skills](file://./skills/core/writing-memorb-skills/SKILL.md)
+- **Extension Skills**: [Extension Skills Index](file://./skills/extensions/)
+  - [business-card-ingestion](file://./skills/extensions/business-card-ingestion/SKILL.md)
+  - [m365-meeting-note](file://./skills/extensions/m365-meeting-note/SKILL.md)
+  - [memorb-domain-query](file://./skills/extensions/memorb-domain-query/SKILL.md)
+  - [obsidian-cli](file://./skills/extensions/obsidian-cli/SKILL.md)
+  - [recording-transcription](file://./skills/extensions/recording-transcription/SKILL.md)
+  - [weekly-report](file://./skills/extensions/weekly-report/SKILL.md)
 
 ## Quick Start (via npx skills)
 

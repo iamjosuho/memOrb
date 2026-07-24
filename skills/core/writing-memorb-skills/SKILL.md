@@ -15,7 +15,7 @@ description: Meta skill：新增或修改本 vault 的任何 sub-skill 時使用
 
 ## Skill 結構規範
 
-1. **位置**：`.claude/skills/{kebab-case-name}/SKILL.md`（扁平，不巢狀）
+1. **位置**：`skills/{kebab-case-name}/SKILL.md`（扁平，不巢狀）
 2. **frontmatter**：只有 `name` 與 `description` 兩欄
    - `description` 必含：一句話用途 + `觸發詞：...` + 前置依賴（若有）
    - 觸發詞用使用者實際會說的話，繁中為主
@@ -37,7 +37,7 @@ description: Meta skill：新增或修改本 vault 的任何 sub-skill 時使用
 ## 測試
 
 - 新 skill 寫完後，模擬一次觸發情境走一遍步驟，確認路徑與指令可執行
-- 下次 lint 時檢查：路由表與 `.claude/skills/` 目錄是否一致
+- 下次 lint 時檢查：路由表與 `skills/` 目錄是否一致
 
 ## Red Flags
 

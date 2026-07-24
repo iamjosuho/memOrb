@@ -62,7 +62,7 @@ memorbs/
 ```text
 memorb/
 ├── plugin.json               # Marketplace plugin manifest
-├── .claude/skills/           # Executable Agent Skills (memorb router, born, ingest, query, lint, forgetter)
+├── skills/                   # Executable Agent Skills (memorb router, born, ingest, query, lint, forgetter, extensions)
 ├── fixtures/                 # Clean, de-identified initial templates and sample data
 ├── scripts/                  # Developer sandbox reset & utility scripts
 ├── tests/                    # Automated repo verification test suite
@@ -90,16 +90,16 @@ Add via the Claude Code plugin manager or copy skills into your workspace:
 claude plugin add iamjosuho/memorb
 
 # OR Manual Workspace Copy
-mkdir -p .claude/skills
-cp -r path/to/memorb/.claude/skills/* .claude/skills/
+mkdir -p skills
+cp -r path/to/memorb/skills/* skills/
 ```
 
 #### Option C: Cursor / Windsurf / VS Code Agent Assistants
-Copy the memOrb skill suite into your repository's `.claude/skills/` directory and reference `SKILL.md` in your `.cursorrules` or `.windsurfrules`:
+Copy the memOrb skill suite into your repository's `skills/` (or `.claude/skills/`) directory and reference `SKILL.md` in your `.cursorrules` or `.windsurfrules`:
 ```bash
 # Copy skill definitions into your project
-mkdir -p .claude/skills
-cp -r path/to/memorb/.claude/skills/* .claude/skills/
+mkdir -p skills
+cp -r path/to/memorb/skills/* skills/
 ```
 
 #### Option D: Git Submodule (Project Workspace Integration)

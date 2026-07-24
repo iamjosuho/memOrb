@@ -20,8 +20,8 @@ Before performing any file operation:
 4. Load multiple sub-skills if needed (e.g., transcript processing = `m365-meeting-note` + `memorb-ingest` + `daily-note`).
 
 ## Skill Router Table
-Core skills reside in `.claude/skills/core/{name}/SKILL.md`.
-Extensions reside in `.claude/skills/extensions/{name}/SKILL.md`.
+Core skills reside in `skills/core/{name}/SKILL.md`.
+Extensions reside in `skills/extensions/{name}/SKILL.md`.
 
 ### Core Skills (`memorb-core`)
 | Sub-skill | Location | Trigger / Scenario |
@@ -51,11 +51,11 @@ Extensions reside in `.claude/skills/extensions/{name}/SKILL.md`.
 | **obsidian-cli** | `extensions/obsidian-cli` | Obsidian CLI commands (requires app running) |
 
 ## Extension Interactive Installation & Fallback Protocol
-If a scenario calls for an extension (e.g. business card OCR, M365 meeting transcript processing), check if `.claude/skills/extensions/{name}/SKILL.md` exists:
+If a scenario calls for an extension (e.g. business card OCR, M365 meeting transcript processing), check if `skills/extensions/{name}/SKILL.md` exists:
 1. **Installed**: Read the extension's `SKILL.md` and execute its specialized workflow.
 2. **Not Installed (Interactive Installation)**:
    - Ask the user: `"💡 Notice: The '{extension-name}' extension provides enhanced domain formatting for this task. Would you like me to install it for you?"`
-   - **User Approves**: Install the extension into `.claude/skills/extensions/{extension-name}/` and execute its specialized workflow immediately.
+   - **User Approves**: Install the extension into `skills/extensions/{extension-name}/` and execute its specialized workflow immediately.
    - **User Declines / Skip**: Proceed with the graceful fallback to core `memorb-ingest` or `memorb-query`.
 
 ## Red Flags
