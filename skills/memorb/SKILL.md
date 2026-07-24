@@ -1,6 +1,6 @@
 ---
 name: memorb
-description: Gateway skill for Second Brain operations (read/write notes, Daily Notes, Inbox, meetings, business cards, memory wiki, reports, closeout). Read first to route to appropriate sub-skills.
+description: Gateway skill for Second Brain operations (read/write notes, Daily Notes, OrbTrack, meetings, business cards, memory wiki, reports, closeout). Read first to route to appropriate sub-skills.
 ---
 
 # Memorb (Gateway Skill)
@@ -29,7 +29,7 @@ Extensions reside in `skills/extensions/{name}/SKILL.md`.
 | **vault-conventions** | `core/vault-conventions` | Base layer: paths, directory structure (`memorbs/`), naming, frontmatter, templates. Required for ALL write ops. |
 | **memorb-born** | `core/memorb-born` | Vault initialization (Phase 0), persona seed setup, CLAUDE.md generation, or `/memorb-born` reset. |
 | **daily-note** | `core/daily-note` | Create/update Daily Notes, journal entries, quick logs |
-| **inbox-triage** | `core/inbox-triage` | Process Inbox, PARA organization, note archiving |
+| **orbtrack-triage** | `core/orbtrack-triage` | Process OrbTrack (`memorbs/HQ/OrbTrack/`), PARA organization, note archiving |
 | **area-creation** | `core/area-creation` | Create new Area/Long-term goal: discuss structure before file creation |
 | **weekly-retro** | `core/weekly-retro` | Weekly review/summary (`WeeklyRetro/YYYY-Www`) |
 | **memorb-ingest** | `core/memorb-ingest` | Ingest raw materials (transcripts, articles, PDFs) into `memorbs/` wiki |
@@ -61,7 +61,7 @@ If a scenario calls for an extension (e.g. business card OCR, M365 meeting trans
 ## Red Flags
 Stop and revert if rationalizing any of the following:
 - *"It's simple, no need to read sub-skills"* → Router rules are mandatory for all file ops.
-- *"Place notes in root temporarily"* → New notes belong in `Inbox/` or PARA folders.
+- *"Place notes in root temporarily"* → New notes belong in `memorbs/HQ/OrbTrack/` or PARA folders.
 - *"I recall the rules without reading"* → Always re-read SKILL.md as rules evolve.
 - *"Skip closeout this time"* → `session-closeout` is a mandatory ritual for every session.
 

@@ -5,7 +5,7 @@
   "main": "plugin.json",
   "scripts": {
     "lint": "node scripts/lint-skills.js",
-    "test": "bash scripts/reset-sandbox.sh --empty",
+    "clean": "bash scripts/reset-sandbox.sh --empty",
     "reset-sandbox": "bash scripts/reset-sandbox.sh"
   },
   "keywords": [

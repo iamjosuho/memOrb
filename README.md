@@ -30,22 +30,25 @@ memOrb structures your memory vault inside `memorbs/` as a modular, self-maintai
 
 ```text
 memorbs/
-├── HQ/                       # Headquarters: Persona, Active Context & Core Orbs
-│   ├── Core.md               # Dynamic persona & active working memory cache
-│   └── Belief.md             # Foundational values, principles & identity anchors
+├── HQ/                       # Headquarters: Persona, Identity & Core/Belief Orbs
+│   ├── persona.md            # AI advisor tone & role (Hot Cache, always read)
+│   ├── identity.md           # Who the user is: background, goals, key relationships (Hot Cache, always read)
+│   ├── Core/                 # Core Memory orbs — one formative experience per file
+│   ├── Belief/                # Belief orbs — values/principles distilled from Core orbs
+│   └── OrbTrack/             # Fast capture & pending triage
 ├── Islands/                  # Islands of Growth (Structured Wiki Layer)
 │   ├── people/               # Key collaborators & relationships
 │   ├── projects/             # Active & completed milestone tracks
 │   ├── context/              # Environmental parameters & domain rules
-│   └── orgs/                 # Organizations & team dynamics
+│   └── organizations/        # Organizations & team dynamics
 └── Dump/                     # Memory Dump & Archival (MUSTY Collection)
-    └── archive/              # Stale, superseded, or pruned memories
+    └── {category}/           # Stale, superseded, or pruned memories
 ```
 
 ### 🏛️ The Five Cognitive Pillars
 
-1. **Headquarters & Core Orbs (`memorbs/HQ/`)**  
-   The central control room housing hot-cache working context (`Core.md`) and core belief anchors (`Belief.md`).
+1. **Headquarters, Identity & Core Orbs (`memorbs/HQ/`)**  
+   The central control room: `persona.md` (AI advisor tone) and `identity.md` (who the user is) are small, always-read Hot Cache files, while `Core/` and `Belief/` hold individual orb files — formative experiences and the values distilled from them — plus the `OrbTrack/` capture zone where new inputs land before triage.
 2. **Islands of Growth (`memorbs/Islands/`)**  
    Dedicated wiki islands categorizing knowledge across People, Projects, Context, and Organizations for instant agent recall.
 3. **Memory Dump & MUSTY Archiving (`memorbs/Dump/`)**  
@@ -53,7 +56,7 @@ memorbs/
 4. **Authority Control & Circulation Tracking**  
    Silent metadata backfills (`last_recalled`, `recall_count`, and `aliases: [...]`) ensure alias mapping and decay metrics across all memory queries.
 5. **Non-Invasive Vault Namespace**  
-   Strictly isolated within `memorbs/`, leaving your existing Obsidian folder structure (such as PARA) untouched and non-polluted.
+   Strictly isolated within `memorbs/`, leaving your existing Obsidian folder structure and conventions untouched and non-polluted.
 
 ---
 
@@ -64,8 +67,7 @@ memorb/
 ├── plugin.json               # Marketplace plugin manifest
 ├── skills/                   # Executable Agent Skills (memorb router, memorb-born, ingest, query, lint, forgetter, extensions)
 ├── fixtures/                 # Clean, de-identified initial templates and sample data
-├── scripts/                  # Developer sandbox reset & utility scripts
-├── tests/                    # Automated repo verification test suite
+├── scripts/                  # Developer sandbox reset & skill-linting utilities
 └── sandbox/                  # Git-ignored local agent testing directory
 ```
 
@@ -116,13 +118,13 @@ In your agent chat (Claude Code, Antigravity, Cursor, etc.), run:
 ```text
 "Run the /memorb-born skill to set up my memorb Memory Vault."
 ```
-The agent will launch an interactive 3-5 question onboarding prompt to construct `memorbs/HQ/Core.md` and initialize your Islands.
+The agent will launch an interactive 3-5 question onboarding prompt to construct `memorbs/HQ/persona.md` and `memorbs/HQ/identity.md`, and initialize your `Core/`, `Belief/`, and `Islands/` folders.
 
 ---
 
 ## 🛠️ Local Developer Sandbox Testing
 
-To test skills locally without polluting git commits with temporary test notes:
+To try out skills locally without polluting git commits with temporary test notes:
 
 ```bash
 # 1a. Reset sandbox with sample fixtures (for testing query/lint/ingest)
@@ -131,9 +133,11 @@ bash scripts/reset-sandbox.sh
 # 1b. Reset sandbox as COMPLETELY EMPTY (for testing /memorb-born initialization from zero)
 bash scripts/reset-sandbox.sh --empty
 
-# 2. Run verification test suite
-node tests/run-tests.js
+# 2. Lint all SKILL.md files and verify plugin.json references are consistent
+node scripts/lint-skills.js
 ```
+
+> Note: there is currently no automated test suite — the linter above only checks skill file structure and routing consistency, not runtime behavior. Verifying a skill's actual behavior still requires walking through it manually in an agent session.
 
 ---
 
