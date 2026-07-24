@@ -1,0 +1,24 @@
+{
+  "name": "memorb-skill-set",
+  "version": "1.0.0",
+  "description": "Agent-Agnostic Second Brain memory framework inspired by Inside Out world-building and library science.",
+  "author": "iamjosuho",
+  "license": "MIT",
+  "keywords": ["memory", "second-brain", "inside-out", "obsidian", "agent-skill"],
+  "homepage": "https://github.com/iamjosuho/memorb-skill-set",
+  "skills": [
+    "./.claude/skills/memorb/SKILL.md",
+    "./.claude/skills/core/born/SKILL.md",
+    "./.claude/skills/core/daily-note/SKILL.md",
+    "./.claude/skills/core/inbox-triage/SKILL.md",
+    "./.claude/skills/core/area-creation/SKILL.md",
+    "./.claude/skills/core/weekly-retro/SKILL.md",
+    "./.claude/skills/core/memory-ingest/SKILL.md",
+    "./.claude/skills/core/memory-query/SKILL.md",
+    "./.claude/skills/core/memory-lint/SKILL.md",
+    "./.claude/skills/core/memorb-forgetter/SKILL.md",
+    "./.claude/skills/core/session-closeout/SKILL.md",
+    "./.claude/skills/core/vault-conventions/SKILL.md",
+    "./.claude/skills/core/writing-memorb-skills/SKILL.md"
+  ]
+}
