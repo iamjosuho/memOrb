@@ -1,11 +1,11 @@
 {
-  "name": "memorb-skill-set",
+  "name": "memorb",
   "version": "1.0.0",
   "description": "Agent-Agnostic Second Brain memory framework inspired by Inside Out world-building and library science.",
   "author": "iamjosuho",
   "license": "MIT",
   "keywords": ["memory", "second-brain", "inside-out", "obsidian", "agent-skill"],
-  "homepage": "https://github.com/iamjosuho/memorb-skill-set",
+  "homepage": "https://github.com/iamjosuho/memorb",
   "skills": [
     "./.claude/skills/memorb/SKILL.md",
     "./.claude/skills/core/born/SKILL.md",

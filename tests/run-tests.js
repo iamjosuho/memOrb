@@ -32,7 +32,7 @@ assert(fs.existsSync(pluginPath), 'plugin.json should exist');
 if (fs.existsSync(pluginPath)) {
   try {
     const pluginData = JSON.parse(fs.readFileSync(pluginPath, 'utf8'));
-    assert(pluginData.name === 'memorb-skill-set', 'plugin.json name should be memorb-skill-set');
+    assert(pluginData.name === 'memorb', 'plugin.json name should be memorb');
     assert(Array.isArray(pluginData.skills) && pluginData.skills.length > 0, 'plugin.json should contain non-empty skills array');
   } catch (e) {
     assert(false, `plugin.json JSON parse error: ${e.message}`);

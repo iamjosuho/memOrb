@@ -21,7 +21,7 @@
 ## 📁 Repository Directory Structure
 
 ```text
-memorb-skill-set/
+memorb/
 ├── plugin.json               # Marketplace plugin manifest
 ├── .claude/skills/           # Executable Agent Skills (memorb router, born, ingest, query, lint, forgetter)
 ├── fixtures/                 # Clean, de-identified initial templates and sample data
@@ -37,7 +37,7 @@ memorb-skill-set/
 ### 1. Installation
 Copy `.claude/skills/` into your project root, or install via plugin CLI:
 ```bash
-agy plugin add iamjosuho/memorb-skill-set
+agy plugin add iamjosuho/memorb
 ```
 
 ### 2. Initialization (`/born`)

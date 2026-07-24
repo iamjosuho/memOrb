@@ -16,7 +16,7 @@ describe('memOrb Skill Set Open Source Repo Structure Tests', () => {
     const pluginPath = path.join(REPO_ROOT, 'plugin.json');
     expect(fs.existsSync(pluginPath)).toBe(true);
     const pluginData = JSON.parse(fs.readFileSync(pluginPath, 'utf8'));
-    expect(pluginData.name).toBe('memorb-skill-set');
+    expect(pluginData.name).toBe('memorb');
     expect(Array.isArray(pluginData.skills)).toBe(true);
     expect(pluginData.skills.length).toBeGreaterThan(0);
   });
