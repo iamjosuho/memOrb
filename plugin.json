@@ -8,7 +8,7 @@
   "homepage": "https://github.com/iamjosuho/memorb",
   "skills": [
     "./skills/memorb/SKILL.md",
-    "./skills/core/born/SKILL.md",
+    "./skills/core/memorb-born/SKILL.md",
     "./skills/core/daily-note/SKILL.md",
     "./skills/core/inbox-triage/SKILL.md",
     "./skills/core/area-creation/SKILL.md",

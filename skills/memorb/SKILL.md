@@ -27,7 +27,7 @@ Extensions reside in `skills/extensions/{name}/SKILL.md`.
 | Sub-skill | Location | Trigger / Scenario |
 | :--- | :--- | :--- |
 | **vault-conventions** | `core/vault-conventions` | Base layer: paths, directory structure (`memorbs/`), naming, frontmatter, templates. Required for ALL write ops. |
-| **born** | `core/born` | Vault initialization (Phase 0), persona seed setup, CLAUDE.md generation, or `/born` reset. |
+| **memorb-born** | `core/memorb-born` | Vault initialization (Phase 0), persona seed setup, CLAUDE.md generation, or `/memorb-born` reset. |
 | **daily-note** | `core/daily-note` | Create/update Daily Notes, journal entries, quick logs |
 | **inbox-triage** | `core/inbox-triage` | Process Inbox, PARA organization, note archiving |
 | **area-creation** | `core/area-creation` | Create new Area/Long-term goal: discuss structure before file creation |

@@ -62,7 +62,7 @@ memorbs/
 ```text
 memorb/
 ├── plugin.json               # Marketplace plugin manifest
-├── skills/                   # Executable Agent Skills (memorb router, born, ingest, query, lint, forgetter, extensions)
+├── skills/                   # Executable Agent Skills (memorb router, memorb-born, ingest, query, lint, forgetter, extensions)
 ├── fixtures/                 # Clean, de-identified initial templates and sample data
 ├── scripts/                  # Developer sandbox reset & utility scripts
 ├── tests/                    # Automated repo verification test suite
@@ -110,11 +110,11 @@ git submodule add https://github.com/iamjosuho/memorb.git .claude/skills/memorb-
 
 ---
 
-### 🐣 2. Vault Initialization (`/born`)
+### 🐣 2. Vault Initialization (`/memorb-born`)
 
 In your agent chat (Claude Code, Antigravity, Cursor, etc.), run:
 ```text
-"Run the /born skill to set up my memorb Memory Vault."
+"Run the /memorb-born skill to set up my memorb Memory Vault."
 ```
 The agent will launch an interactive 3-5 question onboarding prompt to construct `memorbs/HQ/Core.md` and initialize your Islands.
 
@@ -128,7 +128,7 @@ To test skills locally without polluting git commits with temporary test notes:
 # 1a. Reset sandbox with sample fixtures (for testing query/lint/ingest)
 bash scripts/reset-sandbox.sh
 
-# 1b. Reset sandbox as COMPLETELY EMPTY (for testing /born initialization from zero)
+# 1b. Reset sandbox as COMPLETELY EMPTY (for testing /memorb-born initialization from zero)
 bash scripts/reset-sandbox.sh --empty
 
 # 2. Run verification test suite

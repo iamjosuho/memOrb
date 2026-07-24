@@ -10,7 +10,7 @@ rm -rf "$REPO_ROOT/sandbox"
 
 if [ "$1" == "--empty" ] || [ "$1" == "-e" ]; then
   mkdir -p "$REPO_ROOT/sandbox"
-  echo "✅ Empty Sandbox created cleanly! Ready to test /born skill initialization from scratch."
+  echo "✅ Empty Sandbox created cleanly! Ready to test /memorb-born skill initialization from scratch."
 else
   mkdir -p "$REPO_ROOT/sandbox/memorbs"
   echo "📋 Copying fixtures to sandbox/memorbs..."

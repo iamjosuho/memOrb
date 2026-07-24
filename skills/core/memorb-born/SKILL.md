@@ -1,9 +1,9 @@
 ---
-name: born
-description: "Phase 0 Vault Initialization Skill: setup user identity, AI advisor persona, communication preferences, and core vault structure into CLAUDE.md. Triggered when vault setup is missing, user requests re-initialization, or running /born."
+name: memorb-born
+description: "Phase 0 Vault Initialization Skill: setup user identity, AI advisor persona, communication preferences, and core vault structure into CLAUDE.md. Triggered when vault setup is missing, user requests re-initialization, or running /memorb-born."
 ---
 
-# Born Skill (Vault Initialization & Persona Setup)
+# Memorb Born Skill (Vault Initialization & Persona Setup)
 
 > **Purpose**: Establish user identity seed, AI manager/career advisor persona, and vault settings without locking into a specific Agent framework.
 
