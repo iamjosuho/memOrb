@@ -25,7 +25,7 @@ description: "產出每週回顧。觸發詞：週回顧、每週總結、weekly
    - 專案進度變化（對照 memorbs/projects/）
    - 洞見與學習
    - 下週意圖
-4. 回顧中發現的永續性洞見 → 回填 `memorbs/`（見 `memory-query` 回填規則）
-5. 主動建議：週回顧是跑 `memory-lint` 的好時機
+4. 回顧中發現的永續性洞見 → 回填 `memorbs/`（見 `memorb-query` 回填規則）
+5. 主動建議：週回顧是跑 `memorb-lint` 的好時機
 
 *(待與使用者討論固化：回顧的固定步驟與 KPI 區塊)*

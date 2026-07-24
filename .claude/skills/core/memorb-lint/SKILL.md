@@ -1,9 +1,9 @@
 ---
-name: memory-lint
+name: memorb-lint
 description: "Wiki Lint 工作流：memory 健檢，找出矛盾、過期、孤兒頁、缺頁、缺連結。觸發詞：整理 memory、檢查第二大腦、健檢、memory 有沒有要更新的。週回顧時主動建議執行。"
 ---
 
-# Memory Lint Skill
+# Memorb Lint Skill
 
 ## 動作順序
 

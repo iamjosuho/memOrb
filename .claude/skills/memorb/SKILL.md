@@ -17,7 +17,7 @@ Before performing any file operation:
 1. Read this gateway file.
 2. Read `SKILL.md` for **every matching sub-skill** in the routing table below.
 3. All write operations must adhere to `vault-conventions` (paths, naming, frontmatter).
-4. Load multiple sub-skills if needed (e.g., transcript processing = `m365-meeting-note` + `memory-ingest` + `daily-note`).
+4. Load multiple sub-skills if needed (e.g., transcript processing = `m365-meeting-note` + `memorb-ingest` + `daily-note`).
 
 ## Skill Router Table
 Core skills reside in `.claude/skills/core/{name}/SKILL.md`.
@@ -32,9 +32,9 @@ Extensions reside in `.claude/skills/extensions/{name}/SKILL.md`.
 | **inbox-triage** | `core/inbox-triage` | Process Inbox, PARA organization, note archiving |
 | **area-creation** | `core/area-creation` | Create new Area/Long-term goal: discuss structure before file creation |
 | **weekly-retro** | `core/weekly-retro` | Weekly review/summary (`WeeklyRetro/YYYY-Www`) |
-| **memory-ingest** | `core/memory-ingest` | Ingest raw materials (transcripts, articles, PDFs) into `memorbs/` wiki |
-| **memory-query** | `core/memory-query` | Q&A, comparisons, decision recommendations via `memorbs/` wiki |
-| **memory-lint** | `core/memory-lint` | Vault health check and `memorbs/` wiki MUSTY linting |
+| **memorb-ingest** | `core/memorb-ingest` | Ingest raw materials (transcripts, articles, PDFs) into `memorbs/` wiki |
+| **memorb-query** | `core/memorb-query` | Q&A, comparisons, decision recommendations via `memorbs/` wiki |
+| **memorb-lint** | `core/memorb-lint` | Vault health check and `memorbs/` wiki MUSTY linting |
 | **memorb-forgetter** | `core/memorb-forgetter` | Execute MUSTY archiving to `Archives/memorbs/` and update vault Wiki Links |
 | **session-closeout** | `core/session-closeout` | Session termination: Daily Note summary, log.md, git commit/push |
 | **writing-memorb-skills** | `core/writing-memorb-skills` | Create/modify vault skills (Meta) |
@@ -46,7 +46,7 @@ Extensions reside in `.claude/skills/extensions/{name}/SKILL.md`.
 | **m365-meeting-note** | `extensions/m365-meeting-note` | Process Teams meeting transcripts & minutes |
 | **recording-transcription** | `extensions/recording-transcription` | Non-Teams voice recordings (phone, interview, m4a) to transcript |
 | **business-card-ingestion** | `extensions/business-card-ingestion` | Business cards to `memorbs/people/` Page Bundle |
-| **memory-domain-query** | `extensions/memory-domain-query` | Bi-directional domain/email lookup & M365/Outlook integration |
+| **memorb-domain-query** | `extensions/memorb-domain-query` | Bi-directional domain/email lookup & M365/Outlook integration |
 | **weekly-report** | `extensions/weekly-report` | Generate CEO weekly report pptx |
 | **obsidian-cli** | `extensions/obsidian-cli` | Obsidian CLI commands (requires app running) |
 
@@ -56,7 +56,7 @@ If a scenario calls for an extension (e.g. business card OCR, M365 meeting trans
 2. **Not Installed (Interactive Installation)**:
    - Ask the user: `"💡 Notice: The '{extension-name}' extension provides enhanced domain formatting for this task. Would you like me to install it for you?"`
    - **User Approves**: Install the extension into `.claude/skills/extensions/{extension-name}/` and execute its specialized workflow immediately.
-   - **User Declines / Skip**: Proceed with the graceful fallback to core `memory-ingest` or `memory-query`.
+   - **User Declines / Skip**: Proceed with the graceful fallback to core `memorb-ingest` or `memorb-query`.
 
 ## Red Flags
 Stop and revert if rationalizing any of the following:

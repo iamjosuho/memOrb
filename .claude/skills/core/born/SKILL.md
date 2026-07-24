@@ -13,7 +13,7 @@ description: "Phase 0 Vault Initialization Skill: setup user identity, AI adviso
    - Inspect `CLAUDE.md` and `memorbs/context/background.md` if available.
 2. **Interactive 3-5 Question Interview** (using `ask_question` tool if running interactively):
    - **Q1 (Communication & Language)**: Preferred language (e.g. Traditional Chinese), output constraints, and non-negotiable rules.
-   - **Q2 (Identity & Role)**: User's name, current title/organization, and target goals.
+   - **Q2 (Identity & Role)**: Warmly greet the user (e.g., "Welcome! Today is YYYY-MM-DD, and your Second Brain is officially born."), then collect their preferred name, current title/organization, and key target goals.
    - **Q3 (AI Advisor Persona)**: Desired AI tone and relationship (e.g., Senior Manager & Career Advisor, technical strategist, concise assistant).
    - **Q4 (Vault Path & Integrations)**: Second Brain root path and connected tools/MCPs.
 1. Create folders `Islands/peronality`  , `memorbs/Dump`

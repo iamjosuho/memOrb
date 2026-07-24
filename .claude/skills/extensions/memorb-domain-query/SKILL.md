@@ -1,5 +1,5 @@
 ---
-name: memory-domain-query
+name: memorb-domain-query
 description: Use when querying companies, employees, or contacts by email address, domain name, or company name, or when integrating Outlook/M365 email collection and company email status checks.
 ---
 

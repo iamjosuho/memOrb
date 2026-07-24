@@ -18,7 +18,7 @@ Inbox 只是**暫存區**（未處理、待分類）。目標：處理後 Inbox 
 2. **特殊類型先路由**：
    - 名片圖檔 → `business-card-ingestion`
    - 會議逐字稿 → `m365-meeting-note`
-   - 有學習價值的素材 → 搬移後同時跑 `memory-ingest`
+   - 有學習價值的素材 → 搬移後同時跑 `memorb-ingest`
 3. 一般筆記逐一判斷，依 PARA 決策樹搬移：
 
 | 判斷 | 去向 |
@@ -32,7 +32,7 @@ Inbox 只是**暫存區**（未處理、待分類）。目標：處理後 Inbox 
 5. 整理inbox files，把內容分類，判斷要進到哪些檔案
 6. 可能inbox files input data同時包含很多PARA的資料，先詢問使用者怎麼處理，並給予推薦
 7. 搬移(mv command) 時更新 frontmatter：`status: unprocessed` → `status: processed`（或對應狀態）
-8. 若筆記提到人物/專案/術語的新資訊，可以加上雙向連結，回填 `memorbs/` 對應頁（見 `memory-ingest` 步驟 3）
+8. 若筆記提到人物/專案/術語的新資訊，可以加上雙向連結，回填 `memorbs/` 對應頁（見 `memorb-ingest` 步驟 3）
 
 ## Red Flags
 

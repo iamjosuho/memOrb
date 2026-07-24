@@ -1,6 +1,6 @@
 ---
 name: area-creation
-description: "新增 PARA Area（長期領域/長期目標）的完整流程：先與使用者討論 Area 定義與命名層級，再判斷資料夾結構方案，確認首批檔案清單後才動手建立，最後同步 memory 層。觸發詞：新增 Area、開一個 Area、新的領域、長期目標、我要開始經營/負責某件事、把某主題加進第二大腦。只要使用者想在 Areas/ 底下開新資料夾，即使沒說出「Area」一詞也適用。前置依賴：vault-conventions；執行後依賴：memory-ingest。"
+description: "新增 PARA Area（長期領域/長期目標）的完整流程：先與使用者討論 Area 定義與命名層級，再判斷資料夾結構方案，確認首批檔案清單後才動手建立，最後同步 memory 層。觸發詞：新增 Area、開一個 Area、新的領域、長期目標、我要開始經營/負責某件事、把某主題加進第二大腦。只要使用者想在 Areas/ 底下開新資料夾，即使沒說出「Area」一詞也適用。前置依賴：vault-conventions；執行後依賴：memorb-ingest。"
 ---
 
 # Area Creation（新增領域流程）
@@ -63,7 +63,7 @@ Area = 需要**長期維持標準的責任領域**，不是商品、工具、或
    每份開頭加一行引用回 MOC：`> 入口：[[Areas/{Area 名稱}/000-MOC|{Area 名稱} MOC]]`。內文只放結構骨架與提示，不要編造內容。
 4. 若領域有明確短期目標（如「建置並驗證交易系統」），建議使用者在 `Projects/` 開伴生專案筆記——Project 追進度、Area 存知識，做完歸檔知識留下。
 
-### 階段 5：memory 層同步（依 memory-ingest）
+### 階段 5：memory 層同步（依 memorb-ingest）
 
 1. `memorbs/context/{slug}.md`：記錄**命名與結構決策及其理由**（日後 lint/回顧時最有價值的就是「為什麼這樣定」）
 2. `MEMORY.md` 索引加一行

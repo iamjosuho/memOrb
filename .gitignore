@@ -9,3 +9,4 @@ sandbox/
 test-vault/
 *.tmp
 *.log
+.obsidian/

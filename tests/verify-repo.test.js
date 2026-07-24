@@ -26,9 +26,9 @@ describe('memOrb Skill Set Open Source Repo Structure Tests', () => {
     expect(fs.existsSync(skillsDir)).toBe(true);
     expect(fs.existsSync(path.join(skillsDir, 'memorb/SKILL.md'))).toBe(true);
     expect(fs.existsSync(path.join(skillsDir, 'core/born/SKILL.md'))).toBe(true);
-    expect(fs.existsSync(path.join(skillsDir, 'core/memory-ingest/SKILL.md'))).toBe(true);
-    expect(fs.existsSync(path.join(skillsDir, 'core/memory-query/SKILL.md'))).toBe(true);
-    expect(fs.existsSync(path.join(skillsDir, 'core/memory-lint/SKILL.md'))).toBe(true);
+    expect(fs.existsSync(path.join(skillsDir, 'core/memorb-ingest/SKILL.md'))).toBe(true);
+    expect(fs.existsSync(path.join(skillsDir, 'core/memorb-query/SKILL.md'))).toBe(true);
+    expect(fs.existsSync(path.join(skillsDir, 'core/memorb-lint/SKILL.md'))).toBe(true);
     expect(fs.existsSync(path.join(skillsDir, 'core/memorb-forgetter/SKILL.md'))).toBe(true);
   });
 
@@ -51,5 +51,14 @@ describe('memOrb Skill Set Open Source Repo Structure Tests', () => {
     const sandboxMemorbs = path.join(REPO_ROOT, 'sandbox/memorbs');
     expect(fs.existsSync(sandboxMemorbs)).toBe(true);
     expect(fs.existsSync(path.join(sandboxMemorbs, 'HQ/Core.md'))).toBe(true);
+  });
+
+  test('reset-sandbox script with --empty should leave sandbox completely blank', () => {
+    const scriptPath = path.join(REPO_ROOT, 'scripts/reset-sandbox.sh');
+    execSync(`bash "${scriptPath}" --empty`, { cwd: REPO_ROOT });
+
+    const sandboxDir = path.join(REPO_ROOT, 'sandbox');
+    expect(fs.existsSync(sandboxDir)).toBe(true);
+    expect(fs.readdirSync(sandboxDir).length).toBe(0);
   });
 });

@@ -1,9 +1,9 @@
 ---
-name: memory-ingest
+name: memorb-ingest
 description: "Wiki Ingest workflow: ingest raw content and update structured memory pages. Triggers: 讀這個, 整理這份逐字稿, 處理這篇文章, 幫我看這個 PDF, 這篇文章學到什麼. Prerequisite: vault-conventions."
 ---
 
-# Memory Ingest Skill
+# Memorb Ingest Skill
 
 > LLM Wiki Architecture: **raw (sources) → wiki (memorbs/ structured pages) → schema (CLAUDE.md)**.
 > Ingest ensures consistency across all three layers when new raw material arrives.

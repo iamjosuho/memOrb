@@ -1,11 +1,11 @@
 ---
 name: memorb-forgetter
-description: "Memory Archive Executor (Mind Workers Forgetter): Archive outdated or MUSTY-flagged memorbs pages to Archives/ after user confirmation, and update vault Wiki Links. Triggered by memory-lint report or user archive requests."
+description: "Memory Archive Executor (Mind Workers Forgetter): Archive outdated or MUSTY-flagged memorbs pages to Archives/ after user confirmation, and update vault Wiki Links. Triggered by memorb-lint report or user archive requests."
 ---
 
 # Memorb Forgetter Skill
 
-> **Purpose**: Decoupled archiving executor. Executes physical file relocation of `memorbs/` pages flagged by `memory-lint` under the MUSTY criteria, ensuring link integrity across the vault.
+> **Purpose**: Decoupled archiving executor. Executes physical file relocation of `memorbs/` pages flagged by `memorb-lint` under the MUSTY criteria, ensuring link integrity across the vault.
 
 ## Execution Sequence
 

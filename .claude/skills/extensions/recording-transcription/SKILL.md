@@ -1,6 +1,6 @@
 ---
 name: recording-transcription
-description: "手動提供的會議/面談錄音檔（手機錄音、m4a/mp3/wav，非 Teams 來源）轉逐字稿處理助理。負責探測本地 Whisper 是否可用、音檔正規化與長檔切段、背景轉錄＋進度輪詢、簡轉繁，並與使用者提供的 iPhone 內建語音轉文字草稿比對校正人名/術語，產出可靠逐字稿與面談分析後交給 memory-ingest。只要提到錄音、逐字稿、轉錄、面談、語音轉文字、STT、m4a，且來源不是 Teams 會議，就該用這個 skill。前置依賴：vault-conventions；下游接 memory-ingest。"
+description: "手動提供的會議/面談錄音檔（手機錄音、m4a/mp3/wav，非 Teams 來源）轉逐字稿處理助理。負責探測本地 Whisper 是否可用、音檔正規化與長檔切段、背景轉錄＋進度輪詢、簡轉繁，並與使用者提供的 iPhone 內建語音轉文字草稿比對校正人名/術語，產出可靠逐字稿與面談分析後交給 memorb-ingest。只要提到錄音、逐字稿、轉錄、面談、語音轉文字、STT、m4a，且來源不是 Teams 會議，就該用這個 skill。前置依賴：vault-conventions；下游接 memorb-ingest。"
 ---
 
 # 🎙️ recording-transcription Skill
@@ -9,7 +9,7 @@ description: "手動提供的會議/面談錄音檔（手機錄音、m4a/mp3/wav
 
 - 錄音來源是**使用者手動提供的檔案**（手機/錄音筆/現場錄音）→ 本 skill
 - 逐字稿已由 M365 Teams 自動產生（有 `meetingTranscriptUrl`）→ 改用 `m365-meeting-note`
-- 兩者最終都交給 `memory-ingest` 做影響面掃描
+- 兩者最終都交給 `memorb-ingest` 做影響面掃描
 
 ## 核心前提
 
@@ -115,7 +115,7 @@ rm -rf "$WORKDIR"
 
 輸出分析前，先讀一次對方在 `memorbs/people/` 的既有頁面，確保分析銜接既有脈絡，而不是每次從零開始。
 
-### Step 5：存檔與交接 memory-ingest
+### Step 5：存檔與交接 memorb-ingest
 
 | 內容 | 路徑 |
 |------|------|
@@ -123,7 +123,7 @@ rm -rf "$WORKDIR"
 | 逐字稿（raw，未修正） | `Resources/會議記錄/raw/{YYYY-MM-DD}-{標題}.md` |
 | 逐字稿（清稿＋面談分析） | `memorbs/meeting-note/{YYYY-MM-DD} 與{對象}面談.md` |
 
-完成後交給 `memory-ingest` 走完整流程（掃描影響 `memorbs/people`、`memorbs/projects`、`log.md`、`MEMORY.md` 索引、PARA 活躍區）。本 skill 只負責「錄音→可靠逐字稿＋初步分析」，不重複做 memory-ingest 的事。
+完成後交給 `memorb-ingest` 走完整流程（掃描影響 `memorbs/people`、`memorbs/projects`、`log.md`、`MEMORY.md` 索引、PARA 活躍區）。本 skill 只負責「錄音→可靠逐字稿＋初步分析」，不重複做 memorb-ingest 的事。
 
 ## 注意事項
 

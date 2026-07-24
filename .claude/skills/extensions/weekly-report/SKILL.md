@@ -36,4 +36,4 @@ description: 產出周報 pptx。觸發詞：做周報、產出周報、執行�
 1. 素材收集完成後，才讀 pptx 產出用 skill 建立簡報
 2. 檔名慣例：跟隨 OneDrive 資料夾內既有命名（先列出既有檔案確認格式）
 3. 產出後提醒使用者上傳 OneDrive（或經 MCP 直接存放，若已接通）
-4. 周報中的專案狀態變化 → 回填 `memorbs/projects/`（見 memory-query 回填規則）
+4. 周報中的專案狀態變化 → 回填 `memorbs/projects/`（見 memorb-query 回填規則）

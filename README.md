@@ -1,20 +1,58 @@
-# 🧠 memOrb
+# 🔮 memOrb
 
-> **The Outside-In Memory Engine for Autonomous AI Agents**  
-> Inspired by *Inside Out* cognitive world-building and Library Science MUSTY archiving.
+> **The Cognitive World-building Memory Engine for Autonomous AI Agents**  
+> *Inspired by my favorite animated movie, memOrb turns cognitive worldview into a structured memory universe for AI agents and human second brains.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 📌 Overview
+---
 
-**memOrb** (package name: `memorb`) is an open-source, modular Skill Set designed for AI Agents (Claude Code, Gemini Antigravity, Cursor, etc.) to maintain a compounding, persistent Markdown memory vault inside Obsidian or any markdown workspace.
+## 🌟 Story & Vision
 
-### Core Architectural Features:
-1. **Headquarters & Core Orbs (`memorbs/HQ/`)**: Hot cache persona, Belief System, and current session working context.
-2. **Personality & Responsibility Islands (`memorbs/Islands/`)**: Structured wiki layer for People, Projects, Context, and Organizations.
-3. **Library Science MUSTY Archiving (`memorbs/Dump/`)**: Automated MUSTY (Misleading, Ugly, Superseded, Trivial, Your collection doesn't need it) linting and archival via `memorb-forgetter`.
-4. **Authority Control (`aliases: [...]`) & Circulation Tracking**: Automatic alias mapping and silent `last_recalled`/`recall_count` backfill on every query.
-5. **Non-Invasive Namespace**: All memorb operations are strictly encapsulated inside `memorbs/`, preserving existing vault folder structures (like PARA).
+Most AI agents live in the moment—losing context the second a session ends or drowning in unorganized chat logs. 
+
+**memOrb** was born from a simple realization inspired by cinematic worldview: *our memories aren't just flat storage logs; they are vibrant universes composed of core experiences, evolving values, and structured islands of responsibility.*
+
+### ⚡ Dual-Engine Memory Synergy
+memOrb connects daily execution with long-term human growth through a dual-engine architecture:
+
+1. **Task & Project Engine**: Empowers autonomous agents to track multi-step workflows, projects, and structured knowledge effortlessly.
+2. **Emotional & Belief Anchoring Engine**: Distills daily interactions into core memory orbs, reflecting your values, beliefs, and evolution over time.
+
+By bridging task performance with personal values, **memOrb helps users achieve complex goals without losing their core identity—empowering them to grow into a more complete, self-aware person.**
+
+---
+
+## 🔮 Worldview Architecture
+
+memOrb structures your memory vault inside `memorbs/` as a modular, self-maintaining cognitive ecosystem:
+
+```text
+memorbs/
+├── HQ/                       # Headquarters: Persona, Active Context & Core Orbs
+│   ├── Core.md               # Dynamic persona & active working memory cache
+│   └── Belief.md             # Foundational values, principles & identity anchors
+├── Islands/                  # Islands of Growth (Structured Wiki Layer)
+│   ├── people/               # Key collaborators & relationships
+│   ├── projects/             # Active & completed milestone tracks
+│   ├── context/              # Environmental parameters & domain rules
+│   └── orgs/                 # Organizations & team dynamics
+└── Dump/                     # Memory Dump & Archival (MUSTY Collection)
+    └── archive/              # Stale, superseded, or pruned memories
+```
+
+### 🏛️ The Five Cognitive Pillars
+
+1. **Headquarters & Core Orbs (`memorbs/HQ/`)**  
+   The central control room housing hot-cache working context (`Core.md`) and core belief anchors (`Belief.md`).
+2. **Islands of Growth (`memorbs/Islands/`)**  
+   Dedicated wiki islands categorizing knowledge across People, Projects, Context, and Organizations for instant agent recall.
+3. **Memory Dump & MUSTY Archiving (`memorbs/Dump/`)**  
+   Automated MUSTY (*Misleading, Ugly, Superseded, Trivial, Your collection doesn't need it*) linting and pruning powered by `memorb-forgetter`.
+4. **Authority Control & Circulation Tracking**  
+   Silent metadata backfills (`last_recalled`, `recall_count`, and `aliases: [...]`) ensure alias mapping and decay metrics across all memory queries.
+5. **Non-Invasive Vault Namespace**  
+   Strictly isolated within `memorbs/`, leaving your existing Obsidian folder structure (such as PARA) untouched and non-polluted.
 
 ---
 
@@ -34,18 +72,50 @@ memorb/
 
 ## 🚀 Quick Start
 
-### 1. Installation
-Copy `.claude/skills/` into your project root, or install via plugin CLI:
+### 📦 1. Installation Options across Agent Tools & Marketplaces
+
+Choose the installation method for your preferred AI Agent tool:
+
+#### Option A: Antigravity / AGY CLI (Recommended for AGY)
+Install directly from GitHub via the AGY plugin registry:
 ```bash
 agy plugin add iamjosuho/memorb
 ```
 
-### 2. Initialization (`/born`)
-In your agent chat, run:
+#### Option B: Claude Code CLI
+Add via the Claude Code plugin manager or copy skills into your workspace:
+```bash
+# Plugin Manager
+claude plugin add iamjosuho/memorb
+
+# OR Manual Workspace Copy
+mkdir -p .claude/skills
+cp -r path/to/memorb/.claude/skills/* .claude/skills/
+```
+
+#### Option C: Cursor / Windsurf / VS Code Agent Assistants
+Copy the memOrb skill suite into your repository's `.claude/skills/` directory and reference `SKILL.md` in your `.cursorrules` or `.windsurfrules`:
+```bash
+# Copy skill definitions into your project
+mkdir -p .claude/skills
+cp -r path/to/memorb/.claude/skills/* .claude/skills/
+```
+
+#### Option D: Git Submodule (Project Workspace Integration)
+Keep memOrb skills automatically updated across team repositories:
+```bash
+git submodule add https://github.com/iamjosuho/memorb.git .claude/skills/memorb-suite
+```
+
+---
+
+### 🐣 2. Vault Initialization (`/born`)
+
+In your agent chat (Claude Code, Antigravity, Cursor, etc.), run:
 ```text
 "Run the /born skill to set up my memorb Memory Vault."
 ```
-The agent will launch an interactive 3-5 question onboarding prompt to create `memorbs/HQ/Core.md` and initialize your Islands.
+The agent will launch an interactive 3-5 question onboarding prompt to construct `memorbs/HQ/Core.md` and initialize your Islands.
 
 ---
 
@@ -54,8 +124,11 @@ The agent will launch an interactive 3-5 question onboarding prompt to create `m
 To test skills locally without polluting git commits with temporary test notes:
 
 ```bash
-# 1. Reset sandbox from clean fixtures
+# 1a. Reset sandbox with sample fixtures (for testing query/lint/ingest)
 bash scripts/reset-sandbox.sh
+
+# 1b. Reset sandbox as COMPLETELY EMPTY (for testing /born initialization from zero)
+bash scripts/reset-sandbox.sh --empty
 
 # 2. Run verification test suite
 node tests/run-tests.js

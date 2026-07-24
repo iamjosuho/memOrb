@@ -1,9 +1,9 @@
 ---
-name: memory-query
+name: memorb-query
 description: "Wiki Query workflow: read memory before answering questions about people, projects, or decisions, and backfill insights. Triggers: 使用者提問, 要求比較, 要求整理, 要求決策建議, 幫我分析."
 ---
 
-# Memory Query Skill
+# Memorb Query Skill
 
 ## Execution Sequence
 

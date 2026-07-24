@@ -44,9 +44,9 @@ const skillsDir = path.join(REPO_ROOT, '.claude/skills');
 assert(fs.existsSync(skillsDir), '.claude/skills directory should exist');
 assert(fs.existsSync(path.join(skillsDir, 'memorb/SKILL.md')), 'memorb Gateway SKILL.md should exist');
 assert(fs.existsSync(path.join(skillsDir, 'core/born/SKILL.md')), 'born SKILL.md should exist');
-assert(fs.existsSync(path.join(skillsDir, 'core/memory-ingest/SKILL.md')), 'memory-ingest SKILL.md should exist');
-assert(fs.existsSync(path.join(skillsDir, 'core/memory-query/SKILL.md')), 'memory-query SKILL.md should exist');
-assert(fs.existsSync(path.join(skillsDir, 'core/memory-lint/SKILL.md')), 'memory-lint SKILL.md should exist');
+assert(fs.existsSync(path.join(skillsDir, 'core/memorb-ingest/SKILL.md')), 'memorb-ingest SKILL.md should exist');
+assert(fs.existsSync(path.join(skillsDir, 'core/memorb-query/SKILL.md')), 'memorb-query SKILL.md should exist');
+assert(fs.existsSync(path.join(skillsDir, 'core/memorb-lint/SKILL.md')), 'memorb-lint SKILL.md should exist');
 assert(fs.existsSync(path.join(skillsDir, 'core/memorb-forgetter/SKILL.md')), 'memorb-forgetter SKILL.md should exist');
 
 // Test 4: fixtures
@@ -68,6 +68,17 @@ if (fs.existsSync(scriptPath)) {
     assert(fs.existsSync(path.join(sandboxMemorbs, 'HQ/Core.md')), 'sandbox/memorbs/HQ/Core.md should exist after reset');
   } catch (e) {
     assert(false, `reset-sandbox script execution failed: ${e.message}`);
+  }
+
+  // Test 6: reset-sandbox script with --empty
+  try {
+    execSync(`bash "${scriptPath}" --empty`, { cwd: REPO_ROOT });
+    const sandboxDir = path.join(REPO_ROOT, 'sandbox');
+    assert(fs.existsSync(sandboxDir), 'sandbox directory should exist after --empty reset');
+    const contents = fs.readdirSync(sandboxDir);
+    assert(contents.length === 0, 'sandbox should be completely empty after --empty reset');
+  } catch (e) {
+    assert(false, `reset-sandbox --empty script execution failed: ${e.message}`);
   }
 }
 
