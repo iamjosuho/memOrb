@@ -1,4 +1,4 @@
-# 🧠 memOrb Skill Set
+# 🧠 memorb Skill Set
 
 > **Agent-Agnostic Second Brain Memory Framework** inspired by *Inside Out* world-building and Library Science MUSTY archiving.
 
@@ -6,14 +6,14 @@
 
 ## 📌 Overview
 
-**memOrb** is an open-source, modular Skill Set designed for AI Agents (Claude Code, Gemini Antigravity, Cursor, etc.) to maintain a compounding, persistent Markdown memory vault inside Obsidian or any markdown workspace.
+**memorb** is an open-source, modular Skill Set designed for AI Agents (Claude Code, Gemini Antigravity, Cursor, etc.) to maintain a compounding, persistent Markdown memory vault inside Obsidian or any markdown workspace.
 
 ### Core Architectural Features:
 1. **Headquarters & Core Orbs (`memorbs/HQ/`)**: Hot cache persona, Belief System, and current session working context.
 2. **Personality & Responsibility Islands (`memorbs/Islands/`)**: Structured wiki layer for People, Projects, Context, and Organizations.
 3. **Library Science MUSTY Archiving (`memorbs/Dump/`)**: Automated MUSTY (Misleading, Ugly, Superseded, Trivial, Your collection doesn't need it) linting and archival via `memorb-forgetter`.
 4. **Authority Control (`aliases: [...]`) & Circulation Tracking**: Automatic alias mapping and silent `last_recalled`/`recall_count` backfill on every query.
-5. **Non-Invasive Namespace**: All memOrb operations are strictly encapsulated inside `memorbs/`, preserving existing vault folder structures (like PARA).
+5. **Non-Invasive Namespace**: All memorb operations are strictly encapsulated inside `memorbs/`, preserving existing vault folder structures (like PARA).
 
 ---
 
@@ -42,7 +42,7 @@ agy plugin add iamjosuho/memorb-skill-set
 ### 2. Initialization (`/born`)
 In your agent chat, run:
 ```text
-"Run the /born skill to set up my memOrb Memory Vault."
+"Run the /born skill to set up my memorb Memory Vault."
 ```
 The agent will launch an interactive 3-5 question onboarding prompt to create `memorbs/HQ/Core.md` and initialize your Islands.
 
