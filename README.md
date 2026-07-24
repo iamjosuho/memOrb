@@ -1,12 +1,13 @@
-# 🧠 memorb Skill Set
+# 🧠 memOrb
 
-> **Agent-Agnostic Second Brain Memory Framework** inspired by *Inside Out* world-building and Library Science MUSTY archiving.
+> **The Outside-In Memory Engine for Autonomous AI Agents**  
+> Inspired by *Inside Out* cognitive world-building and Library Science MUSTY archiving.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 📌 Overview
 
-**memorb** is an open-source, modular Skill Set designed for AI Agents (Claude Code, Gemini Antigravity, Cursor, etc.) to maintain a compounding, persistent Markdown memory vault inside Obsidian or any markdown workspace.
+**memOrb** (package name: `memorb`) is an open-source, modular Skill Set designed for AI Agents (Claude Code, Gemini Antigravity, Cursor, etc.) to maintain a compounding, persistent Markdown memory vault inside Obsidian or any markdown workspace.
 
 ### Core Architectural Features:
 1. **Headquarters & Core Orbs (`memorbs/HQ/`)**: Hot cache persona, Belief System, and current session working context.
