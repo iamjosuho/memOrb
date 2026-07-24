@@ -1,0 +1,20 @@
+{
+  "name": "memorb",
+  "version": "1.0.0",
+  "description": "Agent-Agnostic Second Brain memory framework inspired by cognitive world-building and library science.",
+  "main": "plugin.json",
+  "scripts": {
+    "lint": "node scripts/lint-skills.js",
+    "test": "bash scripts/reset-sandbox.sh --empty",
+    "reset-sandbox": "bash scripts/reset-sandbox.sh"
+  },
+  "keywords": [
+    "memory",
+    "second-brain",
+    "agent-skill",
+    "claude-skill",
+    "obsidian"
+  ],
+  "author": "iamjosuho",
+  "license": "MIT"
+}
