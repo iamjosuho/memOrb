@@ -4,6 +4,7 @@
 > *Inspired by my favorite animated movie, memOrb turns cognitive worldview into a structured memory universe for AI agents and human second brains.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![skills.sh](https://skills.sh/b/iamjosuho/memorb)](https://skills.sh/iamjosuho/memorb)
 
 ---
 
