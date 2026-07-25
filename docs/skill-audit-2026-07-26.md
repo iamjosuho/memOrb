@@ -51,7 +51,40 @@ status: active
 
 ## 5. 沒發現問題、可以放心的部分
 
-- `plugin.json` 註冊：19/19 全對應，無孤兒無缺漏。
-- Frontmatter：19 個 SKILL.md 全部只有 `name`/`description` 兩欄，符合 `writing-memorb-skills` 規範，長度也都通過 lint 的最短長度檢查。
-- `memorb-lint`／`memorb-forgetter`／`island-reclamation`／`orbtrack-triage`（路由部分除外）／`daily-note`／`weekly-retro`：路徑與架構都已對齊 `Long-Term/` SSOT，內容邏輯沒發現矛盾。
+- `plugin.json` 註冊：18/18 全對應，無孤兒無缺漏（`weekly-report` 刪除後已更新）。
+- Frontmatter：18 個 SKILL.md 全部只有 `name`/`description` 兩欄，符合 `writing-memorb-skills` 規範，長度也都通過 lint 的最短長度檢查。
+- `memorb-lint`／`memorb-forgetter`／`island-reclamation`／`orbtrack-triage`（路由已補）／`daily-note`／`weekly-retro`：路徑與架構都已對齊 `Long-Term/` SSOT，內容邏輯沒發現矛盾。
 - 上一輪新增的 `DEPRECATED_PATTERNS` 架構漂移守衛與 pre-commit hook 運作正常，這次全庫掃描 0 殘留舊路徑。
+
+---
+
+## 6. 概念/內容成熟度掃描（2026-07-26 新增）
+
+路徑與架構之外，另外針對「概念是否充實」逐一檢視全部 18 個 skill：描述是否清楚、邏輯是否完整、有沒有具體範例、觸發條件是否明確。分三級：🔴 概念尚未充實（需要實質補內容）、🟡 堪用但可加強、🟢 成熟無虞。**這份清單只列問題，不動手改——留給接下來一個一個 skill 討論時處理。**
+
+### 🔴 概念尚未充實
+
+| Skill | 問題 |
+| :--- | :--- |
+| `weekly-retro` | 文件自己就寫著「*(待固化：回顧的固定步驟與 KPI 區塊)*」——連作者自己都承認還沒定案。全篇只有 32 行，沒有 Red Flags 表（其他 core skill 幾乎都有），也沒有一份實際週回顧產出長什麼樣的範例，讀完不知道最終輸出的具體格式。 |
+| `memorb-born` | Q1-Q4 訪談流程寫得籠統（「using `ask_question` tool if running interactively」是個沒展開的條件句，非互動時該怎麼辦沒說），且 Step 3「Create Complete Folder Structure」名不符實——只建了 `memorbs/` 跟 `Long-Term/`，沒建 `Daily Notes/`、`Resources/`、`WeeklyRetro/`、`Dump/`、`TASKS.md` 等 vault 原生資料夾（見稽核 P2 #7，還牽出一個從沒被其他 skill 使用過的 `AGENT.md`）。 |
+| `obsidian-cli` | 讀起來像是直接搬 Obsidian CLI 官方文件，完全沒有跟這個 vault 的架構（`memorb-conventions`、`Long-Term/`、frontmatter schema）掛勾，也沒說明「什麼時候該用 `obsidian` CLI、什麼時候該直接用 Read/Edit 工具」。觸發描述也沒有走其他 skill 慣用的「觸發詞：」格式。概念上比較像一份工具速查表，不是一個整合進 memOrb 工作流的 skill。 |
+
+### 🟡 堪用但可加強
+
+| Skill | 問題 |
+| :--- | :--- |
+| `memorb-conventions` | SSOT 本身品質最高，但文件內有 2 處自承的「待固化」：Project 範本要補 Authority Control 欄位、`Long-Term/`／`memorbs/HQ/` 頁面沒有固定範本檔。 |
+| `memorb-forgetter` | 邏輯正確但偏薄（29 行），沒有 Red Flags 表、沒有一個實際歸檔事件的範例（`log.md` 該長什麼樣）。 |
+| `memorb-ingest` | Step 2 會議摘要路徑寫「`memorbs/meeting-note/` **或** `Resources/會議記錄/notes/`」——兩個選項並存但實際上只有前者被 `m365-meeting-note`／`recording-transcription` 用到，這個「或」造成邏輯模糊。整篇也沒有一次完整 ingest 的範例走過一遍。 |
+| `memorb-lint` | 「附帶檢查（可選）」讀起來像加在最後的補充，跟前面 MUSTY 表的份量不成比例；沒有範例呈現「一份 lint 報告實際長怎樣」。 |
+| `memorb-query` | 這次修完術語後邏輯正確，但整篇偏簡短，沒有具體範例示範「引用來源」該怎麼寫（是列檔案路徑？還是列 log.md 事件？兩種都提了但沒有範例）。 |
+| `orbtrack-triage` | 步驟 4-6（「確認第一層 PARA 後逐層遞迴」「整理 OrbTrack files」「先詢問使用者怎麼處理」）跟步驟 3 的判斷表內容重疊，讀起來像草稿還沒收斂；部分句子中英夾雜且文法生硬（例如「OrbTrack files input data同時包含很多PARA的資料」），跟 `island-reclamation` 的成熟度有明顯落差。 |
+| `session-closeout` | `git push` 寫死為必要步驟，沒有失敗（例如憑證不存在）時的退路——這次幫 memOrb 本身 commit 時真的遇到這個情境（見 P3 #11，尚未修）。 |
+| `business-card-ingestion` | 沒有宣告「前置依賴」，但實際重度依賴 `memorb-conventions`（Long-Term schema）與 `orbtrack-triage`（路由來源）；description 也沒用其他 skill 慣用的「觸發詞：」格式。 |
+| `m365-meeting-note` | 「使用者表現分析框架」整段高度綁定單一真實情境（資訊部、IT、執行長周報、特定關鍵字如「守浩」），是為使用者個人職務量身打造，不是通用邏輯——如果之後想把這個 skill 分享或套用到別的情境，這段需要重寫成可配置的版本。 |
+| `memorb-domain-query` | 內容其實是這批 extension skill 裡數一數二完整的（mermaid 流程圖＋4 種模式＋Dataview 範本），純粹是描述格式沒跟上「觸發詞：」的中文標籤慣例，跟 `obsidian-cli` 同樣的風格落差。 |
+
+### 🟢 成熟、暫不需要處理
+
+`memorb`（gateway）、`daily-note`、`island-reclamation`、`writing-memorb-skills`、`recording-transcription`——邏輯完整、有具體範例或範本、觸發條件清楚，`island-reclamation` 與 `recording-transcription` 是目前全庫寫得最完整的兩個 skill，可以當作其他 skill 補強時的參考範本。

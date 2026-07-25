@@ -47,7 +47,6 @@ Extensions reside in `skills/extensions/{name}/SKILL.md`.
 | **recording-transcription** | `extensions/recording-transcription` | Non-Teams voice recordings (phone, interview, m4a) to transcript |
 | **business-card-ingestion** | `extensions/business-card-ingestion` | Business cards to `Long-Term/People/` Page Bundle |
 | **memorb-domain-query** | `extensions/memorb-domain-query` | Bi-directional domain/email lookup & M365/Outlook integration |
-| **obsidian-cli** | `extensions/obsidian-cli` | Obsidian CLI commands (requires app running) |
 
 ## Extension Interactive Installation & Fallback Protocol
 If a scenario calls for an extension (e.g. business card OCR, M365 meeting transcript processing), check if `skills/extensions/{name}/SKILL.md` exists:
