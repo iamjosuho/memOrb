@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.png" alt="memOrb Banner" width="100%">
+</p>
+
 # 🔮 memOrb
 
 > **The Cognitive World-building Memory Engine for Autonomous AI Agents**  
@@ -64,6 +68,7 @@ memorbs/
 
 ```text
 memorb/
+├── assets/                   # Project media & documentation assets (banner, logos)
 ├── plugin.json               # Marketplace plugin manifest
 ├── skills/                   # Executable Agent Skills (memorb router, memorb-born, ingest, query, lint, forgetter, extensions)
 ├── fixtures/                 # Clean, de-identified initial templates and sample data
