@@ -26,7 +26,7 @@ OrbTrack 只是**暫存區**（未處理、待分類），位於 `memorbs/HQ/Orb
 | 有明確截止日或交付物 | `Long-Term/Projects/` |
 | 長期持續關注的責任領域/興趣 | `Islands/` |
 | 參考資料、學習筆記 | `Resources/` |
-| 已完成或不再相關 | `Archives/` |
+| 已完成或不再相關 | `Dump/` |
 
 4. 確認第一層PARA後，在逐層確認要放到哪個資料夾，之後逐層遞迴，直到檔案本身
 5. 整理 OrbTrack files，把內容分類，判斷要進到哪些檔案
