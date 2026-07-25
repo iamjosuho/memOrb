@@ -15,7 +15,7 @@ description: "Wiki Query workflow: read memory before answering questions about 
    - **On-the-fly Migration**: If target page frontmatter lacks `aliases`, `orb_emotions`, `recall_count`, or `last_recalled`, automatically backfill missing keys with default values (`aliases: []`, `orb_emotions: []`, `recall_count: 1`, `last_recalled: YYYY-MM-DD`).
    - *Note*: Do NOT append circulation updates to `log.md` to prevent event-log noise.
 3. **Cite sources** in response (file paths or log.md events).
-4. **Backfill Rule**: If answer generates **enduring insights** (person traits, project decisions, principles, terms, cross-page links), update corresponding `memorbs/` pages (not just Daily Notes).
+4. **Backfill Rule**: If answer generates **enduring insights**, write them to the right layer — person/project/org traits or decisions → `Long-Term/{People,Projects,Orgs}/`; durable principles/beliefs → `memorbs/HQ/Belief/`; new terms → `memorbs/glossary.md`; cross-page links → whichever existing page they connect. Never leave enduring insights only in Daily Notes.
 5. If insight belongs to no existing page → create new page and add to `MEMORY.md`.
 6. Log key queries/decisions near top of `memorbs/log.md`:
    ```markdown
@@ -26,7 +26,7 @@ description: "Wiki Query workflow: read memory before answering questions about 
 ## Three-Layer Responsibility
 
 - Daily Notes: "What happened today"
-- `memorbs/`: "How this changed our understanding of people/projects/topics"
+- `Long-Term/` (people/projects/orgs) + `memorbs/HQ/` (Core/Belief/glossary): "How this changed our understanding"
 - `log.md`: "When events/operations occurred"
 
 ## Red Flags
@@ -34,4 +34,4 @@ description: "Wiki Query workflow: read memory before answering questions about 
 | Rationalization | Reality |
 | :--- | :--- |
 | *"I know the answer, no need to query memory"* | Answering from memory uses stale data. Always read index first. |
-| *"Writing insight in Daily Note is enough"* | Enduring insights MUST be backfilled to `memorbs/` pages for future lookup. |
+| *"Writing insight in Daily Note is enough"* | Enduring insights MUST be backfilled to `Long-Term/` (entities) or `memorbs/HQ/` (principles/terms) for future lookup. |

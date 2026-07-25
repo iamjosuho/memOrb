@@ -17,7 +17,8 @@ OrbTrack 只是**暫存區**（未處理、待分類），位於 `memorbs/HQ/Orb
    ```
 2. **特殊類型先路由**：
    - 名片圖檔 → `business-card-ingestion`
-   - 會議逐字稿 → `m365-meeting-note`
+   - 會議逐字稿（M365 Teams 自動產生，有 `meetingTranscriptUrl`）→ `m365-meeting-note`
+   - 錄音檔（手機/錄音筆錄的 m4a/mp3/wav，非 Teams 來源）→ `recording-transcription`
    - 有學習價值的素材 → 搬移後同時跑 `memorb-ingest`
 3. 一般筆記逐一判斷，依 PARA 決策樹搬移：
 

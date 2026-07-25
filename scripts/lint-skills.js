@@ -281,6 +281,12 @@ const DEPRECATED_PATTERNS = [
     reason: 'Archive namespace is singular: memorbs/Dump/, not memorbs/Dumps/.',
     exemptFiles: [],
   },
+  {
+    pattern: /(corresponding `memorbs\/` pages|backfilled to `memorbs\/` pages|`memorbs\/`:\s*"How this changed)/,
+    suggestion: 'Long-Term/{People,Projects,Orgs}/ (entity insights) or memorbs/HQ/{Core,Belief}/ + memorbs/glossary.md (principles/terms)',
+    reason: 'memorb-query described enduring-insight backfill as living generically under memorbs/ before the Long-Term/ migration. Entity pages (people/projects/orgs) now live in Long-Term/; only Core/Belief/glossary stay under memorbs/HQ.',
+    exemptFiles: [],
+  },
 ];
 
 function validateDeprecatedPathReferences() {

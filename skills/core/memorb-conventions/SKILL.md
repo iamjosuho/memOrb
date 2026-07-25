@@ -56,7 +56,8 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
 > **注意**：`memorbs/HQ/OrbTrack/` 是唯一的收集區。不要另外建立 `Inbox/`——兩個收集區並存只會讓 triage 邏輯分裂。
 > **注意**：歸檔統一寫作 `memorbs/Dump/{category}/`（單數 Dump）。
 > **注意**：`Long-Term/People`／`Long-Term/Orgs`／`Long-Term/Projects` 取代了原本的 `memorbs/Islands/{people,organizations,projects}`，`memorbs/Islands/` 這個命名空間已廢除。原本歸在 `context/` 的環境規則不再獨立分類，直接寫進相關實體的 Long-Term 頁面本體。
-> **注意**：`recording-transcription`／`business-card-ingestion`／`weekly-report`／`memorb-domain-query`／`m365-meeting-note` 幾個 extension skill 原本仍寫作舊的扁平路徑（`memorbs/people/`、`memorbs/organizations/`、`memorbs/projects/`），已於 2026-07-25 同步對齊為 `Long-Term/People/`、`Long-Term/Orgs/`、`Long-Term/Projects/`。`fixtures/memorbs/Islands/` 測試樣本與 `scripts/lint-skills.js` 的 fixture 結構驗證同步更新為 `fixtures/Long-Term/{Projects,People,Orgs}`。
+> **注意**：`recording-transcription`／`business-card-ingestion`／`memorb-domain-query`／`m365-meeting-note` 幾個 extension skill 原本仍寫作舊的扁平路徑（`memorbs/people/`、`memorbs/organizations/`、`memorbs/projects/`），已於 2026-07-25 同步對齊為 `Long-Term/People/`、`Long-Term/Orgs/`、`Long-Term/Projects/`。`fixtures/memorbs/Islands/` 測試樣本與 `scripts/lint-skills.js` 的 fixture 結構驗證同步更新為 `fixtures/Long-Term/{Projects,People,Orgs}`。
+> **注意（待處理 TODO，2026-07-26 稽核發現，暫緩不動）**：`Long-Term/People/` 頁面結構目前不一致——`business-card-ingestion`／`memorb-domain-query` 假設「有名片附件時依公司名稱建巢狀資料夾」（`Long-Term/People/{公司}/{姓名}/{姓名}.md`），本檔案定義的預設卻是單一頁面，`recording-transcription`／`m365-meeting-note`／`memorb-ingest` 也都假設扁平 `Long-Term/People/{姓名}.md`。同一人可能因建檔管道不同落在兩個不同路徑。尚未決定要統一成哪個方向，先列入待辦，詳見 `docs/skill-audit-2026-07-26.md` P1 #1。
 > **注意**：`persona.md`／`identity.md` 是固定的 Hot Cache 檔案（各一份，不會重複），`Core/`／`Belief/` 是裝 orb 的資料夾（一 orb 一檔，數量會持續增加）。四者角色不同，不要互相混用。
 
 ## Session 開頭必讀

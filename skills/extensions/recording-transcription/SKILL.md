@@ -95,7 +95,7 @@ rm -rf "$WORKDIR"
 
 > ⚠️ **Context Window 保護機制**：逐字稿通常動輒數萬字，**禁止主 Agent 直接讀取整份逐字稿**。你必須使用 `invoke_subagent` 工具派遣一個子代理（如 `research` 或 `self`），將以下 Step 3 與 Step 4 的任務交辦給它，讓子代理去閱讀、校正並總結出面談分析後回報。
 
-1. 動態讀取 `memorbs/glossary.md` 與 `Long-Term/People/*.md`（含子資料夾 Page Bundle）取得目前已知的人名、暱稱、專案代號、術語——不要用寫死的字典，這份清單會一直變
+1. 動態讀取 `memorbs/glossary.md` 與 `Long-Term/People/` 底下所有 `.md`（`find "$VAULT/Long-Term/People" -name "*.md"`，需遞迴含子資料夾 Page Bundle，不能只掃一層）取得目前已知的人名、暱稱、專案代號、術語——不要用寫死的字典，這份清單會一直變
 2. 可以向使用者確認錄音中有誰
 3. 若 Step 2A 與 Step 2B 兩份資料都有（本地 Whisper 輸出＋手機草稿），互相對照：Whisper 對語流/標點通常較穩，手機內建版對「使用者手機通訊錄/字典裡已有的專有名詞」有時反而更準，尤其是人名。兩邊對不上的地方，才是真正需要人工確認的地方
 4. 只有一份資料時（通常是純草稿路徑），對照 glossary/people 修正明顯誤轉（例如 eBao→「e 包／醫保」、Halu→「哈魯」之類的同音錯字），修正**另存清稿版本**，保留原始草稿不覆蓋

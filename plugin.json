@@ -24,7 +24,6 @@
     "./skills/extensions/m365-meeting-note/SKILL.md",
     "./skills/extensions/memorb-domain-query/SKILL.md",
     "./skills/extensions/obsidian-cli/SKILL.md",
-    "./skills/extensions/recording-transcription/SKILL.md",
-    "./skills/extensions/weekly-report/SKILL.md"
+    "./skills/extensions/recording-transcription/SKILL.md"
   ]
 }
