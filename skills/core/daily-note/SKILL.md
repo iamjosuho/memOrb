@@ -1,6 +1,6 @@
 ---
 name: daily-note
-description: "Create or update Daily Notes. Triggers: 今日日記, 開啟日記, daily note, 日誌, 隨記, 寫進今天的筆記, 對話紀錄. Prerequisite: vault-conventions."
+description: "Create or update Daily Notes. Triggers: 今日日記, 開啟日記, daily note, 日誌, 隨記, 寫進今天的筆記, 對話紀錄. Prerequisite: memorb-conventions."
 ---
 
 # Daily Note Skill

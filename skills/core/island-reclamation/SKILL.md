@@ -1,23 +1,23 @@
 ---
-name: area-creation
-description: "新增 PARA Area（長期領域/長期目標）的完整流程：先與使用者討論 Area 定義與命名層級，再判斷資料夾結構方案，確認首批檔案清單後才動手建立，最後同步 memory 層。觸發詞：新增 Area、開一個 Area、新的領域、長期目標、我要開始經營/負責某件事、把某主題加進第二大腦。只要使用者想在 Areas/ 底下開新資料夾，即使沒說出「Area」一詞也適用。前置依賴：vault-conventions；執行後依賴：memorb-ingest。"
+name: island-reclamation
+description: "新增 Island（長期領域/長期興趣）的完整流程：先與使用者討論 Island 定義與命名層級，再判斷資料夾結構方案，確認首批檔案清單後才動手建立，最後同步 memory 層。觸發詞：新增 Island、開一個 Island、新的領域、新的興趣、長期目標、我要開始經營/負責某件事、把某主題加進第二大腦。只要使用者想在 Islands/ 底下開新資料夾，即使沒說出「Island」一詞也適用。前置依賴：memorb-conventions；執行後依賴：memorb-ingest。"
 ---
 
-# Area Creation（新增領域流程）
+# Island Reclamation（填海造陸：新增人格島流程）
 
-> Area 是 PARA 裡最容易開錯的東西：開太窄日後改名斷連結，開太寬變垃圾桶，把 Project 誤開成 Area 則永遠關不掉。
+> Island 就像使用者腦中的一座人格島（像電影中主角的曲棍球島）：是需要被記憶不斷造訪、灌注才撐得住的興趣或責任領域，不是做完就結束的任務。開太窄日後改名斷連結，開太寬變垃圾桶，把 Project 誤開成 Island 則永遠關不掉；島立起來後還得長期經營，沒人再造訪就會像電影裡一樣崩塌、滾落回大海——對應到這座 vault，就是被 `memorb-forgetter` 收進 `memorbs/Dump/`。
 > 所以本流程的鐵律是：**前三階段是純討論，未經使用者確認前，禁止建立任何檔案或資料夾。**
 
 ## 動作順序
 
-### 階段 1：討論 Area 定義（純對話）
+### 階段 1：討論 Island 定義（純對話）
 
-Area = 需要**長期維持標準的責任領域**，不是商品、工具、或有完成日的目標。和使用者討論收斂三件事：
+Island = 需要**長期維持標準的責任領域或興趣**，不是商品、工具、或有完成日的目標。和使用者討論收斂三件事：
 
-1. **這是 Area 還是 Project？** 有明確完成狀態（考到證照、上線系統）→ 是 Project，建議開在 `Projects/`，可連回相關 Area。無限期維持（健康、財務、某項職責）→ 才是 Area。
+1. **這是 Island 還是 Project？** 有明確完成狀態（考到證照、上線系統）→ 是 Project，建議開在 `Projects/`，可連回相關 Island。無限期維持（健康、財務、某項職責、某個長期興趣）→ 才是 Island。
 2. **命名層級**：太窄（具體商品/工具/平台，如「台指期」「Notion」）→ 換了工具就得改名；太寬（「人生」「理財」）→ 變大雜燴。找中間層級：問「五年後這個名字還成立嗎？」「要維持的標準是什麼？」
    - 實例：使用者想做台指期交易 → 命名定在「主動交易與投資」（交易手藝可遷移，商品只是當前選擇；被動理財刻意排除）。
-3. **與既有 Area 的關係**：先 `ls "$VAULT/Areas"` 檢查是否已有重疊領域，重疊就擴充既有 Area 而非新開。
+3. **與既有 Island 的關係**：先 `ls "$VAULT/Islands"` 檢查是否已有重疊領域，重疊就擴充既有 Island 而非新開。
 
 ### 階段 2：判斷結構方案（純對話）
 
@@ -26,7 +26,7 @@ Area = 需要**長期維持標準的責任領域**，不是商品、工具、或
 | 方案 | 結構 | 適用 |
 |------|------|------|
 | **A 檔案分類法** | 固定板塊筆記（如：系統與策略／風險管理／心理／行政） | 知識可預先分類、喜歡高結構 |
-| **B 嵌套 PARA** | Area 下再開 Projects/Resources/Archives | 筆記量已龐大、有獨立子專案。**新 Area 幾乎不該選**（over-structure） |
+| **B 巢狀分類法** | Island 下再開 Projects/Resources/Archives | 筆記量已龐大、有獨立子專案。**新 Island 幾乎不該選**（over-structure） |
 | **C MOC 扁平法** | 無子資料夾，全靠 `000-` MOC 用 [[連結]] 組織 | 筆記型態難預測、重靈活 |
 | **A+C 混合（預設推薦）** | 固定板塊筆記 + MOC 入口；單篇筆記（讀書、覆盤）扁平放，MOC 掛連結 | 兼顧結構與彈性，日後可原地升級為 B |
 
@@ -40,34 +40,34 @@ Area = 需要**長期維持標準的責任領域**，不是商品、工具、或
 
 ### 階段 4：建立檔案
 
-1. 資料夾：`$VAULT/Areas/{Area 名稱}/`
-2. MOC：檔名**統一為 `000-MOC.md`**——這是跨 Area/Project 的固定入口慣例：任何 skill 或代理進到一個資料夾，先讀 `000-MOC.md` 就能拿到該領域全貌；`000-` 前綴同時確保排序置頂。frontmatter：
+1. 資料夾：`$VAULT/Islands/{Island 名稱}/`
+2. MOC：檔名**統一為 `000-MOC.md`**——這是跨 Island/Project 的固定入口慣例：任何 skill 或代理進到一個資料夾，先讀 `000-MOC.md` 就能拿到該領域全貌；`000-` 前綴同時確保排序置頂。frontmatter：
    ```yaml
    ---
-   title: {Area 名稱}
-   tags: [area, moc]
+   title: {Island 名稱}
+   tags: [island, moc]
    created: {YYYY-MM-DD}
    ---
    ```
-   因全 vault 會有多個同名 `000-MOC.md`，**所有指向 MOC 的 wiki 連結一律用完整路徑**：`[[Areas/{Area 名稱}/000-MOC|{Area 名稱}]]`，避免同名歧義。
+   因全 vault 會有多個同名 `000-MOC.md`，**所有指向 MOC 的 wiki 連結一律用完整路徑**：`[[Islands/{Island 名稱}/000-MOC|{Island 名稱}]]`，避免同名歧義。
    內容含：責任範圍、現狀（含目前主力焦點）、板塊導覽（[[連結]]）、相關專案區（留 Projects/ 伴生專案待辦）、單篇筆記索引區、維護清單。
 3. 板塊筆記 frontmatter：
    ```yaml
    ---
    title: {板塊名}
    date: {YYYY-MM-DD}
-   tags: [area, {領域 tag}]
+   tags: [island, {領域 tag}]
    status: active
    ---
    ```
-   每份開頭加一行引用回 MOC：`> 入口：[[Areas/{Area 名稱}/000-MOC|{Area 名稱} MOC]]`。內文只放結構骨架與提示，不要編造內容。
-4. 若領域有明確短期目標（如「建置並驗證交易系統」），建議使用者在 `Projects/` 開伴生專案筆記——Project 追進度、Area 存知識，做完歸檔知識留下。
+   每份開頭加一行引用回 MOC：`> 入口：[[Islands/{Island 名稱}/000-MOC|{Island 名稱} MOC]]`。內文只放結構骨架與提示，不要編造內容。
+4. 若領域有明確短期目標（如「建置並驗證交易系統」），建議使用者在 `Projects/` 開伴生專案筆記——Project 追進度、Island 存知識，做完歸檔知識留下。
 
 ### 階段 5：memory 層同步（依 memorb-ingest）
 
-1. `memorbs/context/{slug}.md`：記錄**命名與結構決策及其理由**（日後 lint/回顧時最有價值的就是「為什麼這樣定」）
-2. `MEMORY.md` 索引加一行
-3. `memorbs/log.md` 開頭 append 一筆 `ingest | 建立 Area「{名稱}」`，含決策摘要與影響頁面
+1. `memorbs/Islands/context/{slug}.md`：記錄**命名與結構決策及其理由**（日後 lint/回顧時最有價值的就是「為什麼這樣定」）。frontmatter 依 memorb-conventions 的 Islands schema，需含 `aliases: []`、`orb_emotions: []`、`recall_count: 0`、`last_recalled: null` 四個 Authority Control 欄位。
+2. `memorbs/MEMORY.md` 索引加一行
+3. `memorbs/log.md` 開頭 append 一筆 `ingest | 建立 Island「{名稱}」`，含決策摘要與影響頁面
 
 ### 階段 6：驗證
 
@@ -80,9 +80,9 @@ Area = 需要**長期維持標準的責任領域**，不是商品、工具、或
 | 藉口 | 真實情況 |
 |------|---------|
 | 「使用者說得很清楚了，直接建」 | 階段 1-3 是鐵律。命名層級錯誤的成本是日後全部連結斷裂。 |
-| 「這個目標聽起來就是 Area」 | 有完成日的是 Project。先問「做到什麼程度算完成？」 |
+| 「這個目標聽起來就是 Island」 | 有完成日的是 Project。先問「做到什麼程度算完成？」 |
 | 「先建檔案，結構之後再調」 | 資料夾改名 = wiki 連結全斷。結構討論必須在建檔前。 |
-| 「memory 同步下次再做」 | 命名與結構決策不進 memorbs/context，下次對話就忘了為什麼這樣定。 |
+| 「memory 同步下次再做」 | 命名與結構決策不進 memorbs/Islands/context，下次對話就忘了為什麼這樣定。 |
 | 「板塊筆記先幫使用者填點內容」 | 骨架歸 skill，內容歸使用者。編造內容會污染第二大腦。 |
 | 「板塊我幫使用者決定就好」 | 板塊是使用者要長期維護的分類，必須經過提議＋多選確認。 |
 | 「順手把路由表/其他 skill 修一修」 | 超出職責。發現其他 skill 有問題就回報使用者，修改歸 writing-memorb-skills 流程。 |

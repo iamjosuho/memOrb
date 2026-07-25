@@ -151,6 +151,37 @@ function validatePluginJson() {
   }
 }
 
+/**
+ * Validate fixture vault structure against memorb-conventions SSOT
+ */
+function validateFixturesStructure() {
+  const fixturesPath = path.join(REPO_ROOT, 'fixtures', 'memorbs');
+  if (!fs.existsSync(fixturesPath)) return;
+
+  console.log(`\n🏛️  Checking fixtures vault structure (memorb-conventions SSOT)...`);
+  const requiredDirs = [
+    'HQ/Core',
+    'HQ/Belief',
+    'HQ/OrbTrack',
+    'HQ/OrbTrack/Attachments',
+    'Islands/people',
+    'Islands/projects',
+    'Islands/organizations',
+    'Islands/context',
+    'Dump'
+  ];
+
+  for (const dirRel of requiredDirs) {
+    const fullDirPath = path.join(fixturesPath, dirRel);
+    if (!fs.existsSync(fullDirPath)) {
+      console.error(`  ❌ ERROR: Missing required fixture directory: fixtures/memorbs/${dirRel}`);
+      errors++;
+    } else {
+      console.log(`  ✓ Directory exists: fixtures/memorbs/${dirRel}`);
+    }
+  }
+}
+
 // Execute Linting
 const skillFiles = findSkillFiles(REPO_ROOT);
 for (const file of skillFiles) {
@@ -158,6 +189,7 @@ for (const file of skillFiles) {
 }
 
 validatePluginJson();
+validateFixturesStructure();
 
 console.log(`\n----------------------------------------`);
 console.log(`📊 Summary: Scanned ${scannedFiles} SKILL.md file(s).`);

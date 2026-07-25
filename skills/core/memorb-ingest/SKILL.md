@@ -1,6 +1,6 @@
 ---
 name: memorb-ingest
-description: "Wiki Ingest workflow: ingest raw content and update structured memory pages. Triggers: 讀這個, 整理這份逐字稿, 處理這篇文章, 幫我看這個 PDF, 這篇文章學到什麼. Prerequisite: vault-conventions."
+description: "Wiki Ingest workflow: ingest raw content and update structured memory pages. Triggers: 讀這個, 整理這份逐字稿, 處理這篇文章, 幫我看這個 PDF, 這篇文章學到什麼. Prerequisite: memorb-conventions."
 ---
 
 # Memorb Ingest Skill
@@ -26,7 +26,7 @@ description: "Wiki Ingest workflow: ingest raw content and update structured mem
    - **Update Trace Rules**:
      - **Fact Updates** (e.g. title changes, project status): Overwrite directly with latest state.
      - **Decision/Principle Updates** (tagged `#orb/anger`, `#orb/sadness`, etc.): Retain change history and context in the page body to preserve reasoning lineage.
-   - **(Crucial) PARA Active Zones**: Extract actionable strategies/knowledge into corresponding active notes in `Areas/` or `Projects/`.
+   - **(Crucial) PARA Active Zones**: Extract actionable strategies/knowledge into corresponding active notes in `Islands/` or `Projects/`.
 4. **Update Index**: `memorbs/MEMORY.md` (if new page added; keep index under 200 lines).
 5. **Log Event**: Append near top of `memorbs/log.md`:
    ```markdown

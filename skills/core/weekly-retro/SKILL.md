@@ -1,6 +1,6 @@
 ---
 name: weekly-retro
-description: "產出每週回顧。觸發詞：週回顧、每週總結、weekly retro、本週回顧、這週過得如何。前置依賴：vault-conventions。"
+description: "產出每週回顧。觸發詞：週回顧、每週總結、weekly retro、本週回顧、這週過得如何。前置依賴：memorb-conventions。"
 ---
 
 # Weekly Retro Skill

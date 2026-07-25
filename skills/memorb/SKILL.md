@@ -16,7 +16,7 @@ description: Gateway skill for Second Brain operations (read/write notes, Daily 
 Before performing any file operation:
 1. Read this gateway file.
 2. Read `SKILL.md` for **every matching sub-skill** in the routing table below.
-3. All write operations must adhere to `vault-conventions` (paths, naming, frontmatter).
+3. All write operations must adhere to `memorb-conventions` (paths, naming, frontmatter).
 4. Load multiple sub-skills if needed (e.g., transcript processing = `m365-meeting-note` + `memorb-ingest` + `daily-note`).
 
 ## Skill Router Table
@@ -26,11 +26,11 @@ Extensions reside in `skills/extensions/{name}/SKILL.md`.
 ### Core Skills (`memorb-core`)
 | Sub-skill | Location | Trigger / Scenario |
 | :--- | :--- | :--- |
-| **vault-conventions** | `core/vault-conventions` | Base layer: paths, directory structure (`memorbs/`), naming, frontmatter, templates. Required for ALL write ops. |
+| **memorb-conventions** | `core/memorb-conventions` | Base layer: paths, directory structure (`memorbs/`), naming, frontmatter, templates. Required for ALL write ops. |
 | **memorb-born** | `core/memorb-born` | Vault initialization (Phase 0), persona seed setup, CLAUDE.md generation, or `/memorb-born` reset. |
 | **daily-note** | `core/daily-note` | Create/update Daily Notes, journal entries, quick logs |
 | **orbtrack-triage** | `core/orbtrack-triage` | Process OrbTrack (`memorbs/HQ/OrbTrack/`), PARA organization, note archiving |
-| **area-creation** | `core/area-creation` | Create new Area/Long-term goal: discuss structure before file creation |
+| **island-reclamation** | `core/island-reclamation` | Create new Island/Long-term goal: discuss structure before file creation |
 | **weekly-retro** | `core/weekly-retro` | Weekly review/summary (`WeeklyRetro/YYYY-Www`) |
 | **memorb-ingest** | `core/memorb-ingest` | Ingest raw materials (transcripts, articles, PDFs) into `memorbs/` wiki |
 | **memorb-query** | `core/memorb-query` | Q&A, comparisons, decision recommendations via `memorbs/` wiki |

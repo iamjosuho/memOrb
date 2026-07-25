@@ -1,11 +1,12 @@
 ---
-name: vault-conventions
+name: memorb-conventions
 description: "Base layer conventions for the memOrb vault：路徑解析、資料夾結構、命名規則、YAML frontmatter schema、範本。所有寫入類 sub-skill 的前置依賴。觸發詞：路徑、資料夾結構、命名、模板、frontmatter、schema。"
 ---
 
-# Vault Conventions（Base Layer）
+# Memorb Conventions (Single Source of Truth / 唯一標準)
 
-> 定義所有寫入操作都必須遵守的**基礎規範**。工作流程本身歸各 sub-skill，這裡只管「東西放哪裡、長什麼格式」。
+> **本 Skill 為 memOrb 系統資料夾結構、檔名格式、YAML Schema 與規範的 Single Source of Truth (SSOT / 唯一標準)。**
+> 定義所有寫入操作與初始化（如 `/memorb-born`）都必須嚴格遵守的基礎規範。工作流程本身歸各 sub-skill，這裡只管「東西放哪裡、長什麼格式」。
 > 本檔案不假設使用者 vault 根目錄的名稱或既有結構——memOrb 只透過 `memorbs/` 這個非侵入式命名空間運作，根目錄以外的東西一律不動。
 
 ## VAULT 路徑解析
@@ -29,9 +30,9 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
 <你的 vault>/
 ├── Daily Notes/            ← 每日筆記，YYYY/MM/YYYY-MM-DD.md（巢狀，不可扁平）
 ├── Projects/               ← 有明確截止日/交付物的專案
-├── Areas/                  ← 需長期維持標準的責任領域
+├── Islands/                ← 需長期維持標準的責任領域/興趣（人格島，可持續被記憶造訪、經營）
 ├── Resources/              ← 參考資料、學習筆記（會議逐字稿原始檔在 Resources/會議記錄/raw/）
-├── Archives/               ← 使用者自己不再需要的 Projects/Areas 筆記（與 memorbs/Dump 是不同的歸檔對象，見下）
+├── Archives/               ← 使用者自己不再需要的 Projects/Islands 筆記（與 memorbs/Dump 是不同的歸檔對象，見下）
 ├── WeeklyRetro/            ← 週回顧，YYYY-Www.md
 ├── Templates/              ← 筆記範本（唯讀參考）
 ├── TASKS.md                ← 待辦清單
@@ -56,6 +57,7 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
 > **注意**：`memorbs/HQ/OrbTrack/` 是唯一的收集區。不要另外建立 `Inbox/`——兩個收集區並存只會讓 triage 邏輯分裂。
 > **注意**：歸檔統一寫作 `memorbs/Dump/{category}/`（單數 Dump）。`memorb-forgetter` 目前程式碼寫的是 `Dumps/`（複數），屬已知不一致，下一輪需修正對齊此處。
 > **注意**：`memorb-ingest`／`memorb-query`／`memorb-lint` 目前的範例路徑仍寫作扁平的 `memorbs/{category}/`，未反映 `Islands/` 這層；本檔案以 `Islands/` 為準，其餘 skill 的路徑範例需要在下一輪同步修正。
+> **注意**：`$VAULT/Islands/`（vault 根目錄）與 `memorbs/Islands/`（memOrb 命名空間內）是兩個不同路徑，但共用同一種「持續存在、需要被記憶造訪維持」的人格島意象——前者是使用者實際經營的長期領域/興趣筆記，後者是 memOrb 內部的人物/專案/組織/情境權威記錄。操作時務必用完整路徑區分兩者，不要混寫。
 > **注意**：`persona.md`／`identity.md` 是固定的 Hot Cache 檔案（各一份，不會重複），`Core/`／`Belief/` 是裝 orb 的資料夾（一 orb 一檔，數量會持續增加）。四者角色不同，不要互相混用。
 
 ## Session 開頭必讀
@@ -70,11 +72,11 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
 4. **語言**：內文預設繁體中文。
 5. **Emoji**：非結構性標題不加 emoji；頂層資料夾名稱不含 emoji。
 6. **動作後回報**：建立/更新筆記後，回報檔案路徑給使用者。
-7. **MOC 命名**：Area/Project 的入口筆記統一命名 `000-MOC.md`；跨資料夾引用一律用完整路徑 `[[Areas/{名稱}/000-MOC|{名稱}]]`，避免同名歧義。
+7. **MOC 命名**：Island/Project 的入口筆記統一命名 `000-MOC.md`；跨資料夾引用一律用完整路徑 `[[Islands/{名稱}/000-MOC|{名稱}]]`，避免同名歧義。
 
 ## Frontmatter Schema
 
-### 一般筆記（Daily Note / Project / Area / Resource）
+### 一般筆記（Daily Note / Project / Island / Resource）
 
 ```yaml
 ---
@@ -147,7 +149,7 @@ derived_from: []       # 僅 belief orb 使用：回連提煉出此信念的 Cor
 | Daily Note | `Templates/Daily Note Template.md` |
 | Meeting Note | `Templates/Meeting Note Template.md` |
 | Project | `Templates/Project Template.md` |
-| Area | `Templates/Area Template.md` |
+| Island | `Templates/Island Template.md` |
 | Resource | `Templates/Resource Template.md` |
 | General Note | `Templates/Note Template.md` |
 

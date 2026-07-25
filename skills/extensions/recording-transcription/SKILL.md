@@ -1,6 +1,6 @@
 ---
 name: recording-transcription
-description: "手動提供的會議/面談錄音檔（手機錄音、m4a/mp3/wav，非 Teams 來源）轉逐字稿處理助理。負責探測本地 Whisper 是否可用、音檔正規化與長檔切段、背景轉錄＋進度輪詢、簡轉繁，並與使用者提供的 iPhone 內建語音轉文字草稿比對校正人名/術語，產出可靠逐字稿與面談分析後交給 memorb-ingest。只要提到錄音、逐字稿、轉錄、面談、語音轉文字、STT、m4a，且來源不是 Teams 會議，就該用這個 skill。前置依賴：vault-conventions；下游接 memorb-ingest。"
+description: "手動提供的會議/面談錄音檔（手機錄音、m4a/mp3/wav，非 Teams 來源）轉逐字稿處理助理。負責探測本地 Whisper 是否可用、音檔正規化與長檔切段、背景轉錄＋進度輪詢、簡轉繁，並與使用者提供的 iPhone 內建語音轉文字草稿比對校正人名/術語，產出可靠逐字稿與面談分析後交給 memorb-ingest。只要提到錄音、逐字稿、轉錄、面談、語音轉文字、STT、m4a，且來源不是 Teams 會議，就該用這個 skill。前置依賴：memorb-conventions；下游接 memorb-ingest。"
 ---
 
 # 🎙️ recording-transcription Skill

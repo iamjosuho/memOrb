@@ -24,7 +24,7 @@ OrbTrack 只是**暫存區**（未處理、待分類），位於 `memorbs/HQ/Orb
 | 判斷 | 去向 |
 |------|------|
 | 有明確截止日或交付物 | `Projects/` |
-| 長期持續關注的責任領域 | `Areas/` |
+| 長期持續關注的責任領域/興趣 | `Islands/` |
 | 參考資料、學習筆記 | `Resources/` |
 | 已完成或不再相關 | `Archives/` |
 
@@ -39,5 +39,5 @@ OrbTrack 只是**暫存區**（未處理、待分類），位於 `memorbs/HQ/Orb
 | 藉口                           | 真實情況                                            |
 | ---------------------------- | ----------------------------------------------- |
 | 「OrbTrack 跟 Resources 差不多，放哪都行」 | OrbTrack 是未處理，Resources 是長期知識庫。定義嚴格區分。          |
-| 「先大概分類，檔名隨便」                 | 檔名與日期格式必須符合 vault-conventions。                  |
+| 「先大概分類，檔名隨便」                 | 檔名與日期格式必須符合 memorb-conventions。                  |
 | 「這張名片圖我直接歸檔」                 | 名片必須走 business-card-ingestion 的 Page Bundle 流程。 |
