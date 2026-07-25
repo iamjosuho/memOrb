@@ -16,16 +16,15 @@ description: "Phase 0 Vault Initialization Skill: setup user identity, AI adviso
    - **Q2 (Identity & Role)**: Warmly greet the user (e.g., "Welcome! Today is YYYY-MM-DD, and your Second Brain is officially born."), then collect their preferred name, birthday (optional), education/career history, current title/organization, and key target goals.
    - **Q3 (AI Advisor Persona)**: Desired AI tone and relationship (e.g., Senior Manager & Career Advisor, technical strategist, concise assistant).
    - **Q4 (Vault Path & Integrations)**: Second Brain root path and connected tools/MCPs.
-3. **Create Complete Folder Structure & Base Files** (Strictly following `memorb-conventions` SSOT):
+3. **Create Complete Folder Structure & Base Files** (Strictly following `memorb-conventions` SSOT — note `Long-Term/` and `Islands/` live at the vault root, not inside `memorbs/`):
    - Execute directory creation:
      ```bash
      mkdir -p "$VAULT/memorbs/HQ/Core"
      mkdir -p "$VAULT/memorbs/HQ/Belief"
      mkdir -p "$VAULT/memorbs/HQ/OrbTrack/Attachments"
-     mkdir -p "$VAULT/memorbs/Islands/people"
-     mkdir -p "$VAULT/memorbs/Islands/projects"
-     mkdir -p "$VAULT/memorbs/Islands/organizations"
-     mkdir -p "$VAULT/memorbs/Islands/context"
+     mkdir -p "$VAULT/Long-Term/Projects"
+     mkdir -p "$VAULT/Long-Term/People"
+     mkdir -p "$VAULT/Long-Term/Orgs"
      mkdir -p "$VAULT/memorbs/Dump"
      ```
    - Ensure initial creation of index file `memorbs/MEMORY.md` and event log `memorbs/log.md` if not present.

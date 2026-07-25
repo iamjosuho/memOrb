@@ -30,12 +30,12 @@ Extensions reside in `skills/extensions/{name}/SKILL.md`.
 | **memorb-born** | `core/memorb-born` | Vault initialization (Phase 0), persona seed setup, CLAUDE.md generation, or `/memorb-born` reset. |
 | **daily-note** | `core/daily-note` | Create/update Daily Notes, journal entries, quick logs |
 | **orbtrack-triage** | `core/orbtrack-triage` | Process OrbTrack (`memorbs/HQ/OrbTrack/`), PARA organization, note archiving |
-| **island-reclamation** | `core/island-reclamation` | Create new Island/Long-term goal: discuss structure before file creation |
+| **island-reclamation** | `core/island-reclamation` | Create new Island (long-term interest/responsibility domain): discuss structure before file creation |
 | **weekly-retro** | `core/weekly-retro` | Weekly review/summary (`WeeklyRetro/YYYY-Www`) |
-| **memorb-ingest** | `core/memorb-ingest` | Ingest raw materials (transcripts, articles, PDFs) into `memorbs/` wiki |
-| **memorb-query** | `core/memorb-query` | Q&A, comparisons, decision recommendations via `memorbs/` wiki |
-| **memorb-lint** | `core/memorb-lint` | Vault health check and `memorbs/` wiki MUSTY linting |
-| **memorb-forgetter** | `core/memorb-forgetter` | Execute MUSTY archiving to `Archives/memorbs/` and update vault Wiki Links |
+| **memorb-ingest** | `core/memorb-ingest` | Ingest raw materials (transcripts, articles, PDFs) into `Long-Term/`／`memorbs/` wiki |
+| **memorb-query** | `core/memorb-query` | Q&A, comparisons, decision recommendations via `Long-Term/`／`memorbs/` wiki |
+| **memorb-lint** | `core/memorb-lint` | Vault health check and `Long-Term/`／`memorbs/` wiki MUSTY linting |
+| **memorb-forgetter** | `core/memorb-forgetter` | Execute MUSTY archiving to `memorbs/Dump/` and update vault Wiki Links |
 | **session-closeout** | `core/session-closeout` | Session termination: Daily Note summary, log.md, git commit/push |
 | **writing-memorb-skills** | `core/writing-memorb-skills` | Create/modify vault skills (Meta) |
 

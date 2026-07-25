@@ -21,18 +21,22 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
 
 ## 資料夾結構
 
-兩層並存，互不干涉：
+三層並存：
 
-1. **使用者原生筆記**（vault 根目錄，memOrb 完全不改動其既有結構）
-2. **`memorbs/`**（memOrb 專屬命名空間，唯一會主動寫入/維護的地方）
+1. **使用者原生筆記**（`Daily Notes/`、`Resources/`、`Archives/`、`WeeklyRetro/`、`Templates/`、`TASKS.md`，memOrb 只依既有慣例寫入，不改動其結構）
+2. **`Islands/`、`Long-Term/`**（vault 根目錄下由 memOrb 定義結構、主動維護的兩個資料夾：`Islands/` 只放長期領域/興趣的敘事層，`Long-Term/` 放 Projects／People／Orgs 的實體內容頁）
+3. **`memorbs/`**（memOrb 專屬命名空間：HQ 人設/身分/Core/Belief/OrbTrack、Dump 歸檔、MEMORY.md、log.md）
 
 ```text
 <你的 vault>/
 ├── Daily Notes/            ← 每日筆記，YYYY/MM/YYYY-MM-DD.md（巢狀，不可扁平）
-├── Projects/               ← 有明確截止日/交付物的專案
-├── Islands/                ← 需長期維持標準的責任領域/興趣（人格島，可持續被記憶造訪、經營）
+├── Islands/                ← 需長期維持標準的責任領域/興趣（人格島）：只放現況、長期目標、板塊筆記、MOC，不存放實體 orb，靠連結指向 Long-Term/ 的實體頁面
+├── Long-Term/              ← 長期記憶倉庫，存放實際內容頁（原 Projects/ 與 memorbs/Islands/ 的人物/專案/組織記錄合併於此，一個實體只留一份頁面）
+│   ├── Projects/           ← 有明確截止日/交付物的專案（含歷程紀錄）
+│   ├── People/             ← 關鍵協作者（Authority Control 頁面，見下）
+│   └── Orgs/               ← 組織與團隊（Authority Control 頁面，見下）
 ├── Resources/              ← 參考資料、學習筆記（會議逐字稿原始檔在 Resources/會議記錄/raw/）
-├── Archives/               ← 使用者自己不再需要的 Projects/Islands 筆記（與 memorbs/Dump 是不同的歸檔對象，見下）
+├── Archives/               ← 使用者自己不再需要的 Islands/Long-Term 筆記（與 memorbs/Dump 是不同的歸檔對象，見下）
 ├── WeeklyRetro/            ← 週回顧，YYYY-Www.md
 ├── Templates/              ← 筆記範本（唯讀參考）
 ├── TASKS.md                ← 待辦清單
@@ -43,11 +47,6 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
     │   ├── Core/             ← Core Memory orbs，一 orb 一檔（有轉折意義的具體經驗）
     │   ├── Belief/           ← Belief orbs，一 orb 一檔（從經驗提煉出的價值/信念聲明）
     │   └── OrbTrack/         ← 唯一的快速收集區（`Attachments/` 放附加檔案），由 orbtrack-triage 清空
-    ├── Islands/
-    │   ├── people/           ← 關鍵協作者
-    │   ├── projects/         ← 專案里程碑軌跡
-    │   ├── organizations/    ← 組織與團隊
-    │   └── context/          ← 環境參數與領域規則
     ├── Dump/
     │   └── {category}/       ← MUSTY 淘汰後的歸檔頁（由 memorb-forgetter 搬入）
     ├── MEMORY.md             ← 全庫索引（≤200 行）
@@ -55,14 +54,14 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
 ```
 
 > **注意**：`memorbs/HQ/OrbTrack/` 是唯一的收集區。不要另外建立 `Inbox/`——兩個收集區並存只會讓 triage 邏輯分裂。
-> **注意**：歸檔統一寫作 `memorbs/Dump/{category}/`（單數 Dump）。`memorb-forgetter` 目前程式碼寫的是 `Dumps/`（複數），屬已知不一致，下一輪需修正對齊此處。
-> **注意**：`memorb-ingest`／`memorb-query`／`memorb-lint` 目前的範例路徑仍寫作扁平的 `memorbs/{category}/`，未反映 `Islands/` 這層；本檔案以 `Islands/` 為準，其餘 skill 的路徑範例需要在下一輪同步修正。
-> **注意**：`$VAULT/Islands/`（vault 根目錄）與 `memorbs/Islands/`（memOrb 命名空間內）是兩個不同路徑，但共用同一種「持續存在、需要被記憶造訪維持」的人格島意象——前者是使用者實際經營的長期領域/興趣筆記，後者是 memOrb 內部的人物/專案/組織/情境權威記錄。操作時務必用完整路徑區分兩者，不要混寫。
+> **注意**：歸檔統一寫作 `memorbs/Dump/{category}/`（單數 Dump）。
+> **注意**：`Long-Term/People`／`Long-Term/Orgs`／`Long-Term/Projects` 取代了原本的 `memorbs/Islands/{people,organizations,projects}`，`memorbs/Islands/` 這個命名空間已廢除。原本歸在 `context/` 的環境規則不再獨立分類，直接寫進相關實體的 Long-Term 頁面本體。
+> **注意**：`recording-transcription`／`business-card-ingestion`／`weekly-report`／`memorb-domain-query`／`m365-meeting-note` 幾個 extension skill 目前仍寫作舊的扁平路徑（`memorbs/people/`、`memorbs/organizations/`、`memorbs/projects/`），尚未同步到 `Long-Term/`，下一輪需修正對齊此處。
 > **注意**：`persona.md`／`identity.md` 是固定的 Hot Cache 檔案（各一份，不會重複），`Core/`／`Belief/` 是裝 orb 的資料夾（一 orb 一檔，數量會持續增加）。四者角色不同，不要互相混用。
 
 ## Session 開頭必讀
 
-每次 session 開始，必讀 `memorbs/HQ/persona.md` 與 `memorbs/HQ/identity.md`（兩者合計仍需 <100 行，維持 Hot Cache 的精簡）。`Core/`、`Belief/`、`Islands/` 底下的 orb／頁面一律交由 `memorb-query` 視情境查詢與回填，不必每次全讀。
+每次 session 開始，必讀 `memorbs/HQ/persona.md` 與 `memorbs/HQ/identity.md`（兩者合計仍需 <100 行，維持 Hot Cache 的精簡）。`Core/`、`Belief/` 底下的 orb，以及 `Long-Term/` 底下的實體頁面，一律交由 `memorb-query` 視情境查詢與回填，不必每次全讀。
 
 ## 命名與格式規則
 
@@ -72,11 +71,11 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
 4. **語言**：內文預設繁體中文。
 5. **Emoji**：非結構性標題不加 emoji；頂層資料夾名稱不含 emoji。
 6. **動作後回報**：建立/更新筆記後，回報檔案路徑給使用者。
-7. **MOC 命名**：Island/Project 的入口筆記統一命名 `000-MOC.md`；跨資料夾引用一律用完整路徑 `[[Islands/{名稱}/000-MOC|{名稱}]]`，避免同名歧義。
+7. **MOC 命名**：Island 的入口筆記統一命名 `000-MOC.md`；跨資料夾引用一律用完整路徑 `[[Islands/{名稱}/000-MOC|{名稱}]]`，避免同名歧義。`Long-Term/` 底下的實體頁面（Projects／People／Orgs）預設為單一頁面，不強制要求 MOC。
 
 ## Frontmatter Schema
 
-### 一般筆記（Daily Note / Project / Island / Resource）
+### 一般筆記（Daily Note / Island / Resource）
 
 ```yaml
 ---
@@ -87,9 +86,9 @@ status: active   # active | processed | unprocessed | archived
 ---
 ```
 
-### `memorbs/Islands/` 頁面（Authority Control & Circulation Tracking）
+### `Long-Term/` 頁面（Projects／People／Orgs，Authority Control & Circulation Tracking）
 
-Islands 頁面除一般欄位外，**必須**額外具備以下四個欄位，供 `memorb-ingest`／`memorb-query`／`memorb-lint` 讀寫：
+Long-Term 頁面除一般欄位外，**必須**額外具備以下四個欄位，供 `memorb-ingest`／`memorb-query`／`memorb-lint` 讀寫：
 
 ```yaml
 ---
@@ -110,7 +109,7 @@ status: archived
 archived_at: {YYYY-MM-DD}
 ```
 
-若讀到的 Islands 頁面缺少上述任一欄位，視為舊資料，讀取當下就地補上預設值（`aliases: []`、`orb_emotions: []`、`recall_count: 0`、`last_recalled: null`），不需要另外開一輪修改流程。
+若讀到的 Long-Term 頁面缺少上述任一欄位，視為舊資料，讀取當下就地補上預設值（`aliases: []`、`orb_emotions: []`、`recall_count: 0`、`last_recalled: null`），不需要另外開一輪修改流程。
 
 ### `memorbs/HQ/Core/` 與 `memorbs/HQ/Belief/` 的 orb 檔案
 
@@ -139,7 +138,7 @@ derived_from: []       # 僅 belief orb 使用：回連提煉出此信念的 Cor
 
 
 ## 關鍵關係
-- [[memorbs/Islands/people/{Name}|{Name}]]（{關係}）
+- [[Long-Term/People/{Name}|{Name}]]（{關係}）
 ```
 
 ## 範本路徑
@@ -153,7 +152,7 @@ derived_from: []       # 僅 belief orb 使用：回連提煉出此信念的 Cor
 | Resource | `Templates/Resource Template.md` |
 | General Note | `Templates/Note Template.md` |
 
-*(待固化：`memorbs/HQ/` 與 `memorbs/Islands/` 頁面目前沒有固定範本檔，格式僅由上方 Frontmatter Schema 約束，由 `memorb-born`／`memorb-ingest` 直接生成。)*
+*(待固化：`memorbs/HQ/` 與 `Long-Term/` 頁面目前沒有固定範本檔，格式僅由上方 Frontmatter Schema 約束，由 `memorb-born`／`memorb-ingest` 直接生成；`Project` 範本也需要更新為含 Authority Control 欄位的版本。)*
 
 ## Vault 搜尋
 

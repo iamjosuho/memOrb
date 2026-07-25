@@ -30,37 +30,39 @@ By bridging task performance with personal values, **memOrb helps users achieve 
 
 ## 🔮 Worldview Architecture
 
-memOrb structures your memory vault inside `memorbs/` as a modular, self-maintaining cognitive ecosystem:
+memOrb structures your vault as a modular, self-maintaining cognitive ecosystem, split across three layers — Islands of Personality, Long-Term Memory, and memOrb's own `memorbs/` namespace:
 
 ```text
-memorbs/
-├── HQ/                       # Headquarters: Persona, Identity & Core/Belief Orbs
-│   ├── persona.md            # AI advisor tone & role (Hot Cache, always read)
-│   ├── identity.md           # Who the user is: background, goals, key relationships (Hot Cache, always read)
-│   ├── Core/                 # Core Memory orbs — one formative experience per file
-│   ├── Belief/                # Belief orbs — values/principles distilled from Core orbs
-│   └── OrbTrack/             # Fast capture & pending triage
-├── Islands/                  # Islands of Growth (Structured Wiki Layer)
-│   ├── people/               # Key collaborators & relationships
-│   ├── projects/             # Active & completed milestone tracks
-│   ├── context/              # Environmental parameters & domain rules
-│   └── organizations/        # Organizations & team dynamics
-└── Dump/                     # Memory Dump & Archival (MUSTY Collection)
-    └── {category}/           # Stale, superseded, or pruned memories
+<your vault>/
+├── Islands/                   # Islands of Personality — narrative layer only, never stores content directly
+│   └── {name}/                # 000-MOC.md + section notes: current state, long-term goals, links out to Long-Term/
+├── Long-Term/                 # Long-Term Memory — where the actual content pages live
+│   ├── Projects/              # Deadline-bound work, with milestone history
+│   ├── People/                # Key collaborators (Authority Control pages)
+│   └── Orgs/                  # Organizations & teams (Authority Control pages)
+└── memorbs/                   # memOrb's own namespace
+    ├── HQ/                    # Headquarters: Persona, Identity & Core/Belief Orbs
+    │   ├── persona.md         # AI advisor tone & role (Hot Cache, always read)
+    │   ├── identity.md        # Who the user is: background, goals, key relationships (Hot Cache, always read)
+    │   ├── Core/              # Core Memory orbs — one formative experience per file
+    │   ├── Belief/             # Belief orbs — values/principles distilled from Core orbs
+    │   └── OrbTrack/          # Fast capture & pending triage
+    └── Dump/                  # Memory Dump & Archival (MUSTY Collection)
+        └── {category}/        # Stale, superseded, or pruned memories
 ```
 
 ### 🏛️ The Five Cognitive Pillars
 
 1. **Headquarters, Identity & Core Orbs (`memorbs/HQ/`)**  
    The central control room: `persona.md` (AI advisor tone) and `identity.md` (who the user is) are small, always-read Hot Cache files, while `Core/` and `Belief/` hold individual orb files — formative experiences and the values distilled from them — plus the `OrbTrack/` capture zone where new inputs land before triage.
-2. **Islands of Growth (`memorbs/Islands/`)**  
-   Dedicated wiki islands categorizing knowledge across People, Projects, Context, and Organizations for instant agent recall.
+2. **Islands of Personality (`Islands/`) & Long-Term Memory (`Long-Term/`)**  
+   Islands hold only the narrative of a long-term domain — current state, goals, section notes — never content itself. People, Projects, and Org pages live in `Long-Term/`, connected back to their Islands by wiki-links, mirroring how a mind keeps its Islands of Personality separate from the shelves of Long-Term Memory.
 3. **Memory Dump & MUSTY Archiving (`memorbs/Dump/`)**  
    Automated MUSTY (*Misleading, Ugly, Superseded, Trivial, Your collection doesn't need it*) linting and pruning powered by `memorb-forgetter`.
 4. **Authority Control & Circulation Tracking**  
-   Silent metadata backfills (`last_recalled`, `recall_count`, and `aliases: [...]`) ensure alias mapping and decay metrics across all memory queries.
-5. **Non-Invasive Vault Namespace**  
-   Strictly isolated within `memorbs/`, leaving your existing Obsidian folder structure and conventions untouched and non-polluted.
+   Silent metadata backfills (`last_recalled`, `recall_count`, and `aliases: [...]`) ensure alias mapping and decay metrics across all memory queries — visible right in your `Long-Term/` pages, not hidden away.
+5. **A Managed, Not Invisible, Vault Layer**  
+   `Islands/`, `Long-Term/`, and `memorbs/` are the three folders memOrb actively defines and maintains; your other native folders (Daily Notes, Resources, Archives, WeeklyRetro, Templates) keep their existing structure untouched.
 
 ---
 
@@ -129,7 +131,7 @@ In your agent chat (Claude Code, Antigravity, Cursor, etc.), run:
 ```text
 "Run the /memorb-born skill to set up my memorb Memory Vault."
 ```
-The agent will launch an interactive 3-5 question onboarding prompt to construct `memorbs/HQ/persona.md` and `memorbs/HQ/identity.md`, and initialize your `Core/`, `Belief/`, and `Islands/` folders.
+The agent will launch an interactive 3-5 question onboarding prompt to construct `memorbs/HQ/persona.md` and `memorbs/HQ/identity.md`, and initialize your `Core/`, `Belief/`, and `Long-Term/` folders.
 
 ---
 

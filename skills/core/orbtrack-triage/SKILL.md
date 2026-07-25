@@ -23,7 +23,7 @@ OrbTrack 只是**暫存區**（未處理、待分類），位於 `memorbs/HQ/Orb
 
 | 判斷 | 去向 |
 |------|------|
-| 有明確截止日或交付物 | `Projects/` |
+| 有明確截止日或交付物 | `Long-Term/Projects/` |
 | 長期持續關注的責任領域/興趣 | `Islands/` |
 | 參考資料、學習筆記 | `Resources/` |
 | 已完成或不再相關 | `Archives/` |
