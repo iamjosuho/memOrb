@@ -146,11 +146,20 @@ bash scripts/reset-sandbox.sh
 # 1b. Reset sandbox as COMPLETELY EMPTY (for testing /memorb-born initialization from zero)
 bash scripts/reset-sandbox.sh --empty
 
-# 2. Lint all SKILL.md files and verify plugin.json references are consistent
+# 2. Lint all SKILL.md files, plugin.json registration, fixtures, and
+#    architecture drift (stale/deprecated path references)
 node scripts/lint-skills.js
+# or: npm run lint
+
+# 3. (one-time) install the git pre-commit hook so the linter above runs
+#    automatically on every `git commit` — also runs automatically via the
+#    npm "prepare" script on `npm install`
+bash scripts/install-hooks.sh
 ```
 
-> Note: there is currently no automated test suite — the linter above only checks skill file structure and routing consistency, not runtime behavior. Verifying a skill's actual behavior still requires walking through it manually in an agent session.
+> Note: there is currently no automated test suite — the linter above only checks skill file structure, routing consistency, fixture structure, and path/architecture drift, not runtime behavior. Verifying a skill's actual behavior still requires walking through it manually in an agent session.
+>
+> When a folder/namespace gets renamed (e.g. the `Islands/{people,organizations,projects}` → `Long-Term/` migration), add the old path to the `DEPRECATED_PATTERNS` list in `scripts/lint-skills.js` — every future `npm run lint` and every `git commit` will then catch any skill or fixture still using the old path automatically.
 
 ---
 

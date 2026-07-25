@@ -56,7 +56,7 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
 > **注意**：`memorbs/HQ/OrbTrack/` 是唯一的收集區。不要另外建立 `Inbox/`——兩個收集區並存只會讓 triage 邏輯分裂。
 > **注意**：歸檔統一寫作 `memorbs/Dump/{category}/`（單數 Dump）。
 > **注意**：`Long-Term/People`／`Long-Term/Orgs`／`Long-Term/Projects` 取代了原本的 `memorbs/Islands/{people,organizations,projects}`，`memorbs/Islands/` 這個命名空間已廢除。原本歸在 `context/` 的環境規則不再獨立分類，直接寫進相關實體的 Long-Term 頁面本體。
-> **注意**：`recording-transcription`／`business-card-ingestion`／`weekly-report`／`memorb-domain-query`／`m365-meeting-note` 幾個 extension skill 目前仍寫作舊的扁平路徑（`memorbs/people/`、`memorbs/organizations/`、`memorbs/projects/`），尚未同步到 `Long-Term/`，下一輪需修正對齊此處。
+> **注意**：`recording-transcription`／`business-card-ingestion`／`weekly-report`／`memorb-domain-query`／`m365-meeting-note` 幾個 extension skill 原本仍寫作舊的扁平路徑（`memorbs/people/`、`memorbs/organizations/`、`memorbs/projects/`），已於 2026-07-25 同步對齊為 `Long-Term/People/`、`Long-Term/Orgs/`、`Long-Term/Projects/`。`fixtures/memorbs/Islands/` 測試樣本與 `scripts/lint-skills.js` 的 fixture 結構驗證同步更新為 `fixtures/Long-Term/{Projects,People,Orgs}`。
 > **注意**：`persona.md`／`identity.md` 是固定的 Hot Cache 檔案（各一份，不會重複），`Core/`／`Belief/` 是裝 orb 的資料夾（一 orb 一檔，數量會持續增加）。四者角色不同，不要互相混用。
 
 ## Session 開頭必讀

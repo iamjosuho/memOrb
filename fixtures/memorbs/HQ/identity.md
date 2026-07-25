@@ -17,5 +17,5 @@ updated: 2026-07-25
 - **Key Focus**: Architectural purity, agent-agnostic portability, library science MUSTY linting.
 
 ## 關鍵關係
-- **Alex**（Senior Engineer）— [[memorbs/Islands/people/Alex|Alex]]
-- **AcmeCorp**（Organization）— [[memorbs/Islands/organizations/AcmeCorp|AcmeCorp]]
+- **Alex**（Senior Engineer）— [[Long-Term/People/Alex|Alex]]
+- **AcmeCorp**（Organization）— [[Long-Term/Orgs/AcmeCorp|AcmeCorp]]

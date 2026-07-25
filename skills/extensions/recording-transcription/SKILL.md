@@ -95,7 +95,7 @@ rm -rf "$WORKDIR"
 
 > ⚠️ **Context Window 保護機制**：逐字稿通常動輒數萬字，**禁止主 Agent 直接讀取整份逐字稿**。你必須使用 `invoke_subagent` 工具派遣一個子代理（如 `research` 或 `self`），將以下 Step 3 與 Step 4 的任務交辦給它，讓子代理去閱讀、校正並總結出面談分析後回報。
 
-1. 動態讀取 `memorbs/glossary.md` 與 `memorbs/people/*/*.md`（含子資料夾 Page Bundle）取得目前已知的人名、暱稱、專案代號、術語——不要用寫死的字典，這份清單會一直變
+1. 動態讀取 `memorbs/glossary.md` 與 `Long-Term/People/*.md`（含子資料夾 Page Bundle）取得目前已知的人名、暱稱、專案代號、術語——不要用寫死的字典，這份清單會一直變
 2. 可以向使用者確認錄音中有誰
 3. 若 Step 2A 與 Step 2B 兩份資料都有（本地 Whisper 輸出＋手機草稿），互相對照：Whisper 對語流/標點通常較穩，手機內建版對「使用者手機通訊錄/字典裡已有的專有名詞」有時反而更準，尤其是人名。兩邊對不上的地方，才是真正需要人工確認的地方
 4. 只有一份資料時（通常是純草稿路徑），對照 glossary/people 修正明顯誤轉（例如 eBao→「e 包／醫保」、Halu→「哈魯」之類的同音錯字），修正**另存清稿版本**，保留原始草稿不覆蓋
@@ -111,9 +111,9 @@ rm -rf "$WORKDIR"
 | 決策 | 這次面談拍板了什麼、還懸而未決的是什麼 |
 | 對使用者的回饋/期待 | 對方對使用者的表現、方向有什麼明確或暗示性的評語 |
 | 待釐清問題 | 逐字稿裡模糊、需要下次面談或訊息追問清楚的地方 |
-| 與既有 memory 的呼應 | 對照 `memorbs/people/` 裡對方的既有記錄，這次談話是印證、還是推翻了先前的理解 |
+| 與既有 memory 的呼應 | 對照 `Long-Term/People/` 裡對方的既有記錄，這次談話是印證、還是推翻了先前的理解 |
 
-輸出分析前，先讀一次對方在 `memorbs/people/` 的既有頁面，確保分析銜接既有脈絡，而不是每次從零開始。
+輸出分析前，先讀一次對方在 `Long-Term/People/` 的既有頁面，確保分析銜接既有脈絡，而不是每次從零開始。
 
 ### Step 5：存檔與交接 memorb-ingest
 
@@ -123,7 +123,7 @@ rm -rf "$WORKDIR"
 | 逐字稿（raw，未修正） | `Resources/會議記錄/raw/{YYYY-MM-DD}-{標題}.md` |
 | 逐字稿（清稿＋面談分析） | `memorbs/meeting-note/{YYYY-MM-DD} 與{對象}面談.md` |
 
-完成後交給 `memorb-ingest` 走完整流程（掃描影響 `memorbs/people`、`memorbs/projects`、`log.md`、`MEMORY.md` 索引、PARA 活躍區）。本 skill 只負責「錄音→可靠逐字稿＋初步分析」，不重複做 memorb-ingest 的事。
+完成後交給 `memorb-ingest` 走完整流程（掃描影響 `Long-Term/People`、`Long-Term/Projects`、`log.md`、`MEMORY.md` 索引、PARA 活躍區）。本 skill 只負責「錄音→可靠逐字稿＋初步分析」，不重複做 memorb-ingest 的事。
 
 ## 注意事項
 

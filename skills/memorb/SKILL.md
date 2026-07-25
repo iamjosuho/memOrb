@@ -45,7 +45,7 @@ Extensions reside in `skills/extensions/{name}/SKILL.md`.
 | :--- | :--- | :--- |
 | **m365-meeting-note** | `extensions/m365-meeting-note` | Process Teams meeting transcripts & minutes |
 | **recording-transcription** | `extensions/recording-transcription` | Non-Teams voice recordings (phone, interview, m4a) to transcript |
-| **business-card-ingestion** | `extensions/business-card-ingestion` | Business cards to `memorbs/people/` Page Bundle |
+| **business-card-ingestion** | `extensions/business-card-ingestion` | Business cards to `Long-Term/People/` Page Bundle |
 | **memorb-domain-query** | `extensions/memorb-domain-query` | Bi-directional domain/email lookup & M365/Outlook integration |
 | **weekly-report** | `extensions/weekly-report` | Generate CEO weekly report pptx |
 | **obsidian-cli** | `extensions/obsidian-cli` | Obsidian CLI commands (requires app running) |

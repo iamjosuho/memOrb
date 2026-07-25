@@ -8,5 +8,5 @@
 - [[memorbs/HQ/Belief/decoupled-architecture|Belief Orb: Decoupled Architecture]]
 - [[memorbs/HQ/Belief/musty-library-science|Belief Orb: MUSTY Library Science]]
 
-## Islands
-- [[memorbs/Islands/people/Alex|Alex (Senior Engineer)]]
+## Long-Term
+- [[Long-Term/People/Alex|Alex (Senior Engineer)]]

@@ -6,7 +6,9 @@
   "scripts": {
     "lint": "node scripts/lint-skills.js",
     "clean": "bash scripts/reset-sandbox.sh --empty",
-    "reset-sandbox": "bash scripts/reset-sandbox.sh"
+    "reset-sandbox": "bash scripts/reset-sandbox.sh",
+    "install-hooks": "bash scripts/install-hooks.sh",
+    "prepare": "bash scripts/install-hooks.sh"
   },
   "keywords": [
     "memory",

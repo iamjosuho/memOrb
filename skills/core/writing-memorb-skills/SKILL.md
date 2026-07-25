@@ -37,7 +37,12 @@ description: Meta skill：新增或修改本 vault 的任何 sub-skill 時使用
 ## 測試
 
 - 新 skill 寫完後，模擬一次觸發情境走一遍步驟，確認路徑與指令可執行
-- 下次 lint 時檢查：路由表與 `skills/` 目錄是否一致
+- 執行 `npm run lint`（等同 `node scripts/lint-skills.js`）：檢查 frontmatter 合法性、路由表與 `skills/` 目錄是否一致（有沒有孤兒 skill 沒登記進 `plugin.json`）、fixtures 結構是否對齊 SSOT、以及有沒有殘留的舊路徑寫法
+- `git commit` 時這支 linter 會經由 `scripts/git-hooks/pre-commit`（由 `scripts/install-hooks.sh` 安裝，`npm install` 時透過 `prepare` 腳本自動掛上）自動再跑一次，有錯會直接擋下 commit——不必等下一輪才被人工發現
+
+### 架構改名時（資料夾改名、命名空間廢除）
+
+把舊寫法加進 `scripts/lint-skills.js` 的 `DEPRECATED_PATTERNS` 清單（含 pattern／建議寫法／原因），之後每次 `npm run lint` 或每次 commit 都會自動掃過 `skills/`、`fixtures/`、`README.md` 全部 Markdown 檔案抓出還沒同步的殘留引用，不用每次手動重新 grep 全庫一輪。
 
 ## Red Flags
 
@@ -46,3 +51,4 @@ description: Meta skill：新增或修改本 vault 的任何 sub-skill 時使用
 | 「skill 寫好了，路由表下次補」 | 沒進路由表 = 永遠不會被觸發。註冊流程缺一不可。 |
 | 「description 隨便寫，內文才重要」 | 路由靠 description 觸發詞。寫錯就路由失敗。 |
 | 「規則直接加進 CLAUDE.md 比較快」 | CLAUDE.md 是 schema 層（限 100 行），工作流歸 skill。 |
+| 「這次架構改名只改使用者點名的幾個檔案就好」 | 舊寫法沒加進 `DEPRECATED_PATTERNS`，下次同一個坑還是得靠人工全庫 grep 才找得到。 |

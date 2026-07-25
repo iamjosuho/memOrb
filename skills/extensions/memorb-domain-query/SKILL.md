@@ -9,7 +9,7 @@ description: Use when querying companies, employees, or contacts by email addres
 
 Bi-directional query workflow connecting **Email Addresses**, **Domains**, and **Company Wikis** in Second Brain, integrated with Outlook/M365 email operations.
 
-Core Principle: **Domain is the primary digital identifier linking company wikis (`memorbs/organizations/`), employee profile notes (`memorbs/people/`), and external email systems (M365/Outlook).**
+Core Principle: **Domain is the primary digital identifier linking company wikis (`Long-Term/Orgs/`), employee profile notes (`Long-Term/People/`), and external email systems (M365/Outlook).**
 
 ---
 
@@ -34,8 +34,8 @@ flowchart TD
     CheckType -- Email Ingestion --> ModeC[Mode C: Auto-attribute Sender Domain]
     CheckType -- Company Email Check --> ModeD[Mode D: Domain List → Outlook Query]
     
-    ModeA --> QueryOrgByDomain[1. Grep memorbs/organizations/ for domain]
-    QueryOrgByDomain --> QueryPeopleByEmail[2. Grep memorbs/people/ for contact info]
+    ModeA --> QueryOrgByDomain[1. Grep Long-Term/Orgs/ for domain]
+    QueryOrgByDomain --> QueryPeopleByEmail[2. Grep Long-Term/People/ for contact info]
     QueryPeopleByEmail --> CombineA[3. Return Company Wiki & Contacts]
 
     ModeB --> FindCompanyWiki[1. Read Company Wiki frontmatter]
@@ -54,14 +54,14 @@ flowchart TD
 ### Mode A: Email / Domain → Company & People
 
 1. **Search Company Wiki Domain**:
-   Search `memorbs/organizations/` for YAML `domain` array or body references:
+   Search `Long-Term/Orgs/` for YAML `domain` array or body references:
    ```bash
-   grep -ri "domain:.*acme.com" "$VAULT/memorbs/organizations/" --include="*.md"
+   grep -ri "domain:.*acme.com" "$VAULT/Long-Term/Orgs/" --include="*.md"
    ```
 2. **Search Employee Profile Notes**:
-   Search `memorbs/people/` for `contactChannels.email` or inline domain references:
+   Search `Long-Term/People/` for `contactChannels.email` or inline domain references:
    ```bash
-   grep -ri "acme.com" "$VAULT/memorbs/people/" --include="*.md"
+   grep -ri "acme.com" "$VAULT/Long-Term/People/" --include="*.md"
    ```
 3. **Output**: Return matched Company Wiki link, company background, and list of associated personnel.
 
@@ -70,15 +70,15 @@ flowchart TD
 ### Mode B: Company Name → Domains & Emails
 
 1. **Locate Company Wiki**:
-   Open target note (e.g., `memorbs/organizations/12345678-Acme-Corp.md`).
+   Open target note (e.g., `Long-Term/Orgs/12345678-Acme-Corp.md`).
 2. **Extract `domain` Array**:
    Read `domain` frontmatter field (e.g., `[acme.com, acme.org]`).
 3. **Query Employee Directory**:
    Run Dataview or Grep to aggregate employee emails:
    ```dataview
    TABLE title AS "Title", contactChannels.email AS "Email", domain AS "Domain"
-   FROM "memorbs/people"
-   WHERE (company = [[12345678-Acme-Corp]] OR contains(file.folder, "memorbs/people/Acme"))
+   FROM "Long-Term/People"
+   WHERE (company = [[12345678-Acme-Corp]] OR contains(file.folder, "Long-Term/People/Acme"))
    WHERE relationshipType != null OR contains(tags, "people")
    ```
 
@@ -88,7 +88,7 @@ flowchart TD
 
 1. Upon receiving an external email or daily ingestion, extract sender email (`sender_email = "jane.doe@acme.com"`).
 2. Parse sender domain (`domain = "acme.com"`).
-3. Search `memorbs/organizations/` where `domain` contains `acme.com`.
+3. Search `Long-Term/Orgs/` where `domain` contains `acme.com`.
 4. Associate email summary with matched Company Wiki and Person Note.
 
 ---
@@ -108,8 +108,8 @@ To embed an employee directory in a Company Wiki note:
 
 ```dataview
 TABLE title AS "Title", contactChannels.email AS "Email", department AS "Department"
-FROM "memorbs/people"
-WHERE (company = [[12345678-Acme-Corp]] OR contains(string(company), "Acme") OR contains(file.folder, "memorbs/people/Acme"))
+FROM "Long-Term/People"
+WHERE (company = [[12345678-Acme-Corp]] OR contains(string(company), "Acme") OR contains(file.folder, "Long-Term/People/Acme"))
 WHERE (relationshipType != null OR contains(tags, "people")) AND !contains(file.name, "Interview") AND !contains(file.name, "Review")
 SORT department ASC
 ```

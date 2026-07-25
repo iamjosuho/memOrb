@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+#
+# memOrb pre-commit hook
+# Runs the skill/architecture linter before every commit so path/structure
+# drift (e.g. a skill still writing to a renamed or deprecated folder) is
+# caught immediately, instead of being discovered later by hand.
+#
+# Installed by scripts/install-hooks.sh (kept as a tracked source file here
+# because .git/hooks/ itself is never committed by git).
+#
+# Bypass in an emergency with: git commit --no-verify
+
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+echo "🔎 memOrb pre-commit: running skill linter (scripts/lint-skills.js)..."
+
+if command -v node >/dev/null 2>&1; then
+  node scripts/lint-skills.js
+  status=$?
+else
+  echo "⚠️  node not found on PATH — skipping skill linter. Install Node.js to enable this check."
+  status=0
+fi
+
+if [ "$status" -ne 0 ]; then
+  echo ""
+  echo "❌ Commit blocked: scripts/lint-skills.js found errors (see above)."
+  echo "   Fix them, or bypass with 'git commit --no-verify' if you're certain this is safe."
+  exit 1
+fi
+
+exit 0
