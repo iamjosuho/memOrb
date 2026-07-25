@@ -84,13 +84,19 @@ memorb/
 
 Choose the installation method for your preferred AI Agent tool:
 
-#### Option A: Antigravity / AGY CLI (Recommended for AGY)
+#### Option A: Universal Skill Installer (skills.sh)
+Install directly into your workspace via `skills.sh`:
+```bash
+npx skills add iamjosuho/memorb
+```
+
+#### Option B: Antigravity / AGY CLI (Recommended for AGY)
 Install directly from GitHub via the AGY plugin registry:
 ```bash
 agy plugin add iamjosuho/memorb
 ```
 
-#### Option B: Claude Code CLI
+#### Option C: Claude Code CLI
 Add via the Claude Code plugin manager or copy skills into your workspace:
 ```bash
 # Plugin Manager
@@ -101,7 +107,7 @@ mkdir -p skills
 cp -r path/to/memorb/skills/* skills/
 ```
 
-#### Option C: Cursor / Windsurf / VS Code Agent Assistants
+#### Option D: Cursor / Windsurf / VS Code Agent Assistants
 Copy the memOrb skill suite into your repository's `skills/` (or `.claude/skills/`) directory and reference `SKILL.md` in your `.cursorrules` or `.windsurfrules`:
 ```bash
 # Copy skill definitions into your project
@@ -109,7 +115,7 @@ mkdir -p skills
 cp -r path/to/memorb/skills/* skills/
 ```
 
-#### Option D: Git Submodule (Project Workspace Integration)
+#### Option E: Git Submodule (Project Workspace Integration)
 Keep memOrb skills automatically updated across team repositories:
 ```bash
 git submodule add https://github.com/iamjosuho/memorb.git .claude/skills/memorb-suite
