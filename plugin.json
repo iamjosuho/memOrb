@@ -9,20 +9,28 @@
   "skills": [
     "./skills/memorb/SKILL.md",
     "./skills/core/memorb-born/SKILL.md",
-    "./skills/core/daily-note/SKILL.md",
-    "./skills/core/orbtrack-triage/SKILL.md",
-    "./skills/core/island-reclamation/SKILL.md",
-    "./skills/core/weekly-retro/SKILL.md",
     "./skills/core/memorb-ingest/SKILL.md",
+    "./skills/core/orbtrack-triage/SKILL.md",
     "./skills/core/memorb-query/SKILL.md",
     "./skills/core/memorb-lint/SKILL.md",
     "./skills/core/memorb-forgetter/SKILL.md",
-    "./skills/core/session-closeout/SKILL.md",
+    "./skills/core/island-reclamation/SKILL.md",
     "./skills/core/memorb-conventions/SKILL.md",
+    "./skills/core/daily-note/SKILL.md",
     "./skills/core/writing-memorb-skills/SKILL.md",
+    "./skills/core/weekly-retro/SKILL.md",
+    "./skills/core/session-closeout/SKILL.md",
     "./skills/extensions/business-card-ingestion/SKILL.md",
     "./skills/extensions/m365-meeting-note/SKILL.md",
     "./skills/extensions/memorb-domain-query/SKILL.md",
     "./skills/extensions/recording-transcription/SKILL.md"
-  ]
+  ],
+  "skill_versions": {
+    "./skills/core/weekly-retro/SKILL.md": "v2",
+    "./skills/core/session-closeout/SKILL.md": "v2",
+    "./skills/extensions/business-card-ingestion/SKILL.md": "v2",
+    "./skills/extensions/m365-meeting-note/SKILL.md": "v2",
+    "./skills/extensions/memorb-domain-query/SKILL.md": "v2",
+    "./skills/extensions/recording-transcription/SKILL.md": "v2"
+  }
 }

@@ -66,6 +66,37 @@ memOrb structures your vault as a modular, self-maintaining cognitive ecosystem,
 
 ---
 
+## 🔄 Distillation Pipeline
+
+**distill** is the core verb in memOrb: the action of crystallizing raw materials or AI session output into a **memorb** — an atomic note that is self-contained and carries bi-directional links.
+
+```
+Step 1: Raw materials / AI session
+           ↓  distill
+        memorb  (atomic note, self-contained, bi-directional links)
+
+Step 2: Classify + add shared frontmatter
+           ↓
+        OrbTrack  (staging area — holds distilled memorbs awaiting triage)
+
+Step 3: Organize bi-directional links between memorbs
+
+Step 4: Consolidate
+           ↓
+        Long-Term  (People / Projects / Orgs)
+
+Step 5: Evaluate
+           ↓
+        Islands / Core / Belief orbs  (updated)
+```
+
+**Key principles:**
+- **distill** is the core verb — AI crystallizes experience into a memorb.
+- **OrbTrack** is the staging area for distilled memorbs, not raw input storage.
+- Each memorb follows atomic note methodology: one idea, self-contained.
+
+---
+
 ## 📁 Repository Directory Structure
 
 ```text
