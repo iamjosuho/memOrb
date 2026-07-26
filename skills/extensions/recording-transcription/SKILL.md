@@ -117,13 +117,15 @@ rm -rf "$WORKDIR"
 
 ### Step 5：存檔與交接 memorb-ingest
 
-| 內容 | 路徑 |
-|------|------|
-| 原始音檔（經確認要留底才寫） | `Resources/會議記錄/raw/audio/{YYYY-MM-DD}-{標題}.{ext}`（**.gitignore 排除，不進 git**；寫入後無法刪除，先問使用者要不要留） |
-| 逐字稿（raw，未修正） | `Resources/會議記錄/raw/{YYYY-MM-DD}-{標題}.md` |
-| 逐字稿（清稿＋面談分析） | `memorbs/meeting-note/{YYYY-MM-DD} 與{對象}面談.md` |
+| 內容 | 路徑 | 性質 |
+|------|------|------|
+| 原始音檔（經確認要留底才寫） | `Resources/會議記錄/raw/audio/{YYYY-MM-DD}-{標題}.{ext}`（**.gitignore 排除，不進 git**；寫入後無法刪除，先問使用者要不要留） | raw |
+| 逐字稿（raw，未修正） | `Resources/會議記錄/raw/{YYYY-MM-DD}-{標題}.md` | raw |
+| 面談 orb（清稿＋分析） | `memorbs/HQ/OrbTrack/{YYYY-MM-DD}-{HHMM}-與{對象}面談.md` | orb |
 
-完成後交給 `memorb-ingest` 走完整流程（掃描影響 `Long-Term/People`、`Long-Term/Projects`、`log.md`、`MEMORY.md` 索引、PARA 活躍區）。本 skill 只負責「錄音→可靠逐字稿＋初步分析」，不重複做 memorb-ingest 的事。
+> `Resources/` 是使用者原生資料夾，**不存在就跳過 raw 存檔**，改把來源資訊（檔名、時長、取得方式）寫進 orb 的內文與 log.md 的 entry。orb 的 frontmatter 要有 `source:` 指回 raw 檔（存在時），raw 與 orb 的生命週期綁在一起。
+
+完成後交給 `memorb-ingest` 走完整流程（掃描影響 `Long-Term/People`、`Long-Term/Projects`、寫 `log.md` 時間軸、PARA 活躍區）。本 skill 只負責「錄音→可靠逐字稿＋初步分析」，不重複做 memorb-ingest 的事。
 
 ## 注意事項
 

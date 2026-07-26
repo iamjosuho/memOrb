@@ -58,6 +58,5 @@ mv "$ORIGIN_IMG_PATH" "$TARGET_DIR/{姓名}_名片.$EXT"
 
 ### 5. 結束紀錄
 1. 確保相關的實體（人物、組織）都已建立或更新。
-2. 在 `memorbs/log.md` 紀錄此事件。
-3. 將對話重點摘要寫入當天的 Daily Note，並標註 `使用 skill：business-card-ingestion`。
-4. 回報使用者操作完成。
+2. 在 `memorbs/log.md` 開頭 append 一筆 `## [YYYY-MM-DD] ingest | 名片：{姓名}（{組織}）`，含影響頁面；若使用者提到與此人的關係或印象，記進「訊號」欄位。
+3. 回報使用者操作完成。

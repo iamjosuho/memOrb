@@ -23,34 +23,31 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
 
 三層並存：
 
-1. **使用者原生筆記**（`Daily Notes/`、`Resources/`、`Dump/`、`WeeklyRetro/`、`Templates/`、`TASKS.md`，memOrb 只依既有慣例寫入，不改動其結構）
-2. **`Islands/`、`Long-Term/`**（vault 根目錄下由 memOrb 定義結構、主動維護的兩個資料夾：`Islands/` 只放長期領域/興趣的敘事層，`Long-Term/` 放 Projects／People／Orgs 的實體內容頁）
-3. **`memorbs/`**（memOrb 專屬命名空間：HQ 人設/身分/Core/Belief/OrbTrack、Dump 歸檔、MEMORY.md、log.md）
+1. **memOrb 管轄範圍**：`memorbs/`、`Islands/`、`Long-Term/`。**core skill 只擁有這三個**，且必須能在只有這三個資料夾的 vault 上跑完整流程。
+2. **使用者原生筆記**（`Daily Notes/`、`Resources/`、`Dump/`、`Templates/`、`TASKS.md`…）：memOrb 只在其**已存在時**依既有慣例寫入，不改動其結構、不主動建立、不得依賴。命名因人而異，讀不到就跳過該步驟，不要報錯也不要自己建。
+3. 任何**必須**依賴外部系統或外部資料夾慣例的流程，一律歸 `skills/extensions/`。
 
 ```text
 <你的 vault>/
-├── Daily Notes/            ← 每日筆記，YYYY/MM/YYYY-MM-DD.md（巢狀，不可扁平）
 ├── Islands/                ← 需長期維持標準的責任領域/興趣（人格島）：只放現況、長期目標、板塊筆記、MOC，不存放實體 orb，靠連結指向 Long-Term/ 的實體頁面
-├── Long-Term/              ← 長期記憶倉庫，存放實際內容頁（原 Projects/ 與 memorbs/Islands/ 的人物/專案/組織記錄合併於此，一個實體只留一份頁面）
+├── Long-Term/              ← 長期記憶倉庫，存放實際內容頁（一個實體只留一份頁面）
 │   ├── Projects/           ← 有明確截止日/交付物的專案（含歷程紀錄）
 │   ├── People/             ← 關鍵協作者（Authority Control 頁面，見下）
 │   └── Orgs/               ← 組織與團隊（Authority Control 頁面，見下）
-├── Resources/              ← 參考資料、學習筆記（會議逐字稿原始檔在 Resources/會議記錄/raw/）
-├── Dump/               ← 使用者自己不再需要的 Islands/Long-Term 筆記（與 memorbs/Dump 是不同的歸檔對象，見下）
-├── WeeklyRetro/            ← 週回顧，YYYY-Www.md
-├── Templates/              ← 筆記範本（唯讀參考）
-├── TASKS.md                ← 待辦清單
-└── memorbs/                ← memOrb 命名空間（以下才是本檔案真正管轄的範圍）
-    ├── HQ/
-    │   ├── persona.md        ← AI 顧問人設：語氣、角色設定（<100 行，每次 session 必讀）
-    │   ├── identity.md       ← 使用者身分：姓名/生日/學經歷/角色/組織/目標/關鍵關係（<100 行，每次 session 必讀）
-    │   ├── Core/             ← Core Memory orbs，一 orb 一檔（有轉折意義的具體經驗）
-    │   ├── Belief/           ← Belief orbs，一 orb 一檔（從經驗提煉出的價值/信念聲明）
-    │   └── OrbTrack/         ← 唯一的快速收集區（`Attachments/` 放附加檔案），由 orbtrack-triage 清空
-    ├── Dump/
-    │   └── {category}/       ← MUSTY 淘汰後的歸檔頁（由 memorb-forgetter 搬入）
-    ├── MEMORY.md             ← 全庫索引（≤200 行）
-    └── log.md                ← 事件流（ingest / lint / archive / decision …）
+├── memorbs/                ← memOrb 命名空間
+│   ├── HQ/
+│   │   ├── persona.md        ← AI 顧問人設：語氣、角色設定（<100 行，每次 session 必讀）
+│   │   ├── identity.md       ← 使用者身分：姓名/生日/學經歷/角色/組織/目標/關鍵關係（<100 行，每次 session 必讀）
+│   │   ├── Core/             ← Core Memory orbs，一 orb 一檔（有轉折意義的具體經驗）
+│   │   ├── Belief/           ← Belief orbs，一 orb 一檔（從經驗提煉出的價值/信念聲明）
+│   │   └── OrbTrack/         ← 唯一的快速收集區（`Attachments/` 放附加檔案），由 orbtrack-triage 清空
+│   ├── Dump/
+│   │   └── {category}/       ← MUSTY 淘汰後的歸檔頁（由 memorb-forgetter 搬入）
+│   ├── log.md                ← 當期時間軸（見下節）
+│   └── log/{YYYY-MM}.md      ← 已封存的往期時間軸（由 dream-studio 輪替）
+│
+└── （以下為使用者原生資料夾，memOrb 不建立、不依賴，存在才寫入）
+    ├── Daily Notes/  Resources/  Templates/  TASKS.md  Dump/ …
 ```
 
 > **注意**：`memorbs/HQ/OrbTrack/` 是唯一的收集區。不要另外建立 `Inbox/`——兩個收集區並存只會讓 triage 邏輯分裂。
@@ -59,6 +56,40 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
 > **注意**：`recording-transcription`／`business-card-ingestion`／`memorb-domain-query`／`m365-meeting-note` 幾個 extension skill 原本仍寫作舊的扁平路徑（`memorbs/people/`、`memorbs/organizations/`、`memorbs/projects/`），已於 2026-07-25 同步對齊為 `Long-Term/People/`、`Long-Term/Orgs/`、`Long-Term/Projects/`。`fixtures/memorbs/Islands/` 測試樣本與 `scripts/lint-skills.js` 的 fixture 結構驗證同步更新為 `fixtures/Long-Term/{Projects,People,Orgs}`。
 > **注意（待處理 TODO，2026-07-26 稽核發現，暫緩不動）**：`Long-Term/People/` 頁面結構目前不一致——`business-card-ingestion`／`memorb-domain-query` 假設「有名片附件時依公司名稱建巢狀資料夾」（`Long-Term/People/{公司}/{姓名}/{姓名}.md`），本檔案定義的預設卻是單一頁面，`recording-transcription`／`m365-meeting-note`／`memorb-ingest` 也都假設扁平 `Long-Term/People/{姓名}.md`。同一人可能因建檔管道不同落在兩個不同路徑。尚未決定要統一成哪個方向，先列入待辦，詳見 `docs/skill-audit-2026-07-26.md` P1 #1。
 > **注意**：`persona.md`／`identity.md` 是固定的 Hot Cache 檔案（各一份，不會重複），`Core/`／`Belief/` 是裝 orb 的資料夾（一 orb 一檔，數量會持續增加）。四者角色不同，不要互相混用。
+> **注意**：`daily-note`／`weekly-retro`／`session-closeout` 三個 skill 已於 2026-07-26 移除。日記層的職責由 `memorbs/log.md` 接手（見下節），週回顧屬任務管理不屬記憶框架，git 操作不屬本框架職責。
+> **注意**：`memorbs/MEMORY.md` 全庫索引已於 2026-07-26 廢除。**檔案系統就是索引**——手動維護的索引一定會跟實際檔案漂移（舊版 lint 甚至得專門檢查「索引沒列到的孤兒頁」，那條規則本身就是漂移的證據），而且 ≤200 行的上限讓它本來就撐不到 vault 長大。查找一律直接 `ls` 目錄 + `grep` 內容與 `aliases`。頁面的可達性改由**雙向連結**保證：新頁至少要被一個既有頁面連到，沒有任何連結指向的頁面就是孤兒，由 `memorb-lint` 抓。
+
+## `memorbs/log.md`：時間軸
+
+log.md 是這套系統唯一的**時間記錄**。實體頁（`Long-Term/`）是活的、持續累積，還原不出「六月發生了什麼」；OrbTrack 依定義會被清空；檔案 mtime 改個錯字就變動。所以「那陣子在發生什麼」只有 log.md 存得住，而 `dream-studio` 的重播完全靠它。
+
+### 寫入規則
+
+**每個會改變 vault 狀態的動作都要留一筆**，倒序 append 在檔案開頭（最新在最上面）：
+
+```markdown
+## [YYYY-MM-DD] {type} | {一句話標題}
+- 內容：{發生了什麼}
+- 影響頁面：[[...]]、[[...]]
+- 訊號：{使用者的原話片段；情緒；未成形的疑慮}   ← 選填，但這是夢工廠的主食
+```
+
+`type` 取值：`ingest`｜`triage`｜`query`｜`decision`｜`lint`｜`archive`｜`island`｜`skill`｜`dream`
+
+### 「訊號」欄位為什麼重要
+
+`dream-studio` 找共振靠的不是系統做了什麼，是**使用者說了什麼、當時什麼感覺**。「今天跟 Vic 談完覺得怪怪的」不是一個想法、不夠格成為原子筆記，但三個月後它可能就是一條信念的來源。**這類還沒成形的訊號，記在這裡就好，不要為它硬開一個 orb。**
+
+記錄訊號時用**使用者的原話**，不要改寫成更漂亮的句子。潤飾過的訊號在夢工廠回頭讀時會失真。
+
+### 不該寫進 log.md
+
+- `memorb-query` 的流通紀錄更新（`recall_count`／`last_recalled`）——量大且無資訊，會淹掉真正的訊號
+- 純讀取、沒有改變任何檔案的操作
+
+### 輪替
+
+`dream-studio` 執行完畢後，把當期 `log.md` 封存為 `memorbs/log/{YYYY-MM}.md` 並清空 `log.md`，只留檔頭。這樣 log.md 永遠是「上次做夢至今」的份量，不會無限膨脹——就像電影裡當天的記憶球在夜裡被送進長期記憶區。往期檔案保留不刪，夢工廠要拉更長區間時可回頭讀。
 
 ## Session 開頭必讀
 
@@ -76,7 +107,7 @@ VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \;
 
 ## Frontmatter Schema
 
-### 一般筆記（Daily Note / Island / Resource）
+### 一般筆記（OrbTrack / Island / Resource）
 
 ```yaml
 ---
@@ -84,8 +115,20 @@ title: {標題}
 date: {YYYY-MM-DD}
 tags: [...]
 status: active   # active | processed | unprocessed | archived
+source: null     # 有原始素材時，指回 raw 檔；見下節
 ---
 ```
+
+## Raw Data 的生命週期
+
+`Resources/` 存的是 **raw data**——逐字稿、音檔、剪報、PDF 原檔。它不是知識，是知識的原料，**生命週期跟著它凝結出的 orb 走**。
+
+規則：
+
+1. **凝結時建立連結**：任何從 raw 素材 distill 出來的 orb，frontmatter 的 `source:` 要指回 raw 檔（`source: "[[Resources/會議記錄/raw/2026-07-12-與Vic面談]]"`）。一份 raw 可以被多顆 orb 引用。
+2. **淘汰時一起走**：`memorb-forgetter` 歸檔一顆帶 `source:` 的 orb 時，要問使用者要不要一併歸檔 raw。**先確認再搬，絕不逕行刪除**——同一份 raw 可能還被別的 orb 引用著。
+3. **孤兒 raw**：`memorb-lint` 檢查 `Resources/` 裡沒有任何 orb 的 `source:` 指向的檔案。raw 活得比它的 orb 久沒有意義，提報為 **S — Superseded**。
+4. **`Resources/` 不存在就不建**：它是使用者原生資料夾。沒有的話，raw 不落地，來源資訊寫進 orb 內文與 `log.md` 的 entry，`source:` 留 `null`。
 
 ### `Long-Term/` 頁面（Projects／People／Orgs，Authority Control & Circulation Tracking）
 
@@ -121,9 +164,11 @@ archived_at: {YYYY-MM-DD}
 title: {orb 標題}
 formed_at: {YYYY-MM-DD}
 orb_type: core         # core | belief
-derived_from: []       # 僅 belief orb 使用：回連提煉出此信念的 Core orb，如 [[memorbs/HQ/Core/{slug}]]
+derived_from: []       # 僅 belief orb 使用：回連凝聚出此信念的來源 orb
 ---
 ```
+
+**`derived_from` 可指向任何 orb**，不限 Core：`[[memorbs/HQ/Core/{slug}]]`、`[[Long-Term/Projects/{slug}]]`、`[[Long-Term/People/{slug}]]` 都合法。信念多半是由一堆單獨看都不夠格當 Core Memory 的小事累積而成，限定只能連 Core 會把這條路堵死。Core orb 不使用此欄位（保持 `[]` 或省略）。
 
 `persona.md`／`identity.md` 不是 orb，維持一般 Markdown + 精簡 frontmatter（`title`/`updated`）即可，不套用上述 schema。`identity.md` 內容建議結構：
 
@@ -135,12 +180,18 @@ derived_from: []       # 僅 belief orb 使用：回連提煉出此信念的 Cor
   - {YYYY}–{YYYY} {職稱} @ {組織}
   - {YYYY} 畢業於 {學校}／{科系}
 
+## 自我描述標籤
+- MBTI：
+- 其他量表／標籤：
+
 ## 目前角色與目標
 
 
 ## 關鍵關係
 - [[Long-Term/People/{Name}|{Name}]]（{關係}）
 ```
+
+> **MBTI 這類標籤放 `identity.md`，不要放 `Belief/`。** Belief orb 是「從自己經驗提煉出的一句話」，MBTI 是外部量表貼上的分類，兩者性質相反。混放會讓 `dream-studio` 在評估信念演變時把外部標籤誤當成自我提煉的結果。
 
 ## Orb File Structure
 
@@ -158,9 +209,10 @@ Every memorb (Core, Belief, Long-Term entity page, or any named orb) follows one
 
 ## 範本路徑
 
+`Templates/` 是使用者原生資料夾，**不存在就跳過、直接依 Frontmatter Schema 生成**，不要建立這個資料夾。
+
 | 範本 | 路徑 |
 | :--- | :--- |
-| Daily Note | `Templates/Daily Note Template.md` |
 | Meeting Note | `Templates/Meeting Note Template.md` |
 | Project | `Templates/Project Template.md` |
 | Island | `Templates/Island Template.md` |

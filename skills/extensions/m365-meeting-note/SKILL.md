@@ -1,6 +1,6 @@
 ---
 name: m365-meeting-note
-description: 先確認使用者是否安裝M365 connector，M365 Teams 會議記錄處理助理。從 Teams 行事曆取得會議逐字稿，產出重點摘要、完整會議記錄、與會者表現分析，並更新 Daily Note 與 memory 檔案。觸發詞：會議記錄、逐字稿、會議摘要、Teams 會議、周會、讀取會議、整理會議。
+description: 先確認使用者是否安裝M365 connector，M365 Teams 會議記錄處理助理。從 Teams 行事曆取得會議逐字稿，產出重點摘要、完整會議記錄、與會者表現分析，並更新 memorbs/log.md 時間軸與 memory 檔案。觸發詞：會議記錄、逐字稿、會議摘要、Teams 會議、周會、讀取會議、整理會議。
 ---
 
 # 📝 meeting-note Skill
@@ -47,13 +47,17 @@ M365 Teams 實體會議為主，**通常只有一人開麥克風**（透過電�
 
 ### Step 3：產出內容（依會議類型與名稱）
 
+> **這支 skill 是「特定情境的 orb 產生器」**：把一份會議逐字稿凝結成一顆 memorb，落在 `memorbs/HQ/OrbTrack/` 等待 triage，之後由 `orbtrack-triage`／`memorb-ingest` 決定它進哪座書架。**沒有專屬的會議資料夾**——會議記錄不是一個獨立的分類，它就是一顆有來源的 orb。
+>
+> orb frontmatter 必須含 `source:` 指回逐字稿原始檔（見 `memorb-conventions` 的 raw 生命週期規則）。
+
 #### 🏢 資訊部周會 / 小型技術會議
 輸出：
 1. **重點摘要**（表格格式，每議題一行）
 2. **完整會議記錄**（依議題分節，含決策與行動項目，條列式）
 3. **使用者表現分析**（優勢 + 觀察點 + 建議）
 
-存檔路徑：`memorbs/meeting-note/YYYY-Www 資訊部週會.md`
+存檔路徑：`memorbs/HQ/OrbTrack/{YYYY-MM-DD}-{HHMM}-資訊部週會.md`
 
 #### 📊 執行長周進度彙報 / 多人大會
 輸出：
@@ -61,7 +65,7 @@ M365 Teams 實體會議為主，**通常只有一人開麥克風**（透過電�
 2. **使用者發言重點**（用關鍵字定位後整理）
 3. **跨部門決策與資訊部影響**
 
-存檔路徑：`memorbs/meeting-note/YYYY-Www 執行長周報.md`
+存檔路徑：`memorbs/HQ/OrbTrack/{YYYY-MM-DD}-{HHMM}-執行長周報.md`
 
 #### 其他會議
 輸出：
@@ -69,12 +73,12 @@ M365 Teams 實體會議為主，**通常只有一人開麥克風**（透過電�
 2. **完整會議記錄**（依議題分節，含決策與行動項目，條列式）
 3. **使用者表現分析**（優勢 + 觀察點 + 建議）
 
-存檔路徑：`memorbs/meeting-note/YYYY-Www 執行長周報.md`
+存檔路徑：`memorbs/HQ/OrbTrack/{YYYY-MM-DD}-{HHMM}-執行長周報.md`
 
 ### Step 4：更新相關檔案
-1. **每日 Daily Note** → 加入 `## 💬 與 Claude 的對話紀錄` 區塊，含摘要與使用者表現分析
+1. **`memorbs/log.md`** → append 一筆 `## [YYYY-MM-DD] ingest | {會議名稱}`，含影響頁面與「訊號」欄位（會中使用者的原話、情緒、未決的疑慮）。這是時間軸，必寫。
 2. **Long-Term/People/{org}/*.md** → 更新相關與會者的互動紀錄（補充逐字稿觀察）
-3. **MEMORY.md** → 若有新的跨會話記憶點，更新索引
+3. **Daily Notes/**（使用者原生資料夾，選填）→ 若該資料夾存在，加入 `## 💬 與 Claude 的對話紀錄` 區塊；不存在就跳過，不要建立
 
 ### Step 5：使用者表現分析框架
 
@@ -95,5 +99,6 @@ M365 Teams 實體會議為主，**通常只有一人開麥克風**（透過電�
 
 - 逐字稿若超過 25,000 tokens，用 Python 解析後存為暫存 `.txt` 分段讀取
 - 執行長周報逐字稿可能因 API timeout 無法取得，需記錄並告知使用者
-- Daily Note 路徑格式：`Daily Notes/YYYY/MM/YYYY-MM-DD.md`
-- 會議記錄存至 `memorbs/meeting-note/`，命名格式：`YYYY-Www 會議名稱.md`
+- Daily Note 路徑格式：`Daily Notes/YYYY/MM/YYYY-MM-DD.md`（原生資料夾，存在才寫）
+- 會議 orb 存至 `memorbs/HQ/OrbTrack/`，命名依 `memorb-conventions` 的 OrbTrack 規則：`{YYYY-MM-DD}-{HHMM}-{標題}.md`
+- 逐字稿原始檔屬 raw data，存 `Resources/會議記錄/raw/`（該資料夾不存在就跳過，改把來源資訊記進 log.md 的 entry）

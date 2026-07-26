@@ -22,8 +22,9 @@ description: "Memory Archive Executor (Mind Workers Forgetter): Archive outdated
 4. **Rewrite Vault Wiki Links**:
    - Search the vault for all references to any of these patterns: `[[{name}]]`, `[[Long-Term/{category}/{name}]]`, `[[Long-Term/{category}/{name}/{name}]]`.
    - Rewrite all matches to `[[memorbs/Dump/{category}/{name}|{name}]]` so historical context is preserved without breaking links.
-5. **Update Index**:
-   - Remove the orb entry from `memorbs/MEMORY.md` if present.
+5. **Retire the raw source** *(if any)*:
+   - If the orb's frontmatter carries `source:` pointing into `Resources/`, the raw material shares the orb's lifecycle. Ask the user whether to archive it alongside; on approval move it to `memorbs/Dump/{category}/` next to the orb and keep the `source:` link pointing at the new location.
+   - Never delete raw material outright, and never move it without asking — it may be referenced by other orbs.
 6. **Log Archive Event**:
    - Append to `memorbs/log.md`:
      ```markdown

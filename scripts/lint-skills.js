@@ -287,6 +287,30 @@ const DEPRECATED_PATTERNS = [
     reason: 'memorb-query described enduring-insight backfill as living generically under memorbs/ before the Long-Term/ migration. Entity pages (people/projects/orgs) now live in Long-Term/; only Core/Belief/glossary stay under memorbs/HQ.',
     exemptFiles: [],
   },
+  {
+    pattern: /(`daily-note`|`weekly-retro`|`session-closeout`|core\/daily-note|core\/weekly-retro|core\/session-closeout)/,
+    suggestion: 'memorbs/log.md (timeline) or dream-studio (periodic review)',
+    reason: 'daily-note / weekly-retro / session-closeout were removed on 2026-07-26. The timeline role moved to memorbs/log.md; periodic review moved to dream-studio; git operations are out of scope for the framework.',
+    exemptFiles: ['skills/core/memorb-conventions/SKILL.md'],
+  },
+  {
+    pattern: /WeeklyRetro\//,
+    suggestion: 'none — weekly-retro was removed',
+    reason: 'WeeklyRetro/ was weekly-retro\'s output folder. The skill was removed on 2026-07-26 and core no longer writes to that folder.',
+    exemptFiles: [],
+  },
+  {
+    pattern: /MEMORY\.md/,
+    suggestion: 'ls the directory + grep for content/aliases; guarantee reachability with bi-directional links',
+    reason: 'The memorbs/MEMORY.md whole-vault index was abolished on 2026-07-26. A hand-maintained index of the filesystem always drifts, and the 200-line cap could never scale. The filesystem is the index.',
+    exemptFiles: ['skills/core/memorb-conventions/SKILL.md'],
+  },
+  {
+    pattern: /memorbs\/meeting-note\//,
+    suggestion: 'memorbs/HQ/OrbTrack/{YYYY-MM-DD}-{HHMM}-{title}.md (the meeting orb) + Resources/ for the raw transcript',
+    reason: 'The memorbs/meeting-note/ namespace was abolished on 2026-07-26. A meeting record is not its own category — it is an orb with a source:, staged in OrbTrack like any other.',
+    exemptFiles: [],
+  },
 ];
 
 function validateDeprecatedPathReferences() {

@@ -30,9 +30,11 @@ description: Meta skill：新增或修改本 vault 的任何 sub-skill 時使用
 
 1. 建立/修改 `SKILL.md`
 2. 更新 `memorb/SKILL.md` 路由表（新增一列：skill 名 + 觸發情境）
-3. 若影響 CLAUDE.md 的 Skills Registry 或工作流摘要，同步更新（保持 ≤100 行）
-4. 在 `memorbs/log.md` append：`## [YYYY-MM-DD] skill | 新增/修改 {name}`
-5. git commit（訊息註明 skill 變更）
+3. 更新 `plugin.json`（`skills` 陣列必須列到，否則 linter 會擋）
+4. 若影響 CLAUDE.md 的 Skills Registry 或工作流摘要，同步更新（保持 ≤100 行）
+5. 在 `memorbs/log.md` append：`## [YYYY-MM-DD] skill | 新增/修改 {name}`
+
+> git 操作不屬本框架職責，由使用者自行決定何時 commit。
 
 ## 測試
 

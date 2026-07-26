@@ -20,12 +20,13 @@ When **updating an existing** orb, resolve its path first (two-step lookup):
 
 ## Execution Sequence (Strict Order)
 
-1. **Preserve Raw Content**:
+1. **Preserve Raw Content** *(user-native, optional)*:
    - Meeting transcripts → `Resources/會議記錄/raw/`
    - Web articles → Keep original link or `.md` clipper file
-2. **Create Summary Note**:
-   - Meetings → `memorbs/meeting-note/` or `Resources/會議記錄/notes/`
-   - Study materials → `Resources/`
+   - **If `Resources/` does not exist, skip this step** — do not create the folder. Keep the source reference in the log entry instead.
+2. **Distill into an orb**:
+   - The distilled orb lands in `memorbs/HQ/OrbTrack/` unless it clearly belongs to an existing entity page.
+   - Set `source:` in its frontmatter to link back to the raw file from step 1 (`null` if nothing was preserved). Raw data shares the orb's lifecycle — see the Raw Data section in `memorb-conventions`.
 3. **Scan Impact & Update** (Core value of Ingest):
    - `Long-Term/People/` — People mentioned
    - `Long-Term/Projects/` — Projects impacted
@@ -38,14 +39,15 @@ When **updating an existing** orb, resolve its path first (two-step lookup):
      - **Fact Updates** (e.g. title changes, project status): Overwrite directly with latest state.
      - **Decision/Principle Updates** (tagged `#orb/anger`, `#orb/sadness`, etc.): Retain change history and context in the page body to preserve reasoning lineage.
    - **(Crucial) PARA Active Zones**: Extract actionable strategies/knowledge into corresponding active notes in `Islands/` or `Long-Term/Projects/`.
-4. **Update Index**: `memorbs/MEMORY.md` (if new page added; keep index under 200 lines).
-5. **Log Event**: Append near top of `memorbs/log.md`:
+4. **Ensure Reachability**: every newly created page must be linked from at least one existing page. There is no index file — reachability is guaranteed by bi-directional links alone, and an unlinked page is an orphan.
+5. **Log Event** *(mandatory — this is the timeline)*: Append near top of `memorbs/log.md`:
    ```markdown
    ## [YYYY-MM-DD] ingest | Title
-   - Source: ...
-   - Impacted Pages: ...
+   - 內容：...
+   - 影響頁面：[[...]]、[[...]]
+   - 訊號：{使用者的原話片段；情緒；未成形的疑慮}
    ```
-6. Write Daily Note summary block (see `session-closeout`).
+   The **訊號 (signal)** line is what `dream-studio` replays. Record anything the user said that carried weight but was not structured enough to become an orb — in their own words, unpolished. Omit the line only when there genuinely was no such signal.
 
 
 ## Red Flags

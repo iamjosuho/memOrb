@@ -1,6 +1,6 @@
 ---
 name: memorb
-description: Gateway skill for Second Brain operations (read/write notes, Daily Notes, OrbTrack, meetings, business cards, memory wiki, reports, closeout). Read first to route to appropriate sub-skills.
+description: Gateway skill for Second Brain operations (read/write orbs, OrbTrack capture & triage, ingest, query, lint, archive, memory replay, meetings, business cards). Read first to route to appropriate sub-skills.
 ---
 
 # Memorb (Gateway Skill)
@@ -17,7 +17,10 @@ Before performing any file operation:
 1. Read this gateway file.
 2. Read `SKILL.md` for **every matching sub-skill** in the routing table below.
 3. All write operations must adhere to `memorb-conventions` (paths, naming, frontmatter).
-4. Load multiple sub-skills if needed (e.g., transcript processing = `m365-meeting-note` + `memorb-ingest` + `daily-note`).
+4. Load multiple sub-skills if needed (e.g., transcript processing = `m365-meeting-note` + `memorb-ingest`).
+
+### Ownership boundary
+Core skills own `memorbs/`, `Islands/`, and `Long-Term/` — nothing else. They may read the user's native folders (`Daily Notes/`, `Resources/`, `Templates/`, `TASKS.md`) and write into them when those folders already exist, but must never require them: **core must run to completion on a vault containing only the three managed folders.** Anything that depends on an outside system or an outside folder convention belongs in `extensions/`.
 
 ## Skill Router Table
 Core skills reside in `skills/core/{name}/SKILL.md`.
@@ -28,15 +31,13 @@ Extensions reside in `skills/extensions/{name}/SKILL.md`.
 | :--- | :--- | :--- |
 | **memorb-conventions** | `core/memorb-conventions` | Base layer: paths, directory structure (`memorbs/`), naming, frontmatter, templates. Required for ALL write ops. |
 | **memorb-born** | `core/memorb-born` | Vault initialization (Phase 0), persona seed setup, CLAUDE.md generation, or `/memorb-born` reset. |
-| **daily-note** | `core/daily-note` | Create/update Daily Notes, journal entries, quick logs |
 | **orbtrack-triage** | `core/orbtrack-triage` | Process OrbTrack (`memorbs/HQ/OrbTrack/`), PARA organization, note archiving |
 | **island-reclamation** | `core/island-reclamation` | Create new Island (long-term interest/responsibility domain): discuss structure before file creation |
-| **weekly-retro** | `core/weekly-retro` | Weekly review/summary (`WeeklyRetro/YYYY-Www`) |
+| **dream-studio** | `core/dream-studio` | Monthly memory replay: propose Core orbs, add/revise Belief orbs, refresh Island narrative. **Sole writer of `memorbs/HQ/Core/`.** |
 | **memorb-ingest** | `core/memorb-ingest` | Ingest raw materials (transcripts, articles, PDFs) into `Long-Term/`／`memorbs/` wiki |
 | **memorb-query** | `core/memorb-query` | Q&A, comparisons, decision recommendations via `Long-Term/`／`memorbs/` wiki |
 | **memorb-lint** | `core/memorb-lint` | Vault health check and `Long-Term/`／`memorbs/` wiki MUSTY linting |
 | **memorb-forgetter** | `core/memorb-forgetter` | Execute MUSTY archiving to `memorbs/Dump/` and update vault Wiki Links |
-| **session-closeout** | `core/session-closeout` | Session termination: Daily Note summary, log.md, git commit/push |
 | **writing-memorb-skills** | `core/writing-memorb-skills` | Create/modify vault skills (Meta) |
 
 
@@ -61,7 +62,3 @@ Stop and revert if rationalizing any of the following:
 - *"It's simple, no need to read sub-skills"* → Router rules are mandatory for all file ops.
 - *"Place notes in root temporarily"* → New notes belong in `memorbs/HQ/OrbTrack/` or PARA folders.
 - *"I recall the rules without reading"* → Always re-read SKILL.md as rules evolve.
-- *"Skip closeout this time"* → `session-closeout` is a mandatory ritual for every session.
-
-## Session Closeout
-Must execute `session-closeout` upon completing a session (Daily Note summary with `使用 skill: ...`, log.md entry, git commit/push).

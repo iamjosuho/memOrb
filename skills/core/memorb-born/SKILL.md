@@ -27,7 +27,7 @@ description: "Phase 0 Vault Initialization Skill: setup user identity, AI adviso
      mkdir -p "$VAULT/Long-Term/Orgs"
      mkdir -p "$VAULT/memorbs/Dump"
      ```
-   - Ensure initial creation of index file `memorbs/MEMORY.md` and event log `memorbs/log.md` if not present.
+   - Ensure initial creation of the timeline `memorbs/log.md` if not present, seeded with a `# Timeline — since {YYYY-MM-DD}` header.
 4. **Generate/Update HQ Hot Cache**:
    - `memorbs/HQ/persona.md`: AI tone/role from Q3 (<100 lines).
    - `memorbs/HQ/identity.md`: name, birthday, education/career history, role, organization, goals, and key relationships table from Q1/Q2/Q4 (<100 lines).
