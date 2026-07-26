@@ -142,6 +142,20 @@ derived_from: []       # 僅 belief orb 使用：回連提煉出此信念的 Cor
 - [[Long-Term/People/{Name}|{Name}]]（{關係}）
 ```
 
+## Orb File Structure
+
+Every memorb (Core, Belief, Long-Term entity page, or any named orb) follows one of two physical layouts:
+
+| Type | Layout | When to use |
+| :--- | :--- | :--- |
+| **Plain orb** | `orb-name.md` — single file | No attachments; self-contained text |
+| **Bundle orb** | `orb-name/orb-name.md` + attachment files in the same folder | Has attachments (images, PDFs, audio, etc.) |
+
+**Rules:**
+- The folder and the main Markdown file **always share the same name** — never use a generic filename like `memorb.md` inside a bundle folder.
+- **Query resolution order**: look for `orb-name.md` first; if not found, look for `orb-name/orb-name.md`. All skills that read or move orbs must follow this two-step lookup.
+- When archiving or moving a bundle orb, move the **entire `orb-name/` folder**, not just the inner `.md` file.
+
 ## 範本路徑
 
 | 範本 | 路徑 |

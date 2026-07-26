@@ -8,6 +8,16 @@ description: "Wiki Ingest workflow: ingest raw content and update structured mem
 > LLM Wiki Architecture: **raw (sources) → wiki (memorbs/ structured pages) → schema (CLAUDE.md)**.
 > Ingest ensures consistency across all three layers when new raw material arrives.
 
+## Orb Layout Decision (apply before any write)
+
+When creating a **new** orb in `Long-Term/` or `memorbs/HQ/`:
+- **Has attachments** (images, PDFs, audio, etc.) → create a **bundle orb**: `mkdir {base}/{name}/` then write `{base}/{name}/{name}.md`; place attachment files in the same folder.
+- **No attachments** → create a **plain orb**: write `{base}/{name}.md` directly.
+
+When **updating an existing** orb, resolve its path first (two-step lookup):
+1. Check `{base}/{name}.md` — if found, it is a plain orb; update it.
+2. If not found, check `{base}/{name}/{name}.md` — if found, it is a bundle orb; update the inner `.md` file.
+
 ## Execution Sequence (Strict Order)
 
 1. **Preserve Raw Content**:
@@ -21,6 +31,7 @@ description: "Wiki Ingest workflow: ingest raw content and update structured mem
    - `Long-Term/Projects/` — Projects impacted
    - `Long-Term/Orgs/` — Companies/entities
    - `memorbs/glossary.md` — New terms
+   - Use the **two-step lookup** above to locate existing pages before writing; apply the **orb layout decision** above when creating new ones.
    - No separate Context bucket — any environmental fact/domain rule worth keeping goes straight into whichever `Long-Term/People`／`Orgs`／`Projects` page it's actually about.
    - **Frontmatter Schema Enforcer**: Ensure target page frontmatter includes `aliases: []` (authority control) and `orb_emotions: []` (accumulated emotion tags like `joy`, `anxiety`, `fear`, `sadness`, `anger`, `disgust`).
    - **Update Trace Rules**:

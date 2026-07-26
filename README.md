@@ -28,6 +28,18 @@ By bridging task performance with personal values, **memOrb helps users achieve 
 
 ---
 
+## 🏛️ Framework Pillars
+
+memOrb is built on three interlocking design principles:
+
+**1. Movie Universe (Inside Out)** — The metaphorical language. memorbs are crystal orbs holding a single memory. OrbTrack is the staging bay where newly distilled orbs wait before being filed. Islands represent the user's personality domains and evolving belief state. The Forgetter runs MUSTY pruning — clearing out memories that are Misleading, Ugly, Superseded, Trivial, or simply no longer needed.
+
+**2. Atomic Notes** — The unit of knowledge. Each memorb captures exactly one idea, is self-contained, and connects to other memorbs via bi-directional links. *Distillation* is the core act: AI crystallizes a raw experience or session output into an atomic memorb that can stand alone, link outward, and be recalled independently.
+
+**3. Library Classification** — The organizational logic for Long-Term memory. Rather than imposing a rigid taxonomy upfront, memOrb starts with three core shelves — People, Projects, Orgs — and grows organically. As memorbs accumulate in OrbTrack and cluster around recurring themes, new Long-Term categories emerge naturally and get promoted into the shelf system.
+
+---
+
 ## 🔮 Worldview Architecture
 
 memOrb structures your vault as a modular, self-maintaining cognitive ecosystem, split across three layers — Islands of Personality, Long-Term Memory, and memOrb's own `memorbs/` namespace:

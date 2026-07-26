@@ -10,19 +10,25 @@ description: "Memory Archive Executor (Mind Workers Forgetter): Archive outdated
 ## Execution Sequence
 
 1. **Verify Target & User Confirmation**:
-   - Confirm target file in `Long-Term/` (or `memorbs/HQ/Core`／`Belief`) and verify explicit user approval.
-2. **Move File**:
-   - Move page from `Long-Term/{category}/{name}.md` to `memorbs/Dump/{category}/{name}.md`.
-   - Update target page frontmatter: set `status: archived` and add `archived_at: YYYY-MM-DD`.
-3. **Rewrite Vault Wiki Links**:
-   - Search the vault for all references to `[[{name}]]` or `[[Long-Term/{category}/{name}]]`.
-   - Rewrite references to point to `[[memorbs/Dump/{category}/{name}|{name}]]` so historical context is preserved without breaking links.
-4. **Update Index**:
-   - Remove page from `memorbs/MEMORY.md` if present.
-5. **Log Archive Event**:
+   - Confirm target orb in `Long-Term/` (or `memorbs/HQ/Core`／`Belief`) and verify explicit user approval.
+2. **Detect Orb Layout**:
+   - **Plain orb**: `{base}/{category}/{name}.md` exists as a single file.
+   - **Bundle orb**: `{base}/{category}/{name}/` is a folder containing `{name}.md` (and attachment files).
+   - Use this two-step check to determine which applies before moving anything.
+3. **Move Orb**:
+   - *Plain orb*: `mv {base}/{category}/{name}.md memorbs/Dump/{category}/{name}.md`
+   - *Bundle orb*: `mv {base}/{category}/{name}/ memorbs/Dump/{category}/{name}/` (move the entire folder)
+   - Update the target page's frontmatter (`memorbs/Dump/{category}/{name}.md` or `memorbs/Dump/{category}/{name}/{name}.md`): set `status: archived` and add `archived_at: YYYY-MM-DD`.
+4. **Rewrite Vault Wiki Links**:
+   - Search the vault for all references to any of these patterns: `[[{name}]]`, `[[Long-Term/{category}/{name}]]`, `[[Long-Term/{category}/{name}/{name}]]`.
+   - Rewrite all matches to `[[memorbs/Dump/{category}/{name}|{name}]]` so historical context is preserved without breaking links.
+5. **Update Index**:
+   - Remove the orb entry from `memorbs/MEMORY.md` if present.
+6. **Log Archive Event**:
    - Append to `memorbs/log.md`:
      ```markdown
      ## [YYYY-MM-DD] archive | {name}
-     - Original Path: Long-Term/{category}/{name}.md
+     - Original Path: {base}/{category}/{name}.md  (or {name}/ for bundle)
+     - Layout: plain | bundle
      - Reason: MUSTY criteria ({M/U/S/T/Y})
      ```

@@ -5,9 +5,18 @@ description: "Wiki Query workflow: read memory before answering questions about 
 
 # Memorb Query Skill
 
+## Orb Resolution (Two-Step Lookup)
+
+Before reading any named orb, resolve its physical path:
+1. Check `{base}/{name}.md` — if found, use it (plain orb).
+2. If not found, check `{base}/{name}/{name}.md` — if found, use it (bundle orb; attachments are sibling files in `{base}/{name}/`).
+3. If neither exists, the orb is missing — do not hallucinate content.
+
+Apply this lookup to every target in `Long-Term/People/`, `Long-Term/Projects/`, `Long-Term/Orgs/`, `memorbs/HQ/Core/`, and `memorbs/HQ/Belief/`.
+
 ## Execution Sequence
 
-1. **Read `memorbs/MEMORY.md` index first** to locate target pages, then read target files — **do not answer from memory**.
+1. **Read `memorbs/MEMORY.md` index first** to locate target pages, then resolve each target path using the two-step lookup above — **do not answer from memory**.
 2. **Circulation Record & On-the-fly Migration**:
    - Upon successfully reading and using a target page, immediately update its frontmatter:
      - `last_recalled: YYYY-MM-DD`

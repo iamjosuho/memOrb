@@ -5,6 +5,15 @@ description: "Wiki Lint 工作流：memory 健檢，找出矛盾、過期、孤�
 
 # Memorb Lint Skill
 
+## Bundle Orb Awareness
+
+When scanning directories under `Long-Term/` or `memorbs/HQ/Core/`, `memorbs/HQ/Belief/`:
+- A **folder** whose name matches an existing `{name}/{name}.md` is a **valid bundle orb** — treat the inner `.md` as the orb page. Do not flag the folder as an orphan or structural error.
+- A **folder** that contains no same-name `.md` file (e.g. `Long-Term/People/Acme/` with no `Acme.md` inside) is a **genuine orphan** — flag it for review.
+- A **plain `.md` file** at `{base}/{name}.md` is a plain orb — check normally.
+
+Apply this check whenever scanning for orphan pages, broken links, or unregistered entries.
+
 ## 動作順序
 
 1. 讀 `memorbs/MEMORY.md` 全表 + 隨機抽 3-5 頁
