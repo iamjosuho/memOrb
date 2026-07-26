@@ -31,8 +31,8 @@ description: "夢工廠：每月重播 memorbs/log.md 的時間軸，找出反�
 | 往期時間軸 | `memorbs/log/{YYYY-MM}.md` | 僅在使用者要求更長區間時讀 |
 | 待分類區 | `memorbs/HQ/OrbTrack/` | 尚未 triage 的內容 |
 | 現有自我 | `memorbs/HQ/Core/`、`memorbs/HQ/Belief/`、`memorbs/HQ/identity.md` | **全讀**（量小），作為比對基準 |
-| 島嶼現況 | `Islands/*/000-MOC.md` | 現況段落，用於比對是否已經過時 |
-| 相關實體頁 | `Long-Term/` | **只讀 log.md 點名過的頁面**，不要全庫掃描 |
+| 島嶼現況 | `memorbs/Islands/*/000-MOC.md` | 現況段落，用於比對是否已經過時 |
+| 相關實體頁 | `memorbs/Long-Term/` | **只讀 log.md 點名過的頁面**，不要全庫掃描 |
 
 > `Daily Notes/` 是使用者原生資料夾，core 不依賴它。**存在就一併讀進來當補充素材，不存在就跳過**，重播不因此失效。
 
@@ -74,7 +74,7 @@ description: "夢工廠：每月重播 memorbs/log.md 的時間軸，找出反�
 1. {主題}（出現於 {n} 處：{來源清單}）
 
 ### 提議新增 Core orb
-- **{標題}** ｜ {YYYY-MM-DD} ｜ 指向 [[Islands/{名稱}/000-MOC]]
+- **{標題}** ｜ {YYYY-MM-DD} ｜ 指向 [[memorbs/Islands/{名稱}/000-MOC]]
   - 事件：
   - 事後的行為改變：
   - 為什麼夠格：
@@ -85,7 +85,7 @@ description: "夢工廠：每月重播 memorbs/log.md 的時間軸，找出反�
 - **修訂：{既有 orb}** — 現行「{舊}」→ 建議「{新}」，理由：
 
 ### 建議更新的 Island 現況
-- [[Islands/{名稱}/000-MOC]]：{哪一段過時了、建議怎麼改}
+- [[memorbs/Islands/{名稱}/000-MOC]]：{哪一段過時了、建議怎麼改}
 ```
 
 使用者可以逐項採納、修改措辭、或全部否決。**使用者自己寫的句子永遠優先於你擬的**——信念是他的，不是你的。

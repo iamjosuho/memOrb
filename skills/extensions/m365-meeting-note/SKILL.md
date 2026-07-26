@@ -49,7 +49,7 @@ M365 Teams 實體會議為主，**通常只有一人開麥克風**（透過電�
 
 > **這支 skill 是「特定情境的 orb 產生器」**：把一份會議逐字稿凝結成一顆 memorb，落在 `memorbs/HQ/OrbTrack/` 等待 triage，之後由 `orbtrack-triage`／`memorb-ingest` 決定它進哪座書架。**沒有專屬的會議資料夾**——會議記錄不是一個獨立的分類，它就是一顆有來源的 orb。
 >
-> orb frontmatter 必須含 `source:` 指回逐字稿原始檔（見 `memorb-conventions` 的 raw 生命週期規則）。
+> 逐字稿放進**同一顆 orb 的 bundle 資料夾**：`{orb 名}/逐字稿.md`，跟 orb 本體同生共死。不另設會議資料夾，也不寫到 `memorbs/` 以外。
 
 #### 🏢 資訊部周會 / 小型技術會議
 輸出：
@@ -77,8 +77,7 @@ M365 Teams 實體會議為主，**通常只有一人開麥克風**（透過電�
 
 ### Step 4：更新相關檔案
 1. **`memorbs/log.md`** → append 一筆 `## [YYYY-MM-DD] ingest | {會議名稱}`，含影響頁面與「訊號」欄位（會中使用者的原話、情緒、未決的疑慮）。這是時間軸，必寫。
-2. **Long-Term/People/{org}/*.md** → 更新相關與會者的互動紀錄（補充逐字稿觀察）
-3. **Daily Notes/**（使用者原生資料夾，選填）→ 若該資料夾存在，加入 `## 💬 與 Claude 的對話紀錄` 區塊；不存在就跳過，不要建立
+2. **memorbs/Long-Term/People/{org}/*.md** → 更新相關與會者的互動紀錄（補充逐字稿觀察）
 
 ### Step 5：使用者表現分析框架
 
@@ -99,6 +98,5 @@ M365 Teams 實體會議為主，**通常只有一人開麥克風**（透過電�
 
 - 逐字稿若超過 25,000 tokens，用 Python 解析後存為暫存 `.txt` 分段讀取
 - 執行長周報逐字稿可能因 API timeout 無法取得，需記錄並告知使用者
-- Daily Note 路徑格式：`Daily Notes/YYYY/MM/YYYY-MM-DD.md`（原生資料夾，存在才寫）
-- 會議 orb 存至 `memorbs/HQ/OrbTrack/`，命名依 `memorb-conventions` 的 OrbTrack 規則：`{YYYY-MM-DD}-{HHMM}-{標題}.md`
-- 逐字稿原始檔屬 raw data，存 `Resources/會議記錄/raw/`（該資料夾不存在就跳過，改把來源資訊記進 log.md 的 entry）
+- 會議 orb 存至 `memorbs/HQ/OrbTrack/`，命名依 `memorb-conventions` 的 OrbTrack 規則：`{YYYY-MM-DD}-{HHMM}-{標題}/`（bundle，逐字稿放同一資料夾）
+- **不寫到 `memorbs/` 以外**，包含使用者的 Daily Notes——這條對 extension 一樣適用

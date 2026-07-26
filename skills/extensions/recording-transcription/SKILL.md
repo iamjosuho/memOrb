@@ -75,10 +75,12 @@ python3 "$SCRIPT" status --workdir "$WORKDIR"
 
 > 這個 workdir 在 `/tmp`，**只在這次對話/session 內有效**——如果背景任務跑到一半使用者就結束對話，進度會遺失，下次要重新開始。錄音很長的話，處理前先讓使用者知道大概要等多久，讓他決定要不要留著視窗等。模型選擇：`medium` 是準確度/速度的預設平衡點；趕時間用 `small`，要求更高用 `large-v3`（更慢）。純 CPU（無 GPU），速度大致與錄音時長相當或更慢。
 
-全部完成後合併，**`--out` 直接指向保險庫路徑**——這是最終產出，不是中繼檔：
+全部完成後合併，**`--out` 直接指向該 orb 的 bundle 資料夾**——逐字稿是這顆 orb 的附件，不是獨立檔案：
 
 ```bash
-python3 "$SCRIPT" merge --workdir "$WORKDIR" --out "$VAULT/Resources/會議記錄/raw/2026-07-12-與Vic面談.md"
+ORB="$VAULT/memorbs/HQ/OrbTrack/2026-07-12-1400-與Vic面談"
+mkdir -p "$ORB"
+python3 "$SCRIPT" merge --workdir "$WORKDIR" --out "$ORB/逐字稿.md"
 ```
 
 會用 OpenCC（`s2twp`）把 Whisper 預設輸出的簡體字轉成台灣繁體——這一步不能省。處理完 `WORKDIR` 已經沒用了，`/tmp` 可以自由刪除（跟保險庫/outputs 不同）：
@@ -95,7 +97,7 @@ rm -rf "$WORKDIR"
 
 > ⚠️ **Context Window 保護機制**：逐字稿通常動輒數萬字，**禁止主 Agent 直接讀取整份逐字稿**。你必須使用 `invoke_subagent` 工具派遣一個子代理（如 `research` 或 `self`），將以下 Step 3 與 Step 4 的任務交辦給它，讓子代理去閱讀、校正並總結出面談分析後回報。
 
-1. 動態讀取 `memorbs/glossary.md` 與 `Long-Term/People/` 底下所有 `.md`（`find "$VAULT/Long-Term/People" -name "*.md"`，需遞迴含子資料夾 Page Bundle，不能只掃一層）取得目前已知的人名、暱稱、專案代號、術語——不要用寫死的字典，這份清單會一直變
+1. 動態讀取 `memorbs/glossary.md` 與 `memorbs/Long-Term/People/` 底下所有 `.md`（`find "$VAULT/memorbs/Long-Term/People" -name "*.md"`，需遞迴含子資料夾 Page Bundle，不能只掃一層）取得目前已知的人名、暱稱、專案代號、術語——不要用寫死的字典，這份清單會一直變
 2. 可以向使用者確認錄音中有誰
 3. 若 Step 2A 與 Step 2B 兩份資料都有（本地 Whisper 輸出＋手機草稿），互相對照：Whisper 對語流/標點通常較穩，手機內建版對「使用者手機通訊錄/字典裡已有的專有名詞」有時反而更準，尤其是人名。兩邊對不上的地方，才是真正需要人工確認的地方
 4. 只有一份資料時（通常是純草稿路徑），對照 glossary/people 修正明顯誤轉（例如 eBao→「e 包／醫保」、Halu→「哈魯」之類的同音錯字），修正**另存清稿版本**，保留原始草稿不覆蓋
@@ -111,21 +113,23 @@ rm -rf "$WORKDIR"
 | 決策 | 這次面談拍板了什麼、還懸而未決的是什麼 |
 | 對使用者的回饋/期待 | 對方對使用者的表現、方向有什麼明確或暗示性的評語 |
 | 待釐清問題 | 逐字稿裡模糊、需要下次面談或訊息追問清楚的地方 |
-| 與既有 memory 的呼應 | 對照 `Long-Term/People/` 裡對方的既有記錄，這次談話是印證、還是推翻了先前的理解 |
+| 與既有 memory 的呼應 | 對照 `memorbs/Long-Term/People/` 裡對方的既有記錄，這次談話是印證、還是推翻了先前的理解 |
 
-輸出分析前，先讀一次對方在 `Long-Term/People/` 的既有頁面，確保分析銜接既有脈絡，而不是每次從零開始。
+輸出分析前，先讀一次對方在 `memorbs/Long-Term/People/` 的既有頁面，確保分析銜接既有脈絡，而不是每次從零開始。
 
 ### Step 5：存檔與交接 memorb-ingest
 
-| 內容 | 路徑 | 性質 |
-|------|------|------|
-| 原始音檔（經確認要留底才寫） | `Resources/會議記錄/raw/audio/{YYYY-MM-DD}-{標題}.{ext}`（**.gitignore 排除，不進 git**；寫入後無法刪除，先問使用者要不要留） | raw |
-| 逐字稿（raw，未修正） | `Resources/會議記錄/raw/{YYYY-MM-DD}-{標題}.md` | raw |
-| 面談 orb（清稿＋分析） | `memorbs/HQ/OrbTrack/{YYYY-MM-DD}-{HHMM}-與{對象}面談.md` | orb |
+產出是**一顆 bundle orb**，全部落在同一個資料夾裡：
 
-> `Resources/` 是使用者原生資料夾，**不存在就跳過 raw 存檔**，改把來源資訊（檔名、時長、取得方式）寫進 orb 的內文與 log.md 的 entry。orb 的 frontmatter 要有 `source:` 指回 raw 檔（存在時），raw 與 orb 的生命週期綁在一起。
+```text
+memorbs/HQ/OrbTrack/{YYYY-MM-DD}-{HHMM}-與{對象}面談/
+├── {YYYY-MM-DD}-{HHMM}-與{對象}面談.md   ← orb 本體：清稿重點＋面談分析
+└── 逐字稿.md                              ← 附件
+```
 
-完成後交給 `memorb-ingest` 走完整流程（掃描影響 `Long-Term/People`、`Long-Term/Projects`、寫 `log.md` 時間軸、PARA 活躍區）。本 skill 只負責「錄音→可靠逐字稿＋初步分析」，不重複做 memorb-ingest 的事。
+> **音檔不進 vault。** 幾百 MB 會拖垮 vault 與 git，而且寫進去就刪不掉。問使用者要留在哪（vault 外的任何路徑都行），把該位置與錄音時長寫進 orb 內文即可。這是 `memorb-conventions` 「只有文件檔進 vault」規則的直接套用。
+
+完成後交給 `memorb-ingest` 走完整流程（掃描影響 `memorbs/Long-Term/People`、`memorbs/Long-Term/Projects`、寫 `log.md` 時間軸、PARA 活躍區）。本 skill 只負責「錄音→可靠逐字稿＋初步分析」，不重複做 memorb-ingest 的事。
 
 ## 注意事項
 

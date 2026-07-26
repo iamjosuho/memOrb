@@ -17,15 +17,15 @@ description: "Use when 使用者要求處理、新增名片，或上傳任何名
 - 聯絡方式（Email, Phone, Line ID 等）
 
 ### 2. 組織判定
-確認 `Long-Term/Orgs/{公司名稱}.md` 是否存在。若無，先依照 `memorb-conventions` 的 Long-Term 實體頁 Frontmatter Schema 建立該組織檔案（`aliases: []`、`orb_emotions: []`、`recall_count: 0`、`last_recalled: null`）。
+確認 `memorbs/Long-Term/Orgs/{公司名稱}.md` 是否存在。若無，先依照 `memorb-conventions` 的 Long-Term 實體頁 Frontmatter Schema 建立該組織檔案（`aliases: []`、`orb_emotions: []`、`recall_count: 0`、`last_recalled: null`）。
 
 ### 3. 人物資料夾建立 (Page Bundle 模式)
 因為該人物帶有實體附件（圖檔），為了保持目錄整潔，需建立專屬資料夾：
-- **目標資料夾**：`Long-Term/People/{公司名稱}/{姓名}/`
-- **人物檔案**：`Long-Term/People/{公司名稱}/{姓名}/{姓名}.md`
+- **目標資料夾**：`memorbs/Long-Term/People/{公司名稱}/{姓名}/`
+- **人物檔案**：`memorbs/Long-Term/People/{公司名稱}/{姓名}/{姓名}.md`
 
 **重大注意事項 (Red Flag) 絕對不允許找藉口**：
-`memorb-conventions` SSOT 說 `Long-Term/People/` 頁面預設為單一頁面（`Long-Term/People/{公司暱稱}/{姓名}.md`），不強制要求資料夾。
+`memorb-conventions` SSOT 說 `memorbs/Long-Term/People/` 頁面預設為單一頁面（`memorbs/Long-Term/People/{公司暱稱}/{姓名}.md`），不強制要求資料夾。
 **這是特例！名片場景請強行覆寫這個預設規則！** 只要有「名片圖檔」等附件，就 **必須** 建立專屬的 `{姓名}/` 資料夾（Page Bundle 模式）。
 - 直接把 .md 建在公司目錄下？**刪除重來。**
 - 直接把圖片放在公司目錄下？**刪除重來。**
@@ -42,7 +42,7 @@ if [ -z "$VAULT" ]; then
   VAULT=$(pwd)
 fi
 
-TARGET_DIR="$VAULT/Long-Term/People/{公司名稱}/{姓名}"
+TARGET_DIR="$VAULT/memorbs/Long-Term/People/{公司名稱}/{姓名}"
 mkdir -p "$TARGET_DIR"
 
 # 將使用者指定的原圖檔搬移並重新命名

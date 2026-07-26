@@ -23,9 +23,11 @@ Read the tiers bottom-up: an orb is made, shelved, recalled, weeded — and what
 | **Ramp landing bay** | `memorbs/HQ/OrbTrack/` | Staging only. Holds **distilled** orbs awaiting triage — not a dumping ground for raw input. Emptied by triage, never left to accumulate. | `orbtrack-triage` |
 | **The timeline** | `memorbs/log.md` | The only layer that records *when*. Entity pages are living documents with no per-event dates and OrbTrack is emptied by design, so neither can reconstruct a period. Each entry carries a **signal** line — the user's own unpolished words for something that mattered but wasn't shaped enough to become an orb. | all write skills append here |
 | **Memory Ingest Worker** | The act of **distilling** | Crystallizes raw material (transcripts, articles, PDFs) into orbs, then encodes and shelves them. | `memorb-ingest` |
-| **Long-Term Shelves** | `Long-Term/` + `Resources/` | Library classification: three shelves to start (People, Projects, Orgs), growing organically as OrbTrack clusters reveal recurring themes. | `memorb-conventions` |
+| **Long-Term Shelves** | `memorbs/Long-Term/` | Library classification: three shelves to start (People, Projects, Orgs), growing organically as OrbTrack clusters reveal recurring themes. Entity pages are *authority records* — one per entity, singular, with aliases and recall metrics. | `memorb-conventions` |
 
-> **On `Resources/`** — conceptually part of the Long-Term Shelves, but it stays at the vault root and keeps its own structure. `Long-Term/` holds *authority records* (one entity per page, with aliases and recall metrics); `Resources/` holds *the documents themselves*. Same library, different apparatus.
+> **Entities are singular; events carry dates.** An entity page (`Acme.md`) never multiplies. An event that happens twice becomes two dated orbs (`2026-07-26-Acme-應徵/`, `2027-03-11-Acme-應徵/`), both linked from the entity page, which accumulates the history. This is what keeps a recurring event from either colliding on filename or collapsing into a single undated page.
+
+> **Raw material lives in the orb's bundle.** A transcript or a PDF is an attachment of the orb distilled from it — `{orb-name}/{orb-name}.md` plus the source file alongside. Lifecycle is then automatic: archiving moves the whole folder. Documents only; audio and video stay outside the vault with their location recorded in the orb.
 
 ---
 
@@ -51,7 +53,7 @@ This is the tier that separates memOrb from a filing system. Everything above he
 | **Sense of Self** | `memorbs/HQ/identity.md` | Who the user is: background, goals, key relationships, and self-descriptive attributes (MBTI and similar labels belong here, not in `Belief/`). |
 | **Core Memory Slot** | `memorbs/HQ/Core/` | One orb per file. Formative experiences that drive the Islands. |
 | **Belief System** | `memorbs/HQ/Belief/` | One orb per file. Value and principle statements distilled from lived experience. |
-| **Islands of Personality** | `Islands/` | Long-term domains of responsibility and interest. Narrative layer only — current state, goals, section notes, MOC — with wiki-links out to the entity pages in `Long-Term/`. PARA's Areas. |
+| **Islands of Personality** | `memorbs/Islands/` | Long-term domains of responsibility **and interest**. Narrative layer only — current state, goals, section notes, MOC — with wiki-links out to the entity pages in `memorbs/Long-Term/`. Absorbs both **Areas and Resources** from PARA: a topic you follow long-term *is* an island, so study notes hang off it as ordinary orbs rather than living in a reference folder. |
 
 ### Core vs. Belief — two different mechanisms
 
@@ -74,7 +76,7 @@ formed_at: {YYYY-MM-DD}
 orb_type: belief          # core | belief
 derived_from:             # belief orbs only — link to any orbs
   - "[[memorbs/HQ/Core/{slug}]]"
-  - "[[Long-Term/Projects/{slug}]]"
+  - "[[memorbs/Long-Term/Projects/{slug}]]"
 ---
 ```
 
@@ -97,12 +99,14 @@ Every write is confirmed item by item, never as a batch, and the user's own word
 
 | PARA | memOrb |
 | :--- | :--- |
-| **P**rojects | `Long-Term/Projects/` |
-| **A**reas | `Islands/` |
-| **R**esources | `Resources/` *(user-native, untouched)* |
+| **P**rojects | `memorbs/Long-Term/Projects/` |
+| **A**reas | `memorbs/Islands/` |
+| **R**esources | `memorbs/Islands/` — *no separate folder* |
 | **A**rchives | `memorbs/Dump/` |
 
-`orbtrack-triage` runs the PARA decision tree when emptying the staging bay.
+`orbtrack-triage` runs this decision tree when emptying the staging bay.
+
+**R and A share a home on purpose.** An island is defined as a domain of long-term responsibility *or interest*, which is exactly PARA's Areas plus Resources. A subject you keep following is an island; the notes you make while following it are orbs hanging off it. Giving reference material its own folder would mean maintaining a second organising principle for material that is already covered — and it would push memOrb into writing outside `memorbs/`, which it never does.
 
 ---
 
@@ -118,7 +122,9 @@ Listed for completeness — these have no memOrb counterpart and none is promise
 Removed *(all 2026-07-26)*:
 
 - `memorbs/MEMORY.md` — a hand-maintained index of what the filesystem already knows. Any index maintained by hand drifts, and the 200-line cap meant it could never scale with the vault. Lookup is now `ls` plus `grep`; reachability is guaranteed by bi-directional links, and an unlinked page is simply an orphan for the linter to catch
-
+- `Resources/` — PARA's R maps to Islands, so a separate reference folder was never needed. It also forced memOrb to write outside its own namespace, and "write there if the folder happens to exist" gave the same operation three different outcomes depending on what a user named their folders
+- `OrbTrack/Attachments/` and the `source:` field — two more ways to attach raw material, competing with bundle orbs. Consolidated onto bundles, where lifecycle is automatic
+- `memorbs/meeting-note/` — a meeting record is not its own category; it is an orb with its transcript bundled alongside
 - `session-closeout` — handled real-time writes and git operations, which sit outside the memory framework and overlapped with distillation
 - `daily-note` — a dated bucket holding many unrelated ideas is the opposite of an atomic note. The timeline role it was really performing moved to `memorbs/log.md`, which does it better: structured entries, a signal field, and automatic rotation
 - `weekly-retro` — task management (done / not done / next week's intentions) rather than memory work, and overlapping with `dream-studio`'s periodic review

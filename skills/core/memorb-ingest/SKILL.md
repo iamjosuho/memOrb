@@ -10,7 +10,7 @@ description: "Wiki Ingest workflow: ingest raw content and update structured mem
 
 ## Orb Layout Decision (apply before any write)
 
-When creating a **new** orb in `Long-Term/` or `memorbs/HQ/`:
+When creating a **new** orb in `memorbs/Long-Term/` or `memorbs/HQ/`:
 - **Has attachments** (images, PDFs, audio, etc.) → create a **bundle orb**: `mkdir {base}/{name}/` then write `{base}/{name}/{name}.md`; place attachment files in the same folder.
 - **No attachments** → create a **plain orb**: write `{base}/{name}.md` directly.
 
@@ -20,25 +20,25 @@ When **updating an existing** orb, resolve its path first (two-step lookup):
 
 ## Execution Sequence (Strict Order)
 
-1. **Preserve Raw Content** *(user-native, optional)*:
-   - Meeting transcripts → `Resources/會議記錄/raw/`
-   - Web articles → Keep original link or `.md` clipper file
-   - **If `Resources/` does not exist, skip this step** — do not create the folder. Keep the source reference in the log entry instead.
-2. **Distill into an orb**:
+1. **Distill into an orb**:
    - The distilled orb lands in `memorbs/HQ/OrbTrack/` unless it clearly belongs to an existing entity page.
-   - Set `source:` in its frontmatter to link back to the raw file from step 1 (`null` if nothing was preserved). Raw data shares the orb's lifecycle — see the Raw Data section in `memorb-conventions`.
+   - If there is no raw material to keep, it is a plain orb: `{name}.md`.
+2. **Keep the raw material inside the orb's bundle** *(only when there is any)*:
+   - Make the orb a bundle — `{name}/{name}.md` — and drop the transcript, clipping, or PDF alongside it in the same folder. Nothing goes to a shared attachment bucket and nothing is written outside `memorbs/`.
+   - **Documents only** (`.md`, `.txt`, `.pdf`, document scans). Audio and video never enter the vault; record where they live in the orb body instead.
+   - Web articles: keep the original URL in the orb's frontmatter/body; only bundle a clipping if one was actually captured.
 3. **Scan Impact & Update** (Core value of Ingest):
-   - `Long-Term/People/` — People mentioned
-   - `Long-Term/Projects/` — Projects impacted
-   - `Long-Term/Orgs/` — Companies/entities
+   - `memorbs/Long-Term/People/` — People mentioned
+   - `memorbs/Long-Term/Projects/` — Projects impacted
+   - `memorbs/Long-Term/Orgs/` — Companies/entities
    - `memorbs/glossary.md` — New terms
    - Use the **two-step lookup** above to locate existing pages before writing; apply the **orb layout decision** above when creating new ones.
-   - No separate Context bucket — any environmental fact/domain rule worth keeping goes straight into whichever `Long-Term/People`／`Orgs`／`Projects` page it's actually about.
+   - No separate Context bucket — any environmental fact/domain rule worth keeping goes straight into whichever `memorbs/Long-Term/People`／`Orgs`／`Projects` page it's actually about.
    - **Frontmatter Schema Enforcer**: Ensure target page frontmatter includes `aliases: []` (authority control) and `orb_emotions: []` (accumulated emotion tags like `joy`, `anxiety`, `fear`, `sadness`, `anger`, `disgust`).
    - **Update Trace Rules**:
      - **Fact Updates** (e.g. title changes, project status): Overwrite directly with latest state.
      - **Decision/Principle Updates** (tagged `#orb/anger`, `#orb/sadness`, etc.): Retain change history and context in the page body to preserve reasoning lineage.
-   - **(Crucial) PARA Active Zones**: Extract actionable strategies/knowledge into corresponding active notes in `Islands/` or `Long-Term/Projects/`.
+   - **(Crucial) PARA Active Zones**: Extract actionable strategies/knowledge into corresponding active notes in `memorbs/Islands/` or `memorbs/Long-Term/Projects/`.
 4. **Ensure Reachability**: every newly created page must be linked from at least one existing page. There is no index file — reachability is guaranteed by bi-directional links alone, and an unlinked page is an orphan.
 5. **Log Event** *(mandatory — this is the timeline)*: Append near top of `memorbs/log.md`:
    ```markdown

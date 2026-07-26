@@ -194,47 +194,44 @@ function validatePluginJson() {
  */
 function validateFixturesStructure() {
   const memorbsFixturesPath = path.join(REPO_ROOT, 'fixtures', 'memorbs');
-  const longTermFixturesPath = path.join(REPO_ROOT, 'fixtures', 'Long-Term');
 
   console.log(`\n🏛️  Checking fixtures vault structure (memorb-conventions SSOT)...`);
 
-  if (fs.existsSync(memorbsFixturesPath)) {
-    const requiredMemorbsDirs = [
-      'HQ/Core',
-      'HQ/Belief',
-      'HQ/OrbTrack',
-      'HQ/OrbTrack/Attachments',
-      'Dump'
-    ];
+  // Everything memOrb owns lives under memorbs/. Nothing is written outside it.
+  const requiredMemorbsDirs = [
+    'HQ/Core',
+    'HQ/Belief',
+    'HQ/OrbTrack',
+    'Islands',
+    'Long-Term/Projects',
+    'Long-Term/People',
+    'Long-Term/Orgs',
+    'Dump'
+  ];
 
-    for (const dirRel of requiredMemorbsDirs) {
-      const fullDirPath = path.join(memorbsFixturesPath, dirRel);
-      if (!fs.existsSync(fullDirPath)) {
-        console.error(`  ❌ ERROR: Missing required fixture directory: fixtures/memorbs/${dirRel}`);
-        errors++;
-      } else {
-        console.log(`  ✓ Directory exists: fixtures/memorbs/${dirRel}`);
-      }
-    }
-  }
-
-  // memorbs/Islands/ is deprecated — Projects/People/Orgs entity pages now live under Long-Term/
-  const deprecatedIslandsPath = path.join(memorbsFixturesPath, 'Islands');
-  if (fs.existsSync(deprecatedIslandsPath)) {
-    console.error(`  ❌ ERROR: Deprecated directory still present: fixtures/memorbs/Islands. Entity pages belong under fixtures/Long-Term/{Projects,People,Orgs}.`);
-    errors++;
-  }
-
-  const requiredLongTermDirs = ['Projects', 'People', 'Orgs'];
-
-  for (const dirRel of requiredLongTermDirs) {
-    const fullDirPath = path.join(longTermFixturesPath, dirRel);
+  for (const dirRel of requiredMemorbsDirs) {
+    const fullDirPath = path.join(memorbsFixturesPath, dirRel);
     if (!fs.existsSync(fullDirPath)) {
-      console.error(`  ❌ ERROR: Missing required fixture directory: fixtures/Long-Term/${dirRel}`);
+      console.error(`  ❌ ERROR: Missing required fixture directory: fixtures/memorbs/${dirRel}`);
       errors++;
     } else {
-      console.log(`  ✓ Directory exists: fixtures/Long-Term/${dirRel}`);
+      console.log(`  ✓ Directory exists: fixtures/memorbs/${dirRel}`);
     }
+  }
+
+  // Nothing may live at the fixtures root except memorbs/ — mirrors the "never write outside memorbs/" rule.
+  const strayRootDirs = ['Long-Term', 'Islands', 'Resources', 'Daily Notes', 'WeeklyRetro'];
+  for (const stray of strayRootDirs) {
+    if (fs.existsSync(path.join(REPO_ROOT, 'fixtures', stray))) {
+      console.error(`  ❌ ERROR: fixtures/${stray} exists at the root. memOrb owns only memorbs/ — move it under fixtures/memorbs/.`);
+      errors++;
+    }
+  }
+
+  // OrbTrack/Attachments/ is deprecated — attachments belong inside the orb's own bundle folder.
+  if (fs.existsSync(path.join(memorbsFixturesPath, 'HQ/OrbTrack/Attachments'))) {
+    console.error(`  ❌ ERROR: Deprecated directory still present: fixtures/memorbs/HQ/OrbTrack/Attachments. Attachments live inside the orb's bundle folder.`);
+    errors++;
   }
 }
 
@@ -253,26 +250,45 @@ function validateFixturesStructure() {
 const DEPRECATED_PATTERNS = [
   {
     pattern: /memorbs\/people\//,
-    suggestion: 'Long-Term/People/',
-    reason: 'memorbs/people/ was replaced by Long-Term/People/ when Islands/ entity storage moved to Long-Term/.',
+    suggestion: 'memorbs/Long-Term/People/',
+    reason: 'memorbs/people/ was replaced by Long-Term/People/ when Islands/ entity storage was split out.',
     exemptFiles: ['skills/core/memorb-conventions/SKILL.md'],
   },
   {
     pattern: /memorbs\/organizations\//,
-    suggestion: 'Long-Term/Orgs/',
+    suggestion: 'memorbs/Long-Term/Orgs/',
     reason: 'memorbs/organizations/ was replaced by Long-Term/Orgs/.',
     exemptFiles: ['skills/core/memorb-conventions/SKILL.md'],
   },
   {
     pattern: /memorbs\/projects\//,
-    suggestion: 'Long-Term/Projects/',
+    suggestion: 'memorbs/Long-Term/Projects/',
     reason: 'memorbs/projects/ was replaced by Long-Term/Projects/.',
     exemptFiles: ['skills/core/memorb-conventions/SKILL.md'],
   },
   {
-    pattern: /memorbs\/Islands\//,
-    suggestion: 'Long-Term/{Projects,People,Orgs}/',
-    reason: 'The memorbs/Islands/ namespace is abolished. Entity pages live in Long-Term/; narrative-layer Islands/ lives at the vault root.',
+    pattern: /memorbs\/Islands\/(people|projects|organizations)\//,
+    suggestion: 'memorbs/Long-Term/{People,Projects,Orgs}/',
+    reason: 'Entity pages never belonged under Islands/. Islands/ is the narrative layer only; entity pages live in Long-Term/. (Islands/ itself is valid again since 2026-07-26 — it now lives at memorbs/Islands/.)',
+    exemptFiles: ['skills/core/memorb-conventions/SKILL.md'],
+  },
+  {
+    // Everything memOrb owns lives under memorbs/. A bare root-level path means the migration was missed.
+    pattern: /(?<!memorbs\/)(?<!fixtures\/)\b(Long-Term|Islands)\/(Projects|People|Orgs|\{)/,
+    suggestion: 'memorbs/Long-Term/… or memorbs/Islands/…',
+    reason: 'On 2026-07-26 Islands/ and Long-Term/ moved under memorbs/. memOrb owns exactly one root folder and never writes outside it.',
+    exemptFiles: ['skills/core/memorb-conventions/SKILL.md'],
+  },
+  {
+    pattern: /Resources\//,
+    suggestion: 'the orb\'s own bundle folder (raw documents) or an Island / Long-Term page (curated notes)',
+    reason: 'The Resources/ concept was abolished on 2026-07-26. memOrb never writes outside memorbs/; raw documents live inside the orb bundle they belong to, and curated reference notes are just orbs under the relevant Island. PARA\'s R maps to Islands, not to a folder.',
+    exemptFiles: ['skills/core/memorb-conventions/SKILL.md'],
+  },
+  {
+    pattern: /OrbTrack\/Attachments/,
+    suggestion: 'the orb\'s own bundle folder: {orb-name}/{orb-name}.md + attachments alongside it',
+    reason: 'A shared Attachments/ bucket was a second attachment mechanism competing with bundle orbs. Consolidated onto bundles on 2026-07-26 so attachments always share their orb\'s lifecycle.',
     exemptFiles: ['skills/core/memorb-conventions/SKILL.md'],
   },
   {

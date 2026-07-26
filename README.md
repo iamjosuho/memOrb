@@ -17,11 +17,11 @@ memOrb is a suite of Agent Skills that turns your AI assistant's scattered sessi
 
 It fuses three established methods under one metaphor:
 
-| | Method | In memOrb |
-| :--- | :--- | :--- |
-| **The unit** | Atomic notes | One memorb holds one idea — self-contained, bi-directionally linked |
-| **The shelves** | PARA | Triage sorts each memorb into Projects, Areas, Resources, or Archives |
-| **The weeding** | Library MUSTY criteria | The Forgetter archives what's misleading, superseded, or trivial |
+|                 | Method                 | In memOrb                                                                            |
+| :-------------- | :--------------------- | :----------------------------------------------------------------------------------- |
+| **The unit**    | Atomic notes           | One memorb holds one idea — self-contained, bi-directionally linked                  |
+| **The shelves** | PARA                   | Triage sorts each memorb into Projects, Areas & Resources (both = Islands), or Archives (Dump) |
+| **The weeding** | Library MUSTY criteria | The Forgetter archives what's misleading, superseded, or trivial                     |
 
 The metaphor is a certain animated film about the inside of a mind, and it isn't decoration. In that film a person becomes whole when core memories power Islands of Personality, and when the mind is finally willing to let some memories go. memOrb runs that architecture literally: sessions distill into memorbs, memorbs consolidate into projects and people, and the ones that resonate become Core orbs, then Beliefs, then reshape your Islands.
 
@@ -77,7 +77,7 @@ In your agent chat, run:
 Run the /memorb-born skill to set up my memorb Memory Vault.
 ```
 
-A 3–5 question onboarding builds `memorbs/HQ/persona.md` (your AI advisor's tone) and `memorbs/HQ/identity.md` (who you are), then initializes the `Core/`, `Belief/`, and `Long-Term/` folders.
+A 3–5 question onboarding builds `memorbs/HQ/persona.md` (your AI advisor's tone) and `memorbs/HQ/identity.md` (who you are), then initializes the `Core/`, `Belief/`, and `memorbs/Long-Term/` folders.
 
 ### 3. Try your first commands
 
@@ -97,7 +97,7 @@ Skills trigger from natural language — no slash commands required after setup.
 
 ### Core
 
-Core skills own exactly three folders — `memorbs/`, `Islands/`, `Long-Term/` — and run to completion on a vault containing nothing else. They will write into your existing `Daily Notes/`, `Resources/`, or `Templates/` when those folders are already there, but never create them and never depend on them. Anything that needs an outside system is an extension.
+Core skills write only inside `memorbs/` and run to completion on a vault containing nothing else. They can read your existing notes when you point them at something, but they never create folders outside their own namespace and never depend on one existing. Anything that needs an outside system is an extension — and the same write boundary applies there.
 
 | Skill | What it does |
 |---|---|
@@ -145,35 +145,39 @@ Long-Term memory starts with three shelves — People, Projects, Orgs — and gr
 
 ### Your vault layout
 
-memOrb defines and maintains exactly three folders. Everything else in your vault keeps its existing structure, untouched.
+**memOrb may read anything you point it at, but it writes only inside `memorbs/`.** One folder appears in your vault. Delete it and your vault is exactly as it was.
 
 ```text
 <your vault>/
-├── Islands/                   # Islands of Personality — narrative layer only, never stores content
-│   └── {name}/                # 000-MOC.md + section notes: current state, goals, links out to Long-Term/
-├── Long-Term/                 # Long-Term Memory — where the actual content pages live
-│   ├── Projects/              # Deadline-bound work, with milestone history
-│   ├── People/                # Key collaborators (Authority Control pages)
-│   └── Orgs/                  # Organizations & teams (Authority Control pages)
-├── memorbs/                   # memOrb's own namespace
-│   ├── HQ/                    # Headquarters: persona, identity, and Core/Belief orbs
-│   │   ├── persona.md         # AI advisor tone & role (Hot Cache, always read)
-│   │   ├── identity.md        # Background, goals, key relationships (Hot Cache, always read)
-│   │   ├── Core/              # Core Memory orbs — one formative experience per file
-│   │   ├── Belief/            # Belief orbs — values and principles distilled from lived experience
-│   │   └── OrbTrack/          # Fast capture & pending triage
-│   ├── Dump/{category}/       # Memory Dump — stale, superseded, or pruned orbs
-│   ├── log.md                 # The timeline for the current period
-│   └── log/{YYYY-MM}.md       # Archived periods, rotated by dream-studio
+├── 1-Projects/  Daily Notes/  Inbox/ …   # yours — read, never written to
 │
-└── (your own folders)         # Daily Notes, Resources, Templates … read when present, never required
+└── memorbs/                    # everything memOrb owns
+    ├── HQ/                     # Headquarters: the console and what's beneath it
+    │   ├── persona.md          # AI advisor tone & role (Hot Cache, always read)
+    │   ├── identity.md         # Background, goals, key relationships (Hot Cache, always read)
+    │   ├── Core/               # Core Memory orbs — one formative experience per file
+    │   ├── Belief/             # Belief orbs — values and principles distilled from lived experience
+    │   └── OrbTrack/           # Fast capture & pending triage
+    ├── Islands/                # Islands of Personality — narrative layer only, never stores content
+    │   └── {name}/             # 000-MOC.md + section notes, linking out to Long-Term/
+    ├── Long-Term/              # Long-Term Memory — where the content pages live
+    │   ├── Projects/           # Deadline-bound work, with milestone history
+    │   ├── People/             # Key collaborators (Authority Control pages)
+    │   └── Orgs/               # Organizations & teams (Authority Control pages)
+    ├── Dump/{category}/        # Memory Dump — stale, superseded, or pruned orbs
+    ├── log.md                  # The timeline for the current period
+    └── log/{YYYY-MM}.md        # Archived periods, rotated by dream-studio
 ```
 
-Islands and Long-Term are deliberately split: Islands narrate a domain, Long-Term stores its pages, and wiki-links connect the two — mirroring how a mind keeps its Islands of Personality separate from the shelves of Long-Term Memory.
+That single boundary is deliberate. The moment a tool says "I'll write to your reference folder if you have one", the same command behaves three different ways depending on what you happened to name things. Reading is safe; conditional writing is not.
+
+Islands and Long-Term are deliberately split: Islands narrate a domain, Long-Term stores its pages, and wiki-links connect the two — mirroring how a mind keeps its Islands of Personality separate from the shelves of Long-Term Memory. There is no separate Resources folder: an island is a domain of responsibility *or interest*, so reference notes are simply orbs hanging off the island they belong to.
+
+Raw material — a transcript, a PDF, a scanned card — lives inside its orb's own folder, so archiving the orb carries the source with it. Documents only; audio and video stay outside the vault.
 
 **`log.md` is the timeline, and it does real work.** Entity pages are living documents with no per-event dates, and OrbTrack is emptied by design — so neither can answer "what was going on that month". The log can, which is why every state-changing action appends an entry, and why each entry carries a *signal* line: the user's own words for something that mattered but wasn't yet shaped enough to become an orb. That residue is what `dream-studio` replays, and it's where beliefs come from.
 
-Circulation metadata (`last_recalled`, `recall_count`, `aliases: [...]`) is backfilled silently on every query, giving you alias mapping and decay metrics visible right in your `Long-Term/` pages rather than hidden in an index.
+Circulation metadata (`last_recalled`, `recall_count`, `aliases: [...]`) is backfilled silently on every query, giving you alias mapping and decay metrics visible right in your `memorbs/Long-Term/` pages rather than hidden in an index.
 
 ### The distillation pipeline
 
@@ -181,7 +185,7 @@ Circulation metadata (`last_recalled`, `recall_count`, `aliases: [...]`) is back
 Step 1: Raw materials / AI session
            ↓  distill                          ↘  every state change also
         memorb  (atomic note, self-contained,      appends a dated entry
-                 bi-directional links, source:)    to log.md — the timeline
+                 bi-directional links; raw in bundle)   to log.md — the timeline
 
 Step 2: Classify + add shared frontmatter
            ↓
@@ -248,7 +252,7 @@ bash scripts/install-hooks.sh
 
 > **No automated test suite yet.** The linter checks skill file structure, routing consistency, fixture structure, and path/architecture drift — not runtime behavior. Verifying what a skill actually does still requires walking through it manually in an agent session.
 
-> **When renaming a folder or namespace** (e.g. the `Islands/{people,organizations,projects}` → `Long-Term/` migration), add the old path to `DEPRECATED_PATTERNS` in `scripts/lint-skills.js`. Every subsequent `npm run lint` and `git commit` will then catch any skill or fixture still on the old path.
+> **When renaming a folder or namespace** (e.g. the `memorbs/Islands/{people,organizations,projects}` → `memorbs/Long-Term/` migration), add the old path to `DEPRECATED_PATTERNS` in `scripts/lint-skills.js`. Every subsequent `npm run lint` and `git commit` will then catch any skill or fixture still on the old path.
 
 ---
 

@@ -7,16 +7,16 @@ description: "Wiki Lint 工作流：memory 健檢，找出矛盾、過期、孤�
 
 ## Bundle Orb Awareness
 
-When scanning directories under `Long-Term/` or `memorbs/HQ/Core/`, `memorbs/HQ/Belief/`:
+When scanning directories under `memorbs/Long-Term/` or `memorbs/HQ/Core/`, `memorbs/HQ/Belief/`:
 - A **folder** whose name matches an existing `{name}/{name}.md` is a **valid bundle orb** — treat the inner `.md` as the orb page. Do not flag the folder as an orphan or structural error.
-- A **folder** that contains no same-name `.md` file (e.g. `Long-Term/People/Acme/` with no `Acme.md` inside) is a **genuine orphan** — flag it for review.
+- A **folder** that contains no same-name `.md` file (e.g. `memorbs/Long-Term/People/Acme/` with no `Acme.md` inside) is a **genuine orphan** — flag it for review.
 - A **plain `.md` file** at `{base}/{name}.md` is a plain orb — check normally.
 
 Apply this check whenever scanning for orphan pages, broken links, or unregistered entries.
 
 ## 動作順序
 
-1. 列出 `Long-Term/`、`memorbs/HQ/Core`、`memorbs/HQ/Belief` 全部檔案 + 隨機抽 3-5 頁細看
+1. 列出 `memorbs/Long-Term/`、`memorbs/HQ/Core`、`memorbs/HQ/Belief` 全部檔案 + 隨機抽 3-5 頁細看
 2. 依檢查清單與 **MUSTY 淘汰判準** 逐項核對：
 
 | 檢查項 | MUSTY 歸屬 | 說明 |
@@ -25,10 +25,11 @@ Apply this check whenever scanning for orphan pages, broken links, or unregister
 | 損壞 / 格式破壞 | **U** - Ugly | 格式壞掉、連結全斷、孤兒頁（全庫沒有任何 `[[連結]]` 指向它） |
 | 被取代 / 已結束 | **S** - Superseded | 整頁對應實體已消失（專案完工結案、人員離職無互動） ➔ **提報交由 `memorb-forgetter` 歸檔** |
 | 價值太低 / 冷記憶 | **T** - Trivial | `recall_count` 極低（如 <2）且 `last_recalled` 極舊 ➔ **提報交由 `memorb-forgetter` 歸檔** |
-| 孤兒 raw | **S** - Superseded | `Resources/` 底下沒有任何 orb 的 `source:` 指向的檔案 ➔ raw 活得比它的 orb 久沒有意義，提報交由 `memorb-forgetter` 處理（`Resources/` 不存在時跳過本項） |
+| 落單附件 | **U** - Ugly | bundle 資料夾裡有附件、卻找不到同名的 `{name}.md` 本體 ➔ 附件失去所屬 orb，提報處理 |
+| 媒體檔誤入庫 | **Y** - Your collection doesn't need | `memorbs/` 底下出現音訊或影片檔（`.m4a`／`.mp3`／`.wav`／`.mp4`…）➔ 只有文件檔該進 vault，提報移出並在 orb 內文記位置 |
 | 範疇外 | **Y** - Your collection doesn't need | 內容非屬記憶庫守備範圍，人工提報處理 |
 | 缺別名註冊 (Authority) | 權威控制 | `log.md` 出現、但未包含在任何頁面 `aliases` 清單的實體詞 ➔ 提報為潛在分裂筆記 |
-| 缺頁 / 缺交叉連結 | 結構完整度 | log.md 多次提及但無專屬頁，或 `Long-Term/People/` 頁未連至 `Long-Term/Projects/` 頁 |
+| 缺頁 / 缺交叉連結 | 結構完整度 | log.md 多次提及但無專屬頁，或 `memorbs/Long-Term/People/` 頁未連至 `memorbs/Long-Term/Projects/` 頁 |
 | 時間軸斷裂 | 結構完整度 | `log.md` 有連續多日空白，或 entry 普遍缺「訊號」欄位 ➔ 提醒使用者，夢工廠會因此無料可重播 |
 
 3. **提出建議清單給使用者確認**：

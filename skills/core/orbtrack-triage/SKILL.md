@@ -11,9 +11,9 @@ OrbTrack 只是**暫存區**（未處理、待分類），位於 `memorbs/HQ/Orb
 
 ## 流程
 
-1. 列出 OrbTrack 內容（忽略 `Attachments/`）：
+1. 列出 OrbTrack 內容。**bundle orb（`{name}/{name}.md` 形式的資料夾）視為一個項目整體處理**，不要拆開搬——附件必須跟著本體走：
    ```bash
-   ls "$VAULT/memorbs/HQ/OrbTrack/" --ignore="Attachments"
+   ls "$VAULT/memorbs/HQ/OrbTrack/"
    ```
 2. **特殊類型先路由**：
    - 名片圖檔 → `business-card-ingestion`
@@ -22,12 +22,15 @@ OrbTrack 只是**暫存區**（未處理、待分類），位於 `memorbs/HQ/Orb
    - 有學習價值的素材 → 搬移後同時跑 `memorb-ingest`
 3. 一般筆記逐一判斷，依 PARA 決策樹搬移：
 
-| 判斷 | 去向 |
-|------|------|
-| 有明確截止日或交付物 | `Long-Term/Projects/` |
-| 長期持續關注的責任領域/興趣 | `Islands/` |
-| 參考資料、學習筆記 | `Resources/` |
-| 已完成或不再相關 | `Dump/` |
+| 判斷 | 去向 | PARA |
+|------|------|------|
+| 有明確截止日或交付物 | `memorbs/Long-Term/Projects/` | **P** |
+| 長期持續關注的責任領域/興趣 | `memorbs/Islands/` | **A** |
+| 參考資料、學習筆記 | `memorbs/Islands/{相關島}/` 底下的單篇 orb，由該島 MOC 連結 | **R** |
+| 關於某個人或組織的資訊 | `memorbs/Long-Term/{People,Orgs}/` | — |
+| 已完成或不再相關 | `memorbs/Dump/{category}/` | **Ar** |
+
+> **PARA 的 R 沒有獨立資料夾。** Island 的定義本來就涵蓋「責任領域**或興趣**」，所以感興趣的主題就是一座島，讀書筆記是掛在那座島底下的 orb。找不到對應的島時，先問使用者要不要開一座（轉 `island-reclamation`），不要為了安置一則筆記而另闢資料夾。
 
 4. 確認第一層PARA後，在逐層確認要放到哪個資料夾，之後逐層遞迴，直到檔案本身
 5. 整理 OrbTrack files，把內容分類，判斷要進到哪些檔案
