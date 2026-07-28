@@ -1,6 +1,6 @@
 {
   "name": "memorb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Agent-Agnostic Second Brain memory framework inspired by cognitive world-building and library science.",
   "main": "plugin.json",
   "scripts": {
