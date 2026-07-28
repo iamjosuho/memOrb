@@ -27,7 +27,12 @@ description: "Phase 0 Vault Initialization Skill: setup user identity, AI adviso
      mkdir -p "$VAULT/memorbs/Long-Term/Projects"
      mkdir -p "$VAULT/memorbs/Long-Term/People"
      mkdir -p "$VAULT/memorbs/Long-Term/Orgs"
-     mkdir -p "$VAULT/memorbs/Dump"
+   - Copy master note templates from `skills/core/memorb-conventions/templates/*.md` into `$VAULT/memorbs/Templates/`:
+     ```bash
+     CONVENTIONS_TEMPLATES="$(dirname "${BASH_SOURCE[0]}")/../memorb-conventions/templates"
+     if [ -d "$CONVENTIONS_TEMPLATES" ]; then
+       cp -n "$CONVENTIONS_TEMPLATES"/*.md "$VAULT/memorbs/Templates/"
+     fi
      ```
    - Ensure initial creation of `memorbs/HQ/glossary.md` and timeline `memorbs/log.md` if not present, seeded with a `# Timeline — since {YYYY-MM-DD}` header.
 4. **Generate/Update HQ Hot Cache**:
