@@ -7,6 +7,6 @@ derived_from: []
 
 # {Title}
 
-## 核心價值與信念描述
+## Core Values & Principle Statement
 
-## 演進歷程與經歷支撐
+## Evolution & Supporting Experiences

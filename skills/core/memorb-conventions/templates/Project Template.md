@@ -14,9 +14,9 @@ updated: {YYYY-MM-DD}
 
 # {Project Name}
 
-## 專案目標與範疇
+## Scope & Objectives
 
-## 關鍵里程碑與近況
+## Key Milestones & Status
 
-## 相關人員與組織
+## Related People & Organizations
 - [[memorbs/Long-Term/People/{PascalPerson}|{Person Name}]]

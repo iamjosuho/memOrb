@@ -7,6 +7,6 @@ orb_emotions: []
 
 # {Title}
 
-## 事件脈絡與核心經歷
+## Context & Core Experience
 
-## 產生的影響與轉變
+## Impact & Transformation

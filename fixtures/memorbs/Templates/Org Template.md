@@ -14,9 +14,9 @@ updated: {YYYY-MM-DD}
 
 # {Org Name}
 
-## 組織簡介
+## Overview
 
-## 主要聯繫人
+## Key Contacts
 - [[memorbs/Long-Term/People/{PascalPerson}|{Person Name}]]
 
-## 專案與合作紀錄
+## Projects & Track Record

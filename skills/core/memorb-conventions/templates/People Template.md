@@ -14,12 +14,12 @@ updated: {YYYY-MM-DD}
 
 # {Name}
 
-## 基本資料
-- 姓名：{Name}
-- 組織/單位：[[memorbs/Long-Term/Orgs/{PascalCompany}|{Company}]]
-- 職稱：{Role}
-- 聯絡方式：
+## Basic Info
+- Name: {Name}
+- Organization: [[memorbs/Long-Term/Orgs/{PascalCompany}|{Company}]]
+- Role: {Role}
+- Contact Channels:
 
-## 背景與合作紀錄
+## Background & History
 
-## 關鍵話題與決策
+## Key Topics & Decisions
