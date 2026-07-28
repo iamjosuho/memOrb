@@ -48,6 +48,10 @@ When **updating an existing** orb, resolve its path first (two-step lookup):
    - 訊號：{使用者的原話片段；情緒；未成形的疑慮}
    ```
    The **訊號 (signal)** line is what `dream-studio` replays. Record anything the user said that carried weight but was not structured enough to become an orb — in their own words, unpolished. Omit the line only when there genuinely was no such signal.
+6. **Mandatory Triage Handoff (via Sub-agent)** *(mandatory — zero-leftover policy)*:
+   - Immediately after logging the event, trigger or launch a sub-agent to execute `orbtrack-triage` over `memorbs/HQ/OrbTrack/`.
+   - The sub-agent classifies and moves every newly distilled orb in `OrbTrack/` to its permanent PARA destination (`memorbs/Long-Term/{Projects,People,Orgs}/`, `memorbs/Islands/`, or `memorbs/Dump/`).
+   - `memorb-ingest` is only complete when `memorbs/HQ/OrbTrack/` is verified 100% empty.
 
 
 ## Red Flags
@@ -56,3 +60,4 @@ When **updating an existing** orb, resolve its path first (two-step lookup):
 | :--- | :--- |
 | *"Summary done, scan impact later"* | Step 3 is the core of Ingest. Skipping it invalidates the ingest. |
 | *"Material affects only 1 page, skip log"* | `log.md` is the event stream. Every ingest requires a log entry. |
+| *"Orb left in OrbTrack is fine, next triage will catch it"* | Ingest is not complete until `OrbTrack` is triaged and empty via sub-agent handoff. |

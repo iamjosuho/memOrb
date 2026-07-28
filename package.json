@@ -1,10 +1,11 @@
 {
   "name": "memorb",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Agent-Agnostic Second Brain memory framework inspired by cognitive world-building and library science.",
   "main": "plugin.json",
   "scripts": {
     "lint": "node scripts/lint-skills.js",
+    "test": "node scripts/lint-skills.js && node scripts/test-e2e.js",
     "clean": "bash scripts/reset-sandbox.sh --empty",
     "reset-sandbox": "bash scripts/reset-sandbox.sh",
     "install-hooks": "bash scripts/install-hooks.sh",
