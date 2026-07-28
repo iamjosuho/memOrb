@@ -1,47 +1,47 @@
 ---
 name: orbtrack-triage
-description: "整理 OrbTrack（收集區）並依 PARA 原則分類搬移筆記。觸發詞：整理 OrbTrack、處理 OrbTrack、整理收集區、分類筆記、歸檔、搬移筆記、清空收集箱、整理。"
+description: "Empty OrbTrack, the capture zone, and file every note where it belongs under PARA. Triggers: triage OrbTrack, process OrbTrack, clear the capture zone, sort my notes, archive, move notes, empty the inbox, 整理 OrbTrack, 處理 OrbTrack, 整理收集區, 分類筆記, 歸檔, 搬移筆記, 清空收集箱, 整理."
 ---
 
 # OrbTrack Triage Skill
 
-## 原則
+## Principle
 
-OrbTrack 只是**暫存區**（未處理、待分類），位於 `memorbs/HQ/OrbTrack/`。目標：處理後 OrbTrack 清空或只剩真正未決事項。
+OrbTrack is a **staging area** and nothing more — unprocessed, awaiting classification — at `memorbs/HQ/OrbTrack/`. A triage pass is done when OrbTrack is empty, or holds nothing but items that are genuinely still undecided.
 
-## 流程
+## Workflow
 
-1. 列出 OrbTrack 內容。**bundle orb（`{name}/{name}.md` 形式的資料夾）視為一個項目整體處理**，不要拆開搬——附件必須跟著本體走：
+1. List what is sitting in OrbTrack. **A bundle orb (a folder shaped `{name}/{name}.md`) is one item and moves as a whole** — never split it apart, because attachments have to travel with their orb:
    ```bash
    ls "$VAULT/memorbs/HQ/OrbTrack/"
    ```
-2. **特殊類型先路由**：
-   - 名片圖檔 → `business-card-ingestion`
-   - 會議逐字稿（M365 Teams 自動產生，有 `meetingTranscriptUrl`）→ `m365-meeting-note`
-   - 錄音檔（手機/錄音筆錄的 m4a/mp3/wav，非 Teams 來源）→ `recording-transcription`
-   - 有學習價值的素材 → 搬移後同時跑 `memorb-ingest`
-3. 一般筆記逐一判斷，依 PARA 決策樹搬移：
+2. **Route the special types first**:
+   - Business card images → `business-card-ingestion`
+   - Audio recordings or transcripts (m4a/mp3/wav or text transcripts) → `recording-transcription` / `memorb-ingest`
+   - Material with learning value → move it, then run `memorb-ingest` over it as well
+3. Take the ordinary notes one at a time and move each along the PARA decision tree:
 
-| 判斷 | 去向 | PARA |
+| Judgement | Destination | PARA |
 |------|------|------|
-| 有明確截止日或交付物 | `memorbs/Long-Term/Projects/` | **P** |
-| 長期持續關注的責任領域/興趣 | `memorbs/Islands/` | **A** |
-| 參考資料、學習筆記 | `memorbs/Islands/{相關島}/` 底下的單篇 orb，由該島 MOC 連結 | **R** |
-| 關於某個人或組織的資訊 | `memorbs/Long-Term/{People,Orgs}/` | — |
-| 已完成或不再相關 | `memorbs/Dump/{category}/` | **Ar** |
+| Has a firm deadline or deliverable | `memorbs/Long-Term/Projects/` | **P** |
+| An area of responsibility or interest you keep coming back to | `memorbs/Islands/` | **A** |
+| Reference material, study notes | a single orb under `memorbs/Islands/{相關島}/`, linked from that Island's MOC | **R** |
+| Information about a particular person or organization | `memorbs/Long-Term/{People,Orgs}/` | — |
+| Finished, or no longer relevant | `memorbs/Dump/{category}/` | **Ar** |
 
-> **PARA 的 R 沒有獨立資料夾。** Island 的定義本來就涵蓋「責任領域**或興趣**」，所以感興趣的主題就是一座島，讀書筆記是掛在那座島底下的 orb。找不到對應的島時，先問使用者要不要開一座（轉 `island-reclamation`），不要為了安置一則筆記而另闢資料夾。
+> **PARA's R gets no folder of its own.** An Island is already defined as an area of responsibility **or interest**, so a subject you care about simply *is* an Island, and reading notes are orbs hanging off it. When no Island fits, ask the user whether to start one (hand off to `island-reclamation`) — do not carve out a new folder just to give one note somewhere to sit.
 
-4. 確認第一層PARA後，在逐層確認要放到哪個資料夾，之後逐層遞迴，直到檔案本身
-5. 整理 OrbTrack files，把內容分類，判斷要進到哪些檔案
-6. 可能 OrbTrack files input data同時包含很多PARA的資料，先詢問使用者怎麼處理，並給予推薦
-7. 搬移(mv command) 時更新 frontmatter：`status: unprocessed` → `status: processed`（或對應狀態）
-8. 若筆記提到人物/專案/術語的新資訊，可以加上雙向連結，回填 `memorbs/` 對應頁（見 `memorb-ingest` 步驟 3）
+4. Once the top-level PARA bucket is settled, confirm each folder level below it in turn, recursing down until you reach the file itself.
+5. Work through the OrbTrack files, break their content down by category, and decide which destination files each part belongs to.
+6. A single OrbTrack file often carries material for several PARA buckets at once. Ask the user how they want it handled, and come with a recommendation.
+7. When you move it (`mv`), update the frontmatter: `status: unprocessed` → `status: processed` (or whichever status fits).
+8. If the note carries new information about a person, project, or term, add bi-directional links and backfill the corresponding page under `memorbs/` (see step 3 of `memorb-ingest`).
 
 ## Red Flags
 
-| 藉口                           | 真實情況                                            |
+| Excuse | Reality |
 | ---------------------------- | ----------------------------------------------- |
-| 「OrbTrack 跟 Resources 差不多，放哪都行」 | OrbTrack 是未處理，Resources 是長期知識庫。定義嚴格區分。          |
-| 「先大概分類，檔名隨便」                 | 檔名與日期格式必須符合 memorb-conventions。                  |
-| 「這張名片圖我直接歸檔」                 | 名片必須走 business-card-ingestion 的 Page Bundle 流程。 |
+| "OrbTrack is basically where notes live, leaving it there is fine" | OrbTrack is a staging area for material that has not been classified yet, and a triage pass is only finished when it is empty. Anything left sitting there is invisible to every other skill — `memorb-query` looks on the shelves, not in the staging bay. |
+| "This one doesn't obviously fit any Island, I'll invent a folder for it" | PARA's R has no folder of its own by design. Either it belongs to an existing Island, or the user needs a new Island — ask, and hand off to `island-reclamation`. |
+| "Rough classification is fine, the filename doesn't matter" | Filenames and date formats must conform to `memorb-conventions`. |
+| "I'll just file this business card image directly" | Business cards go through `business-card-ingestion`'s Page Bundle flow. |

@@ -1,37 +1,36 @@
 ---
 name: recording-transcription
-description: "手動提供的會議/面談錄音檔（手機錄音、m4a/mp3/wav，非 Teams 來源）轉逐字稿處理助理。負責探測本地 Whisper 是否可用、音檔正規化與長檔切段、背景轉錄＋進度輪詢、簡轉繁，並與使用者提供的 iPhone 內建語音轉文字草稿比對校正人名/術語，產出可靠逐字稿與面談分析後交給 memorb-ingest。只要提到錄音、逐字稿、轉錄、面談、語音轉文字、STT、m4a，且來源不是 Teams 會議，就該用這個 skill。前置依賴：memorb-conventions；下游接 memorb-ingest。"
+description: "Turns a manually supplied meeting or one-on-one recording (phone recording, m4a/mp3/wav — anything that is not a Teams meeting) into a reliable transcript. Probes whether local Whisper is usable, normalises and chunks long audio, transcribes in the background with progress polling, converts Simplified to Traditional, and cross-checks names and jargon against the iPhone dictation draft the user supplies — then hands the transcript and interview analysis to memorb-ingest. Use whenever a recording, transcript, transcription, one-on-one, speech-to-text, STT, or m4a file comes up and the source is not a Teams meeting. Depends on memorb-conventions; feeds memorb-ingest. Triggers: recording, transcript, transcription, interview, one-on-one, speech to text, STT, m4a, 錄音, 逐字稿, 轉錄, 面談, 語音轉文字, m4a."
 ---
 
-# 🎙️ recording-transcription Skill
+# recording-transcription
 
-## 適用情境 vs m365-meeting-note
+## Overview
 
-- 錄音來源是**使用者手動提供的檔案**（手機/錄音筆/現場錄音）→ 本 skill
-- 逐字稿已由 M365 Teams 自動產生（有 `meetingTranscriptUrl`）→ 改用 `m365-meeting-note`
-- 兩者最終都交給 `memorb-ingest` 做影響面掃描
+- The audio is **a file the user handed over** (phone, voice recorder, on-site capture) or text draft.
+- The result goes to `memorb-ingest` for the impact scan.
 
-## 核心前提
+## The premise
 
-> 手機錄音是「單一收音來源」問題的另一版本：離手機近的人聲音清楚，遠的人可能模糊或被蓋過。**不能假設清楚的那段一定是使用者自己說的**，要從內容脈絡（提問→回答、稱謂、話題歸屬）判斷講者，跟 `m365-meeting-note` 的原則相通。
+> A phone recording is the single-microphone problem in another guise: whoever sits near the phone comes through clearly, whoever sits far away may be muffled or talked over. **Do not assume the clear parts are the user speaking.** Work out the speaker from the content — question and answer pairs, forms of address, who owns the topic.
 
-> ⚠️ 跟主管/老闆的一對一面談，逐字稿的**用詞準確度與時間戳記**比一般會議更重要——涉及承諾、數字、日期的段落，寧可標記「不確定」也不要讓 AI 腦補通順。這條規則不限於特定對象，任何一對一面談都適用。
+> For a one-on-one with a manager or a colleague, **wording accuracy and timestamps matter more than they do for an ordinary meeting** — anything touching commitments, numbers, or dates should be marked uncertain rather than smoothed over by the model into something that merely reads well.
 
-## ⚠️ 已知環境限制（2026-07-12 實測，務必先看過再動手）
+## Known environment limits (measured 2026-07-12 — read this before you start)
 
-- 這個 sandbox 的網路白名單只開放 `pypi.org`／`github.com` 這類套件生態系網域，**不含 `huggingface.co`**。`pip install faster-whisper` 沒問題，但它執行時預設要連去 HF 抓模型權重，這裡一定連線失敗。`check` 指令會先偵測到這件事，不用等背景任務跑到一半才發現。
-- **任何掛載到真實電腦的資料夾都只能新增/覆寫，不能刪除**——不只保險庫，連 `outputs` 暫存資料夾也一樣，bash 對已寫入的檔案 `rm` 一律 `Operation not permitted`（Write/Edit 工具也有同樣限制）。真正能自由建立、刪除的只有 sandbox 自己的路徑（例如 `/tmp`）。任何「處理完就該清掉」的中繼檔案，只能放 `/tmp`，不能放保險庫或 outputs，否則會變成永久清不掉的垃圾。保險庫裡只放本來就該永久保留的東西：逐字稿、分析、（經確認要留底的）原始音檔。
-- 這兩點合起來決定了下面的路徑安排：**中繼工作檔一律寫在 `/tmp`，只有最終逐字稿/分析/音檔才寫進保險庫。**
+- This sandbox's network allowlist covers package-ecosystem domains such as `pypi.org` and `github.com`, but **not `huggingface.co`**. `pip install faster-whisper` works fine; at run time it wants to fetch model weights from HF and that connection will always fail here. The `check` command detects this up front, so you do not discover it halfway through a background job.
+- **Any folder mounted from the real machine is append/overwrite-only — nothing can be deleted.** That covers the vault and the `outputs` scratch folder alike: `rm` on a file you have already written returns `Operation not permitted` (the Write/Edit tools carry the same restriction). The only paths you can freely create and delete in are the sandbox's own, e.g. `/tmp`. So any intermediate file that is supposed to be cleaned up afterwards belongs in `/tmp`, never in the vault or in outputs — put it there and it becomes garbage you can never remove. The vault holds only what is meant to be permanent: the transcript, the analysis, and (if the user confirms they want it kept) the original audio.
+- Together these two facts dictate the paths below: **intermediate work files always go to `/tmp`; only the final transcript, analysis, and audio ever reach the vault.**
 
-## 標準處理流程
+## Standard workflow
 
-### Step 0：收集輸入
+### Step 0: Collect the inputs
 
-- 音檔：mp3/m4a/wav/mp4 皆可，可一次給多個檔案（例如中途暫停又重錄，依提供順序串接）
-- **強烈建議附上手機/裝置內建語音轉文字草稿**（iPhone 備忘錄逐字稿、即時聽寫等）。在目前這個 sandbox 環境下，這份草稿常常是唯一能穩定取得的逐字稿來源（見上方環境限制），不是可有可無的加分項
-- 使用者提供或由內容推斷：與會者是誰、大致日期、面談主題
+- Audio: mp3/m4a/wav/mp4 all work, and several files can be given at once (for example when the recording was paused and restarted — they are concatenated in the order supplied)
+- **Strongly encourage the user to attach the device's own speech-to-text draft** (iPhone Notes transcript, live dictation, etc.). In this sandbox that draft is often the only transcript source you can reliably obtain — see the environment limits above. It is not a nice-to-have
+- From the user, or inferred from the content: who was present, roughly what date, what the conversation was about
 
-### Step 1：探測本地 Whisper 是否可用
+### Step 1: Probe whether local Whisper is usable
 
 ```bash
 VAULT="$(find /sessions/*/mnt -maxdepth 1 -name "second-brain" -type d | head -1)"
@@ -39,12 +38,13 @@ SCRIPT="$VAULT/.claude/skills/recording-transcription/scripts/transcribe.py"
 python3 "$SCRIPT" check --model medium
 ```
 
-- 回報「本機已有模型」或「連得到 HF，可嘗試下載」→ 走 Step 2A（本地轉錄）
-- 回報「連不到 HF 且沒有本機模型」→ 跳過 Step 2A，直接走 Step 2B（純草稿路徑），不要浪費時間跑背景任務等到失敗才發現
+- Reports "model already present locally" or "HF reachable, download can be attempted" → go to Step 2A (local transcription)
+- Reports "HF unreachable and no local model" → skip Step 2A entirely and go straight to Step 2B (draft-only path). Do not burn time on a background job just to watch it fail
 
-### Step 2A：本地 Whisper 轉錄（環境允許時）
+### Step 2A: Local Whisper transcription (when the environment allows)
 
-環境需求（第一次用先確認）：
+Environment prerequisites (check these the first time):
+
 ```bash
 which ffmpeg >/dev/null || echo "需要安裝 ffmpeg"
 python3 -c "import faster_whisper" 2>/dev/null || pip install faster-whisper --break-system-packages
@@ -52,7 +52,7 @@ python3 -c "import opencc" 2>/dev/null || pip install opencc-python-reimplemente
 python3 -c "import socksio" 2>/dev/null || pip install "httpx[socks]" --break-system-packages
 ```
 
-工作目錄放在 `/tmp`，**不要**放進保險庫或 outputs：
+Keep the working directory in `/tmp`. **Do not** put it in the vault or in outputs:
 
 ```bash
 SLUG="2026-07-12-與Vic面談"   # 依實際日期/主題調整
@@ -60,22 +60,22 @@ WORKDIR="/tmp/recording-$SLUG"
 python3 "$SCRIPT" prepare --input /path/to/audio1.m4a --workdir "$WORKDIR" --chunk-minutes 10
 ```
 
-固定長度切段（預設 10 分鐘一段），短檔案也會變成「1 段」——邏輯統一，不用另外判斷長短。
+Chunking is fixed-length (10 minutes per chunk by default), so a short file simply becomes "1 chunk" — one code path, no special-casing by duration.
 
 ```bash
 nohup python3 "$SCRIPT" run --workdir "$WORKDIR" --model medium --lang zh > "$WORKDIR/run.log" 2>&1 &
 disown
 ```
 
-單次指令執行有時間上限（約 45 秒），一律背景執行，分次用下面指令輪詢進度，直到完成：
+A single command invocation has a time limit (roughly 45 seconds), so always run in the background and poll for progress with the command below until it finishes:
 
 ```bash
 python3 "$SCRIPT" status --workdir "$WORKDIR"
 ```
 
-> 這個 workdir 在 `/tmp`，**只在這次對話/session 內有效**——如果背景任務跑到一半使用者就結束對話，進度會遺失，下次要重新開始。錄音很長的話，處理前先讓使用者知道大概要等多久，讓他決定要不要留著視窗等。模型選擇：`medium` 是準確度/速度的預設平衡點；趕時間用 `small`，要求更高用 `large-v3`（更慢）。純 CPU（無 GPU），速度大致與錄音時長相當或更慢。
+> This workdir lives in `/tmp` and is therefore **only valid within this conversation/session** — if the user ends the conversation while the background job is still running, the progress is lost and next time starts from scratch. For a long recording, tell the user roughly how long it will take before you begin, so they can decide whether to keep the window open. Model choice: `medium` is the default balance of accuracy and speed; use `small` when time is short, `large-v3` when accuracy matters more (slower). This is CPU-only (no GPU), so expect a runtime around the length of the recording or worse.
 
-全部完成後合併，**`--out` 直接指向該 orb 的 bundle 資料夾**——逐字稿是這顆 orb 的附件，不是獨立檔案：
+When every chunk is done, merge — and point **`--out` directly at that orb's bundle folder**, because the transcript is an attachment of the orb, not a standalone file:
 
 ```bash
 ORB="$VAULT/memorbs/HQ/OrbTrack/2026-07-12-1400-與Vic面談"
@@ -83,43 +83,43 @@ mkdir -p "$ORB"
 python3 "$SCRIPT" merge --workdir "$WORKDIR" --out "$ORB/逐字稿.md"
 ```
 
-會用 OpenCC（`s2twp`）把 Whisper 預設輸出的簡體字轉成台灣繁體——這一步不能省。處理完 `WORKDIR` 已經沒用了，`/tmp` 可以自由刪除（跟保險庫/outputs 不同）：
+The merge runs OpenCC (`s2twp`) to convert Whisper's Simplified Chinese output into Taiwanese Traditional Chinese — this step cannot be skipped. Once that is done the `WORKDIR` has served its purpose, and `/tmp` can be deleted freely (unlike the vault or outputs):
 
 ```bash
 rm -rf "$WORKDIR"
 ```
 
-### Step 2B：純裝置草稿路徑（HF 連不到，或使用者沒給音檔時的預設路徑）
+### Step 2B: Device-draft-only path (when HF is unreachable, or the user gave no audio)
 
-不需要 ffmpeg/whisper，直接把 Step 0 使用者貼的草稿文字讀進來，當作逐字稿基礎，交給 Step 3 校正、補標點分段。**這是目前這個 sandbox 下最常會走到的路徑，不是退而求其次的將就方案。**
+No ffmpeg or Whisper needed. Read in the draft text the user pasted in Step 0, treat it as the transcript base, and hand it to Step 3 for correction, punctuation, and paragraphing. **In the current sandbox this is the path you will usually take. It is not a compromise fallback.**
 
-### Step 3：校正人名/術語（必須派遣 Subagent 處理）
+### Step 3: Correct names and jargon (must be delegated to a subagent)
 
-> ⚠️ **Context Window 保護機制**：逐字稿通常動輒數萬字，**禁止主 Agent 直接讀取整份逐字稿**。你必須使用 `invoke_subagent` 工具派遣一個子代理（如 `research` 或 `self`），將以下 Step 3 與 Step 4 的任務交辦給它，讓子代理去閱讀、校正並總結出面談分析後回報。
+> **Context window protection**: transcripts routinely run to tens of thousands of characters, so **the main agent is forbidden from reading a full transcript directly**. Use the `invoke_subagent` tool to dispatch a subagent (`research` or `self`) and hand it Step 3 and Step 4 — let the subagent do the reading and correction, then report back with the interview analysis.
 
-1. 動態讀取 `memorbs/glossary.md` 與 `memorbs/Long-Term/People/` 底下所有 `.md`（`find "$VAULT/memorbs/Long-Term/People" -name "*.md"`，需遞迴含子資料夾 Page Bundle，不能只掃一層）取得目前已知的人名、暱稱、專案代號、術語——不要用寫死的字典，這份清單會一直變
-2. 可以向使用者確認錄音中有誰
-3. 若 Step 2A 與 Step 2B 兩份資料都有（本地 Whisper 輸出＋手機草稿），互相對照：Whisper 對語流/標點通常較穩，手機內建版對「使用者手機通訊錄/字典裡已有的專有名詞」有時反而更準，尤其是人名。兩邊對不上的地方，才是真正需要人工確認的地方
-4. 只有一份資料時（通常是純草稿路徑），對照 glossary/people 修正明顯誤轉（例如 eBao→「e 包／醫保」、Halu→「哈魯」之類的同音錯字），修正**另存清稿版本**，保留原始草稿不覆蓋
-5. 無法判斷的地方用 `[不確定]` 標記，不要猜一個聽起來合理的詞去填空——尤其是承諾、數字、日期相關的句子
+1. Load the currently known names, nicknames, project code names, and terminology dynamically from `memorbs/HQ/glossary.md` and every `.md` under `memorbs/Long-Term/People/` (`find "$VAULT/memorbs/Long-Term/People" -name "*.md"` — it must recurse into bundle subfolders, not just scan one level). Do not use a hardcoded dictionary; this list changes constantly
+2. It is fine to ask the user who was in the room
+3. If both sources exist (local Whisper output plus the phone draft), compare them against each other. Whisper is usually steadier on flow and punctuation; the phone's built-in engine is sometimes more accurate on proper nouns that already exist in the user's contacts or dictionary, names especially. The places where the two disagree are exactly the places that need human confirmation
+4. When only one source exists (usually the draft-only path), correct the obvious mis-transcriptions against glossary and people pages — homophone errors like eBao becoming 「e 包／醫保」, or Halu becoming 「哈魯」. **Save the corrections as a separate clean version**; do not overwrite the original draft
+5. Mark anything you cannot resolve with `[不確定]`. Do not guess a plausible-sounding word to fill the gap — least of all in sentences about commitments, numbers, or dates
 
-### Step 4：面談分析框架
+### Step 4: Interview analysis framework
 
-一對一面談跟會議不同，不套用 `m365-meeting-note` 的「使用者表現分析」（那是設計給使用者主持會議用的）。改用這個角度：
+Analyze the conversation using these angles:
 
-| 面向 | 重點 |
+| Dimension | What to look for |
 |------|------|
-| 承諾與待追蹤事項 | 對方說了哪些具體承諾？有沒有數字、日期、條件？——這類段落優先確保準確，見 Step 3 |
-| 決策 | 這次面談拍板了什麼、還懸而未決的是什麼 |
-| 對使用者的回饋/期待 | 對方對使用者的表現、方向有什麼明確或暗示性的評語 |
-| 待釐清問題 | 逐字稿裡模糊、需要下次面談或訊息追問清楚的地方 |
-| 與既有 memory 的呼應 | 對照 `memorbs/Long-Term/People/` 裡對方的既有記錄，這次談話是印證、還是推翻了先前的理解 |
+| Commitments and follow-ups | What concrete commitments did the other person make? Any numbers, dates, conditions? Accuracy in these passages comes first — see Step 3 |
+| Decisions | What was settled in this conversation, and what is still open |
+| Feedback and expectations directed at the user | What the other person said, explicitly or by implication, about the user's performance and direction |
+| Open questions | Places the transcript is vague and that need a follow-up conversation or message to resolve |
+| How it lines up with existing memory | Compare against the existing record of this person in `memorbs/Long-Term/People/` — does this conversation confirm the earlier understanding, or overturn it? |
 
-輸出分析前，先讀一次對方在 `memorbs/Long-Term/People/` 的既有頁面，確保分析銜接既有脈絡，而不是每次從零開始。
+Before writing the analysis, read the counterpart's existing page under `memorbs/Long-Term/People/` once, so the analysis continues an existing thread instead of starting from zero every time.
 
-### Step 5：存檔與交接 memorb-ingest
+### Step 5: File it and hand off to memorb-ingest
 
-產出是**一顆 bundle orb**，全部落在同一個資料夾裡：
+The output is **one bundle orb**, everything in the same folder:
 
 ```text
 memorbs/HQ/OrbTrack/{YYYY-MM-DD}-{HHMM}-與{對象}面談/
@@ -127,25 +127,25 @@ memorbs/HQ/OrbTrack/{YYYY-MM-DD}-{HHMM}-與{對象}面談/
 └── 逐字稿.md                              ← 附件
 ```
 
-> **音檔不進 vault。** 幾百 MB 會拖垮 vault 與 git，而且寫進去就刪不掉。問使用者要留在哪（vault 外的任何路徑都行），把該位置與錄音時長寫進 orb 內文即可。這是 `memorb-conventions` 「只有文件檔進 vault」規則的直接套用。
+> **Audio never enters the vault.** A few hundred MB will drag down both the vault and git, and once written it cannot be deleted. Ask the user where they want to keep it (any path outside the vault is fine) and record that location plus the recording's duration in the orb body. This is the direct application of the `memorb-conventions` rule that only documents go in the vault.
 
-完成後交給 `memorb-ingest` 走完整流程（掃描影響 `memorbs/Long-Term/People`、`memorbs/Long-Term/Projects`、寫 `log.md` 時間軸、PARA 活躍區）。本 skill 只負責「錄音→可靠逐字稿＋初步分析」，不重複做 memorb-ingest 的事。
+When you are finished, hand off to `memorb-ingest` for the full pipeline (scan the impact on `memorbs/Long-Term/People` and `memorbs/Long-Term/Projects`, write the `log.md` timeline entry, update the active PARA area). This skill's job is only "recording → reliable transcript + first-pass analysis"; it does not duplicate what `memorb-ingest` does.
 
-## 注意事項
+## Notes
 
-- 逐字稿字數龐大，**禁止主 Agent 直接讀取全檔**，必須外包給 Subagent 處理 Step 3 與 Step 4。
-- 國語＋英文術語混雜（eBao、Sprint 等）Whisper 大致能處理；錄音中若有台語內容，準確度會明顯下降，需要人工複查
-- 錄音可能包含敏感內容（人事、財務、承諾）：只有逐字稿文字進 git，原始音檔一律 gitignore
-- **保險庫檔案寫入後無法刪除**，原始音檔這類「不一定要留」的東西，下筆前先跟使用者確認一次，不要先斬後奏
-- 多檔案輸入時順序很重要，`--input` 依對話實際先後順序給
+- Transcripts are large. **The main agent must not read the whole file**; Steps 3 and 4 have to be outsourced to a subagent.
+- Whisper handles Mandarin mixed with English jargon (eBao, Sprint, and so on) reasonably well. Accuracy drops noticeably where the recording contains Taiwanese, so those passages need a manual pass.
+- Recordings may contain sensitive material (personnel, finance, commitments): only the transcript text goes into git, and the original audio is always gitignored.
+- **Files written to the vault cannot be deleted afterwards.** For borderline items like the original audio, ask the user once before you write, rather than acting first and apologising later.
+- With multiple input files the order matters — pass `--input` in the actual chronological order of the conversation.
 
 ## Red Flags
 
-| 藉口 | 真實情況 |
+| Excuse | What is actually true |
 |------|---------|
-| 「這個 sandbox 應該連得到 HF 吧，直接跑」 | 已知連不到，先跑 `check` 確認，別等背景任務失敗才發現 |
-| 「音檔不大，直接前景跑就好」 | 單次指令約 45 秒上限，一律背景執行 |
-| 「中繼檔案放保險庫或 outputs 方便下次接著做」 | 這兩個都是掛載到真實電腦的資料夾，寫入後刪不掉；中繼檔案只能放 `/tmp`，用完即丟 |
-| 「聽起來大概是這樣，直接補上」 | 承諾/數字/日期類段落寧可標「不確定」，不要腦補 |
-| 「逐字稿存好就好，分析下次做」 | Step 4 面談分析是本 skill 的核心價值，不是附加項 |
-| 「原始音檔先存進保險庫再說」 | 保險庫寫入後刪不掉，音檔通常又很大，先問使用者要不要留底再寫 |
+| "This sandbox can probably reach HF, just run it" | It demonstrably cannot. Run `check` first instead of waiting for a background job to fail |
+| "The file isn't big, I'll just run it in the foreground" | A single command caps out at about 45 seconds. Always run in the background |
+| "I'll park the intermediate files in the vault or outputs so I can resume later" | Both are folders mounted from the real machine; once written they cannot be deleted. Intermediate files go in `/tmp` and are thrown away when done |
+| "That's roughly what it sounded like, I'll just fill it in" | For commitments, numbers, and dates, mark it uncertain rather than inventing something plausible |
+| "Saving the transcript is enough, the analysis can wait" | The Step 4 interview analysis is this skill's core value, not an add-on |
+| "Let me stash the original audio in the vault for now" | Vault writes cannot be undone and audio is usually huge. Ask the user whether to keep a copy before writing anything |

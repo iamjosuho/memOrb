@@ -31,7 +31,7 @@ When **updating an existing** orb, resolve its path first (two-step lookup):
    - `memorbs/Long-Term/People/` — People mentioned
    - `memorbs/Long-Term/Projects/` — Projects impacted
    - `memorbs/Long-Term/Orgs/` — Companies/entities
-   - `memorbs/glossary.md` — New terms
+   - `memorbs/HQ/glossary.md` — New terms
    - Use the **two-step lookup** above to locate existing pages before writing; apply the **orb layout decision** above when creating new ones.
    - No separate Context bucket — any environmental fact/domain rule worth keeping goes straight into whichever `memorbs/Long-Term/People`／`Orgs`／`Projects` page it's actually about.
    - **Frontmatter Schema Enforcer**: Ensure target page frontmatter includes `aliases: []` (authority control) and `orb_emotions: []` (accumulated emotion tags like `joy`, `anxiety`, `fear`, `sadness`, `anger`, `disgust`).

@@ -76,11 +76,11 @@ flowchart TD
 3. **Query Employee Directory**:
    Run Dataview or Grep to aggregate employee emails:
    ```dataview
-   TABLE title AS "Title", contactChannels.email AS "Email", domain AS "Domain"
-   FROM "memorbs/Long-Term/People"
-   WHERE (company = [[12345678-Acme-Corp]] OR contains(file.folder, "memorbs/Long-Term/People/Acme"))
-   WHERE relationshipType != null OR contains(tags, "people")
-   ```
+TABLE title AS "Title", contactChannels.email AS "Email", domain AS "Domain"
+FROM "memorbs/Long-Term/People"
+WHERE (company = [[AcmeCorp]] OR contains(string(company), "AcmeCorp"))
+WHERE relationshipType != null OR contains(tags, "people")
+```
 
 ---
 
@@ -109,7 +109,7 @@ To embed an employee directory in a Company Wiki note:
 ```dataview
 TABLE title AS "Title", contactChannels.email AS "Email", department AS "Department"
 FROM "memorbs/Long-Term/People"
-WHERE (company = [[12345678-Acme-Corp]] OR contains(string(company), "Acme") OR contains(file.folder, "memorbs/Long-Term/People/Acme"))
+WHERE (company = [[AcmeCorp]] OR contains(string(company), "AcmeCorp"))
 WHERE (relationshipType != null OR contains(tags, "people")) AND !contains(file.name, "Interview") AND !contains(file.name, "Review")
 SORT department ASC
 ```

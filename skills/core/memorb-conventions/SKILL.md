@@ -1,212 +1,217 @@
 ---
 name: memorb-conventions
-description: "Base layer conventions for the memOrb vault：路徑解析、資料夾結構、命名規則、YAML frontmatter schema、範本。所有寫入類 sub-skill 的前置依賴。觸發詞：路徑、資料夾結構、命名、模板、frontmatter、schema。"
+description: "Base layer conventions for the memOrb vault: path resolution, folder structure, naming rules, YAML frontmatter schema, orb layouts. Prerequisite for every write skill. Triggers: path, folder structure, naming, frontmatter, schema, 路徑, 資料夾結構, 命名, 模板, frontmatter, schema."
 ---
 
-# Memorb Conventions (Single Source of Truth / 唯一標準)
+# Memorb Conventions (Single Source of Truth)
 
-> **本 Skill 為 memOrb 系統資料夾結構、檔名格式、YAML Schema 與規範的 Single Source of Truth (SSOT / 唯一標準)。**
-> 定義所有寫入操作與初始化（如 `/memorb-born`）都必須嚴格遵守的基礎規範。工作流程本身歸各 sub-skill，這裡只管「東西放哪裡、長什麼格式」。
-> 本檔案不假設使用者 vault 根目錄的名稱或既有結構——memOrb 只透過 `memorbs/` 這個非侵入式命名空間運作，根目錄以外的東西一律不動。
+> **This skill is the SSOT for memOrb's folder structure, filename formats, YAML schemas, and naming rules.**
+> Every write operation and every initialization (`/memorb-born`) must follow it. Workflows belong to the individual sub-skills; this file governs only *where things go and what shape they take*.
+> It assumes nothing about the name or existing layout of the user's vault — memOrb operates through the non-invasive `memorbs/` namespace and leaves everything else alone.
 
-## VAULT 路徑解析
+## Resolving VAULT
 
-不假設固定根目錄名稱。以 `memorbs/HQ/identity.md` 是否存在作為「此 vault 已完成 memorb-born 初始化」的判斷依據：
+Do not assume a fixed root folder name. The presence of `memorbs/HQ/identity.md` is what marks a vault as initialized:
 
 ```bash
 VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \; | head -1)
 ```
 
-找不到時，代表尚未執行 `/memorb-born`，應先路由至該 skill。
+If nothing is found, `/memorb-born` has not run yet — route there first.
 
-## 資料夾結構
+## Folder structure
 
-**唯一的邊界規則：memOrb 可以讀你指給它看的任何東西；但只往 `memorbs/` 裡面寫。**
+**The one boundary rule: memOrb may read anything the user points it at, but it writes only inside `memorbs/`.**
 
-沒有例外，extension 也一樣。讀是安全的——不改變狀態、不會意外。寫才是怪異的來源：一旦某個 skill 寫成「`Resources/` 存在就寫進去」，同一個操作會因為使用者資料夾名字的巧合而有三種不同結果（有 `Resources/` 就寫、有 `3-Resources/` 就靜默跳過、沒有就什麼都不做）。這比「完全不碰」和「完全擁有」都糟。
+No exceptions; this binds extensions too. Reading is safe — no state change, no surprise. Conditional *writing* is where the trouble lives. The moment a skill says "write to the reference folder if it exists", the same operation produces three different outcomes depending on a coincidence of folder naming: it writes for one user, silently skips for the user who numbered their folders, and does nothing for the user who has none. That is worse than either owning the folder or never touching it.
 
-所以 memOrb 在使用者的 vault 裡只長出**一個**資料夾：
+So memOrb grows exactly **one** folder in the user's vault:
 
 ```text
-<你的 vault>/
-├── 1-Projects/  Daily Notes/  Inbox/ …   ← 你自己的，memOrb 只讀不寫
+<your vault>/
+├── 1-Projects/  Daily Notes/  Inbox/ …   ← the user's own; read, never written to
 │
-└── memorbs/                    ← memOrb 的全部，砍掉就乾淨
+└── memorbs/                    ← everything memOrb owns; delete it and the vault is clean
     ├── HQ/
-    │   ├── persona.md          ← AI 顧問人設：語氣、角色設定（每次 session 必讀）
-    │   ├── identity.md         ← 使用者身分：姓名/生日/學經歷/角色/組織/目標/關鍵關係（每次 session 必讀）
-    │   ├── Core/               ← Core Memory orbs，一 orb 一檔（有轉折意義的具體經驗）
-    │   ├── Belief/             ← Belief orbs，一 orb 一檔（從經驗凝聚出的價值/信念聲明）
-    │   └── OrbTrack/           ← 唯一的快速收集區，由 orbtrack-triage 清空
-    ├── Islands/                ← 需長期維持標準的責任領域/興趣（人格島）：只放現況、長期目標、板塊筆記、MOC，不存放實體 orb，靠連結指向 Long-Term/
-    ├── Long-Term/              ← 長期記憶倉庫，存放實際內容頁（一個實體只留一份頁面）
-    │   ├── Projects/           ← 有明確截止日/交付物的專案（含歷程紀錄）
-    │   ├── People/             ← 關鍵協作者（Authority Control 頁面，見下）
-    │   └── Orgs/               ← 組織與團隊（Authority Control 頁面，見下）
-    ├── Dump/{category}/        ← MUSTY 淘汰後的歸檔頁（由 memorb-forgetter 搬入）
-    ├── log.md                  ← 當期時間軸（見下節）
-    └── log/{YYYY-MM}.md        ← 已封存的往期時間軸（由 dream-studio 輪替）
+    │   ├── persona.md          ← AI advisor persona: tone and role (Hot Cache, read every session)
+    │   ├── identity.md         ← who the user is: name, background, role, org, goals, key relationships (Hot Cache, read every session)
+    │   ├── glossary.md         ← domain terminology, acronyms, code words (Hot Cache, read by ingest/transcription)
+    │   ├── Core/               ← Core Memory orbs, one per file (formative experiences)
+    │   ├── Belief/             ← Belief orbs, one per file (values and principles distilled from experience)
+    │   └── OrbTrack/           ← the only capture zone, emptied by orbtrack-triage
+    ├── Templates/              ← standard templates for entities and orbs
+    │   ├── People Template.md
+    │   ├── Org Template.md
+    │   └── Project Template.md
+    ├── Islands/                ← domains of long-term responsibility or interest: current state, goals, section notes, MOC only — no entity pages, links out to Long-Term/
+    ├── Long-Term/              ← the shelves: actual content pages, one page per entity
+    │   ├── Projects/           ← deadline-bound work with milestone history
+    │   ├── People/             ← key collaborators (flat PascalCase files: AlexChen.md or AlexChen-AcmeCorp.md)
+    │   └── Orgs/               ← organizations and teams (PascalCase files: AcmeCorp.md)
+    ├── Dump/{category}/        ← pages retired under MUSTY (moved in by memorb-forgetter)
+    ├── log.md                  ← the current period's timeline (see below)
+    └── log/{YYYY-MM}.md        ← archived periods (rotated by dream-studio)
 ```
 
-> **沒有 `Resources/`。** PARA 的 R（長期感興趣的主題）在 memOrb 裡對應的是 **Island**——`island-reclamation` 對 Island 的定義本來就是「需要長期維持標準的責任領域**或興趣**」，已經把 Areas 和 Resources 一起吃下了。所以策展型的讀書筆記就是一顆 orb，掛在相關 Island 底下；原始素材則是 orb 的附件，見下方 Bundle 規則。
+> **There is no `Resources/`.** PARA's R — subjects of long-term interest — maps to **Islands**. The definition of an Island is already "a domain of long-term responsibility *or interest*", which absorbs both Areas and Resources. Curated reading notes are therefore ordinary orbs hanging off the relevant Island, and raw source material is an attachment of its orb (see the bundle rule below).
 
-> **注意**：`memorbs/HQ/OrbTrack/` 是唯一的收集區。不要另外建立 `Inbox/`——兩個收集區並存只會讓 triage 邏輯分裂。
-> **注意**：歸檔統一寫作 `memorbs/Dump/{category}/`（單數 Dump）。
-> **注意**：`Long-Term/{People,Orgs,Projects}` 取代了原本的 `Islands/{people,organizations,projects}`——**實體頁不歸 Islands 管**，Islands 只有敘事層。原本歸在 `context/` 的環境規則不再獨立分類，直接寫進相關實體的 Long-Term 頁面本體。
-> **注意（2026-07-26 遷移）**：`Islands/` 與 `Long-Term/` 原本在 vault 根目錄，已一併移入 `memorbs/`。memOrb 從此只在使用者 vault 裡長出一個資料夾。
-> **注意（待處理 TODO，2026-07-26 稽核發現，暫緩不動）**：`memorbs/Long-Term/People/` 頁面結構目前不一致——`business-card-ingestion`／`memorb-domain-query` 假設「有名片附件時依公司名稱建巢狀資料夾」（`memorbs/Long-Term/People/{公司}/{姓名}/{姓名}.md`），本檔案定義的預設卻是單一頁面，`recording-transcription`／`m365-meeting-note`／`memorb-ingest` 也都假設扁平 `memorbs/Long-Term/People/{姓名}.md`。同一人可能因建檔管道不同落在兩個不同路徑。尚未決定要統一成哪個方向，先列入待辦，詳見 `docs/skill-audit-2026-07-26.md` P1 #1。
-> **注意**：`persona.md`／`identity.md` 是固定的 Hot Cache 檔案（各一份，不會重複），`Core/`／`Belief/` 是裝 orb 的資料夾（一 orb 一檔，數量會持續增加）。四者角色不同，不要互相混用。
-> **注意**：`daily-note`／`weekly-retro`／`session-closeout` 三個 skill 已於 2026-07-26 移除。日記層的職責由 `memorbs/log.md` 接手（見下節），週回顧屬任務管理不屬記憶框架，git 操作不屬本框架職責。
-> **注意**：`memorbs/MEMORY.md` 全庫索引已於 2026-07-26 廢除。**檔案系統就是索引**——手動維護的索引一定會跟實際檔案漂移（舊版 lint 甚至得專門檢查「索引沒列到的孤兒頁」，那條規則本身就是漂移的證據），而且 ≤200 行的上限讓它本來就撐不到 vault 長大。查找一律直接 `ls` 目錄 + `grep` 內容與 `aliases`。頁面的可達性改由**雙向連結**保證：新頁至少要被一個既有頁面連到，沒有任何連結指向的頁面就是孤兒，由 `memorb-lint` 抓。
+> **Note**: `memorbs/HQ/OrbTrack/` is the only capture zone. Never create a second one such as `Inbox/` — two inboxes split the triage logic.
+> **Note**: the archive is always written `memorbs/Dump/{category}/`, singular.
+> **Note**: `Long-Term/{People,Orgs,Projects}` replaced the old `Islands/{people,organizations,projects}` — **entity pages do not belong to Islands**; Islands hold narrative only. Environmental facts that used to sit in a separate `context/` bucket now go straight into the body of whichever Long-Term page they are about.
+> **Note (migrated 2026-07-26)**: `Islands/` and `Long-Term/` used to sit at the vault root and were moved under `memorbs/`. memOrb now creates a single folder in the user's vault.
+> **Note (resolved 2026-07-28)**: `memorbs/Long-Term/People/` is strictly flat `memorbs/Long-Term/People/{PascalName}.md` (or `{PascalName}/` bundle). Filenames use no-space `PascalCase` (e.g. `AlexChen.md`). Disambiguation for name collisions uses hyphenated PascalCase (`AlexChen-AcmeCorp.md`). Frontmatter `aliases` carries natural display names (`['Alex Chen']`).
+> **Note**: `persona.md` and `identity.md` are fixed Hot Cache files (exactly one of each). `Core/` and `Belief/` are folders of orbs (one per file, growing indefinitely). Four distinct roles — do not conflate them.
+> **Note**: the `daily-note`, `weekly-retro`, and `session-closeout` skills were removed on 2026-07-26. The timeline role moved to `memorbs/log.md` (below); weekly review is task management rather than memory work; git operations are out of scope for this framework.
+> **Note**: the `memorbs/MEMORY.md` whole-vault index was abolished on 2026-07-26. **The filesystem is the index.** A hand-maintained index always drifts from the files — the old linter even had a rule for "orphan pages the index failed to list", which was itself proof of the drift — and the 200-line cap meant it could never scale. Look things up with `ls` plus `grep` over content and `aliases`. Reachability is now guaranteed by **bi-directional links**: every new page must be linked from at least one existing page, and a page nothing links to is an orphan for `memorb-lint` to catch.
 
-## `memorbs/log.md`：時間軸
+## `memorbs/log.md`: the timeline
 
-log.md 是這套系統唯一的**時間記錄**。實體頁（`memorbs/Long-Term/`）是活的、持續累積，還原不出「六月發生了什麼」；OrbTrack 依定義會被清空；檔案 mtime 改個錯字就變動。所以「那陣子在發生什麼」只有 log.md 存得住，而 `dream-studio` 的重播完全靠它。
+log.md is this system's only **record of when**. Entity pages under `memorbs/Long-Term/` are living documents that accumulate continuously and cannot reconstruct "what happened in June". OrbTrack is emptied by design. File mtimes change when you fix a typo. So the log is the only thing that holds a period, and `dream-studio`'s replay depends entirely on it.
 
-### 寫入規則
+### Write rules
 
-**每個會改變 vault 狀態的動作都要留一筆**，倒序 append 在檔案開頭（最新在最上面）：
+**Every action that changes vault state leaves an entry**, appended in reverse order at the top of the file (newest first):
 
 ```markdown
-## [YYYY-MM-DD] {type} | {一句話標題}
-- 內容：{發生了什麼}
+## [YYYY-MM-DD] {type} | {one-line title}
+- 內容：{what happened}
 - 影響頁面：[[...]]、[[...]]
-- 訊號：{使用者的原話片段；情緒；未成形的疑慮}   ← 選填，但這是夢工廠的主食
+- 訊號：{the user's own words; emotion; an unresolved doubt}   ← optional, but this is what the dream feeds on
 ```
 
-`type` 取值：`ingest`｜`triage`｜`query`｜`decision`｜`lint`｜`archive`｜`island`｜`skill`｜`dream`
+`type` is one of: `ingest` | `triage` | `query` | `decision` | `lint` | `archive` | `island` | `skill` | `dream`
 
-### 「訊號」欄位為什麼重要
+### Why the signal line matters
 
-`dream-studio` 找共振靠的不是系統做了什麼，是**使用者說了什麼、當時什麼感覺**。「今天跟 Vic 談完覺得怪怪的」不是一個想法、不夠格成為原子筆記，但三個月後它可能就是一條信念的來源。**這類還沒成形的訊號，記在這裡就好，不要為它硬開一個 orb。**
+`dream-studio` finds resonance not in what the system did but in **what the user said and how it felt at the time**. "Something felt off after talking to Vic today" is not an idea and does not deserve an atomic note — but three months later it may be the source of a belief. **Record that kind of unformed signal here and nowhere else; do not force an orb for it.**
 
-記錄訊號時用**使用者的原話**，不要改寫成更漂亮的句子。潤飾過的訊號在夢工廠回頭讀時會失真。
+Quote the user **verbatim**. A polished paraphrase reads false when the dream replays it months later.
 
-### 不該寫進 log.md
+### What does not belong in log.md
 
-- `memorb-query` 的流通紀錄更新（`recall_count`／`last_recalled`）——量大且無資訊，會淹掉真正的訊號
-- 純讀取、沒有改變任何檔案的操作
+- Circulation updates from `memorb-query` (`recall_count` / `last_recalled`) — high volume, no information, and they drown the real signals
+- Pure reads that changed no file
 
-### 輪替
+### Rotation
 
-`dream-studio` 執行完畢後，把當期 `log.md` 封存為 `memorbs/log/{YYYY-MM}.md` 並清空 `log.md`，只留檔頭。這樣 log.md 永遠是「上次做夢至今」的份量，不會無限膨脹——就像電影裡當天的記憶球在夜裡被送進長期記憶區。往期檔案保留不刪，夢工廠要拉更長區間時可回頭讀。
+When `dream-studio` finishes, it archives the current `log.md` to `memorbs/log/{YYYY-MM}.md` and starts a fresh one with only a header. log.md therefore always holds exactly "since the last dream" and never grows without bound — the way the day's orbs are shipped to long-term storage overnight. Archived periods are kept, never deleted; the dream reads them when the user asks for a longer window.
 
-## Session 開頭必讀
+## Read at the start of every session
 
-每次 session 開始，必讀 `memorbs/HQ/persona.md` 與 `memorbs/HQ/identity.md`（兩者合計仍需 <100 行，維持 Hot Cache 的精簡）。`Core/`、`Belief/` 底下的 orb，以及 `memorbs/Long-Term/` 底下的實體頁面，一律交由 `memorb-query` 視情境查詢與回填，不必每次全讀。
+Always read `memorbs/HQ/persona.md` and `memorbs/HQ/identity.md` (under 100 lines combined — that is what keeps the Hot Cache cheap). Orbs under `Core/` and `Belief/`, and entity pages under `memorbs/Long-Term/`, are left to `memorb-query` to fetch and backfill as the context requires; never read them wholesale.
 
-## 命名與格式規則
+## Naming and formatting rules
 
-1. **日期格式**：一律 `YYYY-MM-DD`；週格式 `YYYY-Www`（如 `2026-W28`）。
-2. **OrbTrack 檔名**：`{YYYY-MM-DD}-{HHMM}-{Title}.md`。
-3. **Frontmatter**：每篇筆記都要有 YAML frontmatter，欄位依筆記類型而定（見下方兩張表）。
-4. **語言**：內文預設繁體中文。
-5. **Emoji**：非結構性標題不加 emoji；頂層資料夾名稱不含 emoji。
-6. **動作後回報**：建立/更新筆記後，回報檔案路徑給使用者。
-7. **MOC 命名**：Island 的入口筆記統一命名 `000-MOC.md`；跨資料夾引用一律用完整路徑 `[[memorbs/Islands/{名稱}/000-MOC|{名稱}]]`，避免同名歧義。`memorbs/Long-Term/` 底下的實體頁面（Projects／People／Orgs）預設為單一頁面，不強制要求 MOC。
+1. **Dates**: always `YYYY-MM-DD`; weeks as `YYYY-Www` (e.g. `2026-W28`).
+2. **OrbTrack filenames**: `{YYYY-MM-DD}-{HHMM}-{Title}.md`.
+3. **Frontmatter**: every note carries YAML frontmatter; fields depend on the note type (schemas below).
+4. **Language**: note content written into the vault defaults to Traditional Chinese. SKILL.md instructions are English — see `writing-memorb-skills`.
+5. **Emoji**: no emoji in non-structural headings; never in top-level folder names.
+6. **Report after acting**: always tell the user the file paths you created or updated.
+7. **MOC naming**: an Island's entry note is always `000-MOC.md`. Because many folders contain a file by that name, **every link to a MOC uses the full path**: `[[memorbs/Islands/{Name}/000-MOC|{Name}]]`. Entity pages under `memorbs/Long-Term/` default to a single page and need no MOC.
 
-## 實體是單數，事件帶日期
+## Entities are singular; events carry dates
 
-這是最容易搞錯的一條，錯了就會撞檔名或把不同時間的事混成一頁。
+This is the easiest rule to get wrong, and getting it wrong either collides on filenames or collapses separate occasions into one page.
 
-| | 實體頁 | 事件 orb |
+| | Entity page | Event orb |
 |---|---|---|
-| 是什麼 | 一個人、一間公司、一個專案 | 某天發生的一件事 |
-| 位置 | `memorbs/Long-Term/{People,Orgs,Projects}/` | OrbTrack → 依內容歸位 |
-| 數量 | **一個實體永遠只有一頁**（權威控制，別名收斂到這頁） | **一次一顆，不合併** |
-| 命名 | `{實體名}.md`，不帶日期 | `{YYYY-MM-DD}-{標題}`，**日期是名字的一部分** |
+| What it is | A person, a company, a project | One thing that happened on one day |
+| Where | `memorbs/Long-Term/{People,Orgs,Projects}/` | OrbTrack → filed by content |
+| How many | **One entity, one page, forever** (authority control; aliases converge here) | **One per occurrence, never merged** |
+| Naming | `{Entity}.md`, no date | `{YYYY-MM-DD}-{Title}`, **the date is part of the name** |
 
-**事件的日期前綴在 triage 之後要保留**，這是它跟實體頁最大的差別，也是同一件事重複發生時不會撞名的原因。
+**The date prefix survives triage.** That is the sharpest difference from an entity page, and it is why a recurring event never collides.
 
-實例——今年投了 Acme 的職缺，明年又投一次同一個職位：
+Worked example — applying to a role at Acme this year, and to the same role again next year:
 
 ```text
-memorbs/Long-Term/Orgs/Acme.md              ← 永遠只有這一份
-   ├─ 連到 [[2026-07-26-Acme-資深PM-應徵]]
-   └─ 連到 [[2027-03-11-Acme-資深PM-應徵]]
+memorbs/Long-Term/Orgs/Acme.md              ← only ever one of these
+   ├─ links to [[2026-07-26-Acme-資深PM-應徵]]
+   └─ links to [[2027-03-11-Acme-資深PM-應徵]]
 
 memorbs/…/2026-07-26-Acme-資深PM-應徵/
    ├── 2026-07-26-Acme-資深PM-應徵.md
    └── JD.pdf
-memorbs/…/2027-03-11-Acme-資深PM-應徵/       ← 另一顆，不覆蓋
+memorbs/…/2027-03-11-Acme-資深PM-應徵/       ← a second orb, not an overwrite
    ├── 2027-03-11-Acme-資深PM-應徵.md
    └── JD.pdf
 ```
 
-副作用是好的：`Acme.md` 上自然累積出一條歷程，明年回頭想對照兩份 JD 差在哪時，實體頁就是入口。
+The side effect is a good one: `Acme.md` accumulates a history, so when the user wants to compare the two job descriptions next year, the entity page is the way in.
 
-**判斷法**：問「這件事會不會再發生第二次？」會 → 事件 orb，帶日期。不會、而且它是一個持續存在的東西 → 實體頁，不帶日期。
+**Test**: ask "can this happen a second time?" Yes → event orb, dated. No, and it is a thing that persists → entity page, undated.
 
-## Frontmatter Schema
+## Raw material goes in the bundle, not in a folder of its own
 
-### 一般筆記（OrbTrack / Island / 單篇 orb）
+Transcripts, clippings, PDFs, scanned cards — **raw material is an attachment of an orb**, not a category of its own. It lives in that orb's bundle folder:
+
+```text
+memorbs/HQ/OrbTrack/2026-07-12-1400-與Vic面談/
+├── 2026-07-12-1400-與Vic面談.md    ← the orb itself
+└── 逐字稿.md                         ← attachment; lives and dies with the orb
+```
+
+Lifecycle then takes care of itself: `memorb-forgetter` already moves the entire folder when archiving a bundle orb, so attachments travel with it. No `source:` field, no orphan detection, no shared attachment bucket.
+
+**Documents only**: `.md`, `.txt`, `.pdf`, and images that are document scans (business cards, whiteboards). **Audio and video never enter the vault** — the size ruins both the vault and its git history. Leave recordings outside and record their location and provenance in the orb body.
+
+> This rule replaced three competing mechanisms: `Resources/…/raw/`, `OrbTrack/Attachments/`, and the short-lived `source:` field. All consolidated onto bundles.
+
+## Frontmatter schemas
+
+### Ordinary notes (OrbTrack / Island / standalone orb)
 
 ```yaml
 ---
-title: {標題}
+title: {title}
 date: {YYYY-MM-DD}
 tags: [...]
 status: active   # active | processed | unprocessed | archived
 ---
 ```
 
-## 原始素材：進 bundle，不另設資料夾
+### `memorbs/Long-Term/` pages (Projects / People / Orgs — Authority Control & Circulation Tracking)
 
-逐字稿、剪報、PDF、名片掃描這類**原始素材是 orb 的附件**，不是獨立的一類東西。它們放在 orb 自己的 bundle 資料夾裡：
-
-```text
-memorbs/HQ/OrbTrack/2026-07-12-1400-與Vic面談/
-├── 2026-07-12-1400-與Vic面談.md    ← orb 本體
-└── 逐字稿.md                         ← 附件，跟 orb 同生共死
-```
-
-這樣生命週期自動正確：`memorb-forgetter` 歸檔 bundle orb 時本來就是整個資料夾一起搬，附件跟著走，不需要 `source:` 欄位、不需要孤兒偵測、也不需要一個共用的附件桶。
-
-**只有文件檔進 vault**：`.md`、`.txt`、`.pdf`，以及作為文件掃描的圖片（名片、白板照）。**音訊與影片一律不進**——體積會拖垮 vault 與 git。錄音留在 vault 外，orb 內文記下它的位置與取得方式即可。
-
-> 這條取代了三套並存的舊做法：`Resources/…/raw/`、`OrbTrack/Attachments/`、以及短暫存在過的 `source:` 欄位。全部統一到 bundle。
-
-### `memorbs/Long-Term/` 頁面（Projects／People／Orgs，Authority Control & Circulation Tracking）
-
-Long-Term 頁面除一般欄位外，**必須**額外具備以下四個欄位，供 `memorb-ingest`／`memorb-query`／`memorb-lint` 讀寫：
+Long-Term pages **must** carry these four fields in addition to the ordinary ones. `memorb-ingest`, `memorb-query`, and `memorb-lint` all read and write them:
 
 ```yaml
 ---
-title: {實體名稱}
+title: {entity name}
 tags: [...]
 status: active
-aliases: []          # 別名/暱稱，供權威控制去重；memorb-lint 用來抓「有提到但沒被任何 aliases 涵蓋」的孤兒實體
-orb_emotions: []     # 從 ingest 內容累積的情緒標籤：joy / anxiety / fear / sadness / anger / disgust
-recall_count: 0      # 每次被 memorb-query 讀取命中就 +1
-last_recalled: null  # 最近一次被查詢命中的 YYYY-MM-DD
+aliases: []          # nicknames and alternate spellings; authority control uses these to deduplicate, and memorb-lint uses them to spot entities mentioned but covered by no page
+orb_emotions: []     # emotion tags accumulated from ingested content: joy / anxiety / fear / sadness / anger / disgust
+recall_count: 0      # +1 each time memorb-query reads this page
+last_recalled: null  # YYYY-MM-DD of the most recent query hit
 ---
 ```
 
-歸檔時（由 `memorb-forgetter` 執行）額外加上：
+On archive, `memorb-forgetter` adds:
 
 ```yaml
 status: archived
 archived_at: {YYYY-MM-DD}
 ```
 
-若讀到的 Long-Term 頁面缺少上述任一欄位，視為舊資料，讀取當下就地補上預設值（`aliases: []`、`orb_emotions: []`、`recall_count: 0`、`last_recalled: null`），不需要另外開一輪修改流程。
+A Long-Term page missing any of these fields is old data: backfill the defaults in place as you read it (`aliases: []`, `orb_emotions: []`, `recall_count: 0`, `last_recalled: null`). No separate migration pass is needed.
 
-### `memorbs/HQ/Core/` 與 `memorbs/HQ/Belief/` 的 orb 檔案
+### Orb files in `memorbs/HQ/Core/` and `memorbs/HQ/Belief/`
 
-一 orb 一檔，frontmatter：
+One orb per file:
 
 ```yaml
 ---
-title: {orb 標題}
+title: {orb title}
 formed_at: {YYYY-MM-DD}
 orb_type: core         # core | belief
-derived_from: []       # 僅 belief orb 使用：回連凝聚出此信念的來源 orb
+derived_from: []       # belief orbs only: link back to the orbs this belief grew out of
 ---
 ```
 
-**`derived_from` 可指向任何 orb**，不限 Core：`[[memorbs/HQ/Core/{slug}]]`、`[[memorbs/Long-Term/Projects/{slug}]]`、`[[memorbs/Long-Term/People/{slug}]]` 都合法。信念多半是由一堆單獨看都不夠格當 Core Memory 的小事累積而成，限定只能連 Core 會把這條路堵死。Core orb 不使用此欄位（保持 `[]` 或省略）。
+**`derived_from` may point at any orb**, not just Core ones — `[[memorbs/HQ/Core/{slug}]]`, `[[memorbs/Long-Term/Projects/{slug}]]`, and `[[memorbs/Long-Term/People/{slug}]]` are all valid. Most beliefs are assembled from a pile of moments that would not individually qualify as a Core Memory; restricting the field to Core would close off the path they actually take. Core orbs do not use the field (leave it `[]` or omit it).
 
-`persona.md`／`identity.md` 不是 orb，維持一般 Markdown + 精簡 frontmatter（`title`/`updated`）即可，不套用上述 schema。`identity.md` 內容建議結構：
+`persona.md` and `identity.md` are not orbs. They stay ordinary Markdown with minimal frontmatter (`title` / `updated`) and do not follow the schema above. Suggested structure for `identity.md`:
 
 ```markdown
 ## 基本資料
@@ -227,44 +232,70 @@ derived_from: []       # 僅 belief orb 使用：回連凝聚出此信念的來�
 - [[memorbs/Long-Term/People/{Name}|{Name}]]（{關係}）
 ```
 
-> **MBTI 這類標籤放 `identity.md`，不要放 `Belief/`。** Belief orb 是「從自己經驗提煉出的一句話」，MBTI 是外部量表貼上的分類，兩者性質相反。混放會讓 `dream-studio` 在評估信念演變時把外部標籤誤當成自我提煉的結果。
+> **Labels like MBTI belong in `identity.md`, never in `Belief/`.** A Belief orb is a sentence the user distilled from their own experience; MBTI is a category an external instrument assigned to them. Mixing the two would let `dream-studio` mistake an external label for a self-derived conclusion when it assesses how beliefs evolved.
 
-## Orb File Structure
+## Orb file structure
 
-Every memorb (Core, Belief, Long-Term entity page, or any named orb) follows one of two physical layouts:
+Every memorb (Core, Belief, Long-Term entity page, or any named orb) uses one of two physical layouts:
 
 | Type | Layout | When to use |
 | :--- | :--- | :--- |
-| **Plain orb** | `orb-name.md` — single file | No attachments; self-contained text |
-| **Bundle orb** | `orb-name/orb-name.md` + attachment files in the same folder | Has attachments (images, PDFs, audio, etc.) |
+| **Plain orb** | `orb-name.md` — a single file | No attachments; self-contained text |
+| **Bundle orb** | `orb-name/orb-name.md` plus attachments in the same folder | Has attachments (documents, scans) |
 
 **Rules:**
-- The folder and the main Markdown file **always share the same name** — never use a generic filename like `memorb.md` inside a bundle folder.
-- **Query resolution order**: look for `orb-name.md` first; if not found, look for `orb-name/orb-name.md`. All skills that read or move orbs must follow this two-step lookup.
-- When archiving or moving a bundle orb, move the **entire `orb-name/` folder**, not just the inner `.md` file.
 
-## 範本路徑
+- The folder and the main Markdown file **always share the same name** — never a generic filename like `memorb.md` inside a bundle folder.
+- **Resolution order**: look for `orb-name.md` first; if absent, look for `orb-name/orb-name.md`. Every skill that reads or moves orbs follows this two-step lookup.
+- Moving or archiving a bundle orb moves the **entire `orb-name/` folder**, never just the inner `.md`.
 
-`Templates/` 是使用者原生資料夾，**不存在就跳過、直接依 Frontmatter Schema 生成**，不要建立這個資料夾。
+## `memorbs/HQ/glossary.md`: Domain terms & acronyms
 
-| 範本 | 路徑 |
-| :--- | :--- |
-| Meeting Note | `Templates/Meeting Note Template.md` |
-| Project | `Templates/Project Template.md` |
-| Island | `Templates/Island Template.md` |
-| Resource | `Templates/Resource Template.md` |
-| General Note | `Templates/Note Template.md` |
+`glossary.md` is the vault's authority control for terminology, domain acronyms, internal project code words, and team jargon.
 
-*(待固化：`memorbs/HQ/` 與 `memorbs/Long-Term/` 頁面目前沒有固定範本檔，格式僅由上方 Frontmatter Schema 約束，由 `memorb-born`／`memorb-ingest` 直接生成；`Project` 範本也需要更新為含 Authority Control 欄位的版本。)*
+### Frontmatter & Format
 
-## Vault 搜尋
-
-```bash
-grep -r "keyword" "$VAULT" --include="*.md" -l          # 找檔案
-grep -r "keyword" "$VAULT" --include="*.md" -n -B 2 -A 2  # 帶上下文
+```yaml
+---
+title: Glossary
+type: glossary
+updated: YYYY-MM-DD
+---
 ```
 
-## 快速新增 OrbTrack 筆記
+Organized as a markdown table with columns: `| Term | Definition | Aliases | Related Entity |`.
+All skills that ingest transcripts or text (`memorb-ingest`, `recording-transcription`) consult and update this file to maintain consistent domain terminology.
+
+## Templates (`memorbs/Templates/`)
+
+Templates live in `memorbs/Templates/`:
+- `People Template.md`: Standard layout and frontmatter for people entity pages (`type: person`, `name`, `company`, `role`, `aliases`).
+- `Org Template.md`: Standard layout for organization pages (`type: org`, `name`, `industry`, `aliases`).
+- `Project Template.md`: Standard layout for project pages (`type: project`, `status`, `target_date`).
+- `Core Template.md`: Standard layout for Core orbs.
+- `Belief Template.md`: Standard layout for Belief orbs.
+
+## Agent Instruction Snippet (`CLAUDE.md`)
+
+memOrb does not overwrite the user's root `CLAUDE.md`. When initialized via `/memorb-born`, it offers to append a non-intrusive, protected block:
+
+```markdown
+<!-- memOrb:start -->
+# memOrb Instructions
+- Memory vault location: `memorbs/`
+- Read `memorbs/HQ/persona.md` and `memorbs/HQ/identity.md` at session start.
+- Routinely consult `memorbs/HQ/glossary.md` for domain terminology.
+<!-- memOrb:end -->
+```
+
+## Searching the vault
+
+```bash
+grep -r "keyword" "$VAULT/memorbs" --include="*.md" -l            # find files
+grep -r "keyword" "$VAULT/memorbs" --include="*.md" -n -B 2 -A 2  # with context
+```
+
+## Quick capture into OrbTrack
 
 ```bash
 DATE=$(date +%Y-%m-%d); TIME=$(date +%H%M)
@@ -281,7 +312,3 @@ status: unprocessed
 Content
 EOF
 ```
-
-## 新增待辦到 TASKS.md
-
-在 `## 📋 待辦` 區塊下加一行 `- [ ] 任務描述`。

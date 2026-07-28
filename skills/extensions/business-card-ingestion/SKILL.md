@@ -1,62 +1,66 @@
 ---
 name: business-card-ingestion
-description: "Use when 使用者要求處理、新增名片，或上傳任何名片（business card）的截圖與照片檔時。"
+description: "Turn a business card image into a People entity page plus its Org page, with the scan filed as an attachment in the person's bundle. Use when the user asks to process or add a card, or drops a photo or screenshot of one into the vault. Triggers: business card, process a business card, add a contact from a card, card scan, 名片, 處理名片, 新增名片."
 ---
 
-#  名片處理 Skill (Business Card Ingestion)
+# Business Card Ingestion
 
-## 工作流：處理名片 (全自動搬移流)
+## Workflow: process a card (capture, then move the file for real)
 
-當使用者丟出一張名片圖片在 Obsidian 內（通常在 OrbTrack），並要求「處理名片」時，請嚴格執行以下步驟：
+The user drops a card image somewhere in the vault — usually OrbTrack — and asks to have it processed. Work through these steps in order.
 
-### 1. 資訊擷取
-讀取該圖片，辨識以下資訊：
-- 姓名（含英文名/暱稱）
-- 公司名稱
-- 職稱與部門
-- 聯絡方式（Email, Phone, Line ID 等）
+### 1. Extract the information
 
-### 2. 組織判定
-確認 `memorbs/Long-Term/Orgs/{公司名稱}.md` 是否存在。若無，先依照 `memorb-conventions` 的 Long-Term 實體頁 Frontmatter Schema 建立該組織檔案（`aliases: []`、`orb_emotions: []`、`recall_count: 0`、`last_recalled: null`）。
+Read the image and pull out:
 
-### 3. 人物資料夾建立 (Page Bundle 模式)
-因為該人物帶有實體附件（圖檔），為了保持目錄整潔，需建立專屬資料夾：
-- **目標資料夾**：`memorbs/Long-Term/People/{公司名稱}/{姓名}/`
-- **人物檔案**：`memorbs/Long-Term/People/{公司名稱}/{姓名}/{姓名}.md`
+- Name (including any English name or nickname)
+- Company name
+- Job title and department
+- Contact channels (email, phone, Line ID, and so on)
 
-**重大注意事項 (Red Flag) 絕對不允許找藉口**：
-`memorb-conventions` SSOT 說 `memorbs/Long-Term/People/` 頁面預設為單一頁面（`memorbs/Long-Term/People/{公司暱稱}/{姓名}.md`），不強制要求資料夾。
-**這是特例！名片場景請強行覆寫這個預設規則！** 只要有「名片圖檔」等附件，就 **必須** 建立專屬的 `{姓名}/` 資料夾（Page Bundle 模式）。
-- 直接把 .md 建在公司目錄下？**刪除重來。**
-- 直接把圖片放在公司目錄下？**刪除重來。**
+### 2. Resolve the organization first
 
-建立檔案時請參考 `Templates/People Template.md` 的結構，並補上 Long-Term 實體頁必要欄位（`aliases: []`、`orb_emotions: []`、`recall_count: 0`、`last_recalled: null`），將辨識出的資訊填入。
+Check whether `memorbs/Long-Term/Orgs/{PascalCompany}.md` already exists. If it does not, create it before you create the person, following the template at `memorbs/Templates/Org Template.md` and `memorb-conventions` — that means authority-control fields as well as ordinary ones: `aliases: ["{Company Name}"]`, `orb_emotions: []`, `recall_count: 0`, `last_recalled: null`.
 
-### 4. 圖檔搬移與重新命名 (絕對要求)
-使用終端機指令（如 `mv`），將原本的圖片檔案搬移到該人物資料夾下，**並且一定要改名**：
+The org comes first because the person page links to it. Creating the person first leaves a dangling link that `memorb-lint` will flag.
+
+### 3. Create the person as a bundle orb
+
+This person arrives with a physical attachment — the card image — so they get a dedicated Bundle folder under `memorbs/Long-Term/People/` (flat structure, no company nested folder):
+
+- **Target folder**: `memorbs/Long-Term/People/{PascalName}/` (or `memorbs/Long-Term/People/{PascalName}-{PascalCompany}/` if disambiguation is required)
+- **Person page**: `memorbs/Long-Term/People/{PascalName}/{PascalName}.md`
+
+**Naming & Frontmatter Rules:**
+- **No-Space PascalCase**: Filename and folder use `PascalCase` without spaces (e.g. `AlexChen`).
+- **Disambiguation**: If another person with the exact same name exists at a different company, append `-PascalCompany` (e.g. `AlexChen-AcmeCorp`).
+- **Aliases**: Frontmatter `aliases` must contain the original natural display name (e.g. `aliases: ["Alex Chen"]`).
+
+Build the page using the schema from `memorbs/Templates/People Template.md` and `memorb-conventions`.
+
+### 4. Move and rename the image (non-negotiable)
+
+Use a shell command such as `mv` to relocate the original image into the person's folder, **and rename it while you do**:
 
 ```bash
-# 取得保險庫根目錄 (相容不同環境)
-VAULT=$(find /sessions/*/mnt -maxdepth 1 -name "second-brain" -type d 2>/dev/null | head -1)
-if [ -z "$VAULT" ]; then
-  VAULT=$(pwd)
-fi
+VAULT=$(find . -maxdepth 4 -type d -name memorbs 2>/dev/null -exec dirname {} \; | head -1)
 
-TARGET_DIR="$VAULT/memorbs/Long-Term/People/{公司名稱}/{姓名}"
+TARGET_DIR="$VAULT/memorbs/Long-Term/People/{PascalName}"
 mkdir -p "$TARGET_DIR"
 
-# 將使用者指定的原圖檔搬移並重新命名
-# 假設原圖檔變數為 $ORIGIN_IMG_PATH，副檔名為 $EXT (如 png 或 jpg)
-mv "$ORIGIN_IMG_PATH" "$TARGET_DIR/{姓名}_名片.$EXT"
+# Move and rename original card scan (e.g., AlexChen_card.png)
+mv "$ORIGIN_IMG_PATH" "$TARGET_DIR/${PascalName}_card.$EXT"
 ```
 
- **防呆機制**：
-- 保留原本如 `Pasted image.png` 的檔名？**重來，必須改名為 `{姓名}_名片.png`。**
+**Guardrail:**
 
-完成搬移後，在 `{姓名}.md` 檔案的適當區塊（例如「基本資料」標題下方）插入圖片的 Wiki 連結：
-`![[{姓名}_名片.png]]` （請替換為實際副檔名）
+- Left the original name like `Pasted image.png` in place? **Start over — it has to become `{姓名}_名片.png`.**
 
-### 5. 結束紀錄
-1. 確保相關的實體（人物、組織）都已建立或更新。
-2. 在 `memorbs/log.md` 開頭 append 一筆 `## [YYYY-MM-DD] ingest | 名片：{姓名}（{組織}）`，含影響頁面；若使用者提到與此人的關係或印象，記進「訊號」欄位。
-3. 回報使用者操作完成。
+Once the file has moved, embed it in `{姓名}.md` at the appropriate spot (for example under the basic-details heading) with a wiki link:
+`![[{姓名}_名片.png]]` (substitute the real extension).
+
+### 5. Close out
+
+1. Confirm that every entity involved — the person and the organization — has been created or updated.
+2. Append an entry at the top of `memorbs/log.md`: `## [YYYY-MM-DD] ingest | 名片：{姓名}（{組織}）`, listing the pages you touched. If the user said anything about their relationship with this person or their impression of them, put it in the signal line — that is the raw material `dream-studio` feeds on, and it lives nowhere else.
+3. Report back to the user with the paths you created or changed.

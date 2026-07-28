@@ -117,7 +117,6 @@ Core skills write only inside `memorbs/` and run to completion on a vault contai
 
 | Skill | What it does | Requires |
 |---|---|---|
-| `m365-meeting-note` | Pull Teams transcripts from your calendar; produce summary, full minutes, and participant analysis. | M365 connector |
 | `recording-transcription` | Local audio (m4a/mp3/wav) → transcript via local Whisper, with long-file chunking and name/term correction. | Local Whisper |
 | `business-card-ingestion` | Turn business card photos or screenshots into People pages. | — |
 | `memorb-domain-query` | Look up companies, employees, and contacts by email address, domain, or company name. | Outlook/M365 (optional) |

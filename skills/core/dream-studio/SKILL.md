@@ -1,71 +1,71 @@
 ---
 name: dream-studio
-description: "夢工廠：每月重播 memorbs/log.md 的時間軸，找出反覆出現的主題，提議新增 Core orb、新增或修訂 Belief orb，更新 Island 現況敘事，最後輪替時間軸。這是 distillation pipeline 最後一步「Evaluate」的唯一執行者，也是 memorbs/HQ/Core/ 的唯一寫入者。觸發詞：做夢、夢工廠、dream studio、重播記憶、整理記憶、我最近變成什麼樣的人、我的信念有變嗎、更新核心記憶、Core orb、盤點信念。距上次執行超過一個月時可主動建議。前置依賴：memorb-conventions。"
+description: "The dream studio: once a month, replay the timeline in memorbs/log.md, find the themes that keep recurring, propose new Core orbs and new or revised Belief orbs, refresh the current-state narrative on each Island, and finally rotate the timeline. Sole executor of Evaluate, the last step of the distillation pipeline, and the only writer to memorbs/HQ/Core/. Triggers: dream, dream studio, replay my memories, review my memories, who have I become lately, have my beliefs changed, update core memory, Core orb, take stock of my beliefs, 做夢, 夢工廠, 重播記憶, 整理記憶, 我最近變成什麼樣的人, 我的信念有變嗎, 更新核心記憶, 盤點信念. Offer it proactively when more than a month has passed since the last run. Depends on: memorb-conventions."
 ---
 
-# Dream Studio（夢工廠：記憶重播與自我更新）
+# Dream Studio (Memory Replay and Self-Update)
 
-> 電影裡的夢工廠在夜裡把當天的素材重新剪接、上演；memOrb 的夢工廠做同一件事——把一段時間累積的 orb 重播一遍，看哪些主題反覆出現，然後決定要不要讓它們沉澱成核心記憶與信念。
+> In the film, the dream studio spends the night re-cutting the day's footage and staging it. memOrb's dream studio does the same job: replay the orbs a stretch of time has accumulated, see which themes keep coming back, and decide whether to let them settle into core memories and beliefs.
 >
-> 這是 distillation pipeline 第 5 步 **Evaluate** 的唯一執行者。其他 skill 負責記錄、查詢、淘汰；只有這裡會動 `memorbs/HQ/Core/`、`memorbs/HQ/Belief/` 與 Island 的現況敘事。
+> This is the sole executor of step 5 of the distillation pipeline, **Evaluate**. Other skills record, query, and retire; only this one touches `memorbs/HQ/Core/`, `memorbs/HQ/Belief/`, and the current-state narrative on an Island.
 >
-> **鐵律：階段 1-3 是純分析與討論，未經使用者逐項確認前，禁止寫入任何 Core／Belief／Island 檔案。** 改寫一個人的自我認同不能自動執行。
+> **Iron rule: stages 1-3 are analysis and discussion only. Write nothing to any Core, Belief, or Island file until the user has confirmed it item by item.** Rewriting a person's sense of who they are is not something you do automatically.
 
-## 執行頻率
+## How often to run
 
-以**月**為單位。不要每天跑——夢工廠的價值來自「一段時間之後回頭看」，跑太密會把普通的一天誤判成形成性經驗。執行完會輪替 `log.md`（見階段 5），所以「上次做夢至今」天然就是重播區間。
+**Monthly.** Do not run it daily — the value of the dream comes from looking back after time has passed, and running it too often mistakes an ordinary day for a formative experience. Each run rotates `log.md` (see stage 5), so "since the last dream" is already the natural replay window.
 
-## 動作順序
+## Order of operations
 
-### 階段 1：決定重播範圍（純對話）
+### Stage 1: Set the replay window (talk only)
 
-1. `memorbs/log.md` 的內容就是「上次做夢至今」——輪替機制保證了這一點，不必另外算區間。
-2. 讀檔頭確認起始日並向使用者確認。要拉更長區間就一併讀 `memorbs/log/{YYYY-MM}.md` 的往期檔案。
-3. 使用者可能想針對特定 Island 或特定事件做夢，允許縮小範圍。
+1. Whatever is in `memorbs/log.md` *is* "since the last dream" — rotation guarantees it, so there is no interval to compute.
+2. Read the file header to confirm the start date and check it with the user. For a longer window, also pull the back issues in `memorbs/log/{YYYY-MM}.md`.
+3. The user may want to dream about one particular Island or one particular event; narrowing the scope is allowed.
 
-### 階段 2：重播（素材收集）
+### Stage 2: Replay (gathering the footage)
 
-| 來源 | 路徑 | 取什麼 |
+| Source | Path | What to take |
 |------|------|--------|
-| **當期時間軸** | `memorbs/log.md` | **全文，這是主要素材**。特別注意各筆的「訊號」欄位——使用者的原話與情緒 |
-| 往期時間軸 | `memorbs/log/{YYYY-MM}.md` | 僅在使用者要求更長區間時讀 |
-| 待分類區 | `memorbs/HQ/OrbTrack/` | 尚未 triage 的內容 |
-| 現有自我 | `memorbs/HQ/Core/`、`memorbs/HQ/Belief/`、`memorbs/HQ/identity.md` | **全讀**（量小），作為比對基準 |
-| 島嶼現況 | `memorbs/Islands/*/000-MOC.md` | 現況段落，用於比對是否已經過時 |
-| 相關實體頁 | `memorbs/Long-Term/` | **只讀 log.md 點名過的頁面**，不要全庫掃描 |
+| **Current timeline** | `memorbs/log.md` | **The whole thing — this is the primary material.** Pay particular attention to each entry's signal line: the user's own words and the emotion behind them |
+| Past timelines | `memorbs/log/{YYYY-MM}.md` | Only when the user asks for a longer window |
+| Capture zone | `memorbs/HQ/OrbTrack/` | Whatever has not been triaged yet |
+| The current self | `memorbs/HQ/Core/`, `memorbs/HQ/Belief/`, `memorbs/HQ/identity.md` | **All of it** (the volume is small); this is the baseline you compare against |
+| Island current state | `memorbs/Islands/*/000-MOC.md` | The current-state section, to check whether it has gone stale |
+| Related entity pages | `memorbs/Long-Term/` | **Only the pages `log.md` actually named.** Never scan the whole vault |
 
-> `Daily Notes/` 是使用者原生資料夾，core 不依賴它。**存在就一併讀進來當補充素材，不存在就跳過**，重播不因此失效。
+> `Daily Notes/` is the user's own folder and core does not depend on it. **Read it as supplementary material if it exists, skip it if it does not** — the replay does not fail either way.
 
-### 階段 3：找共振（純分析，不寫檔）
+### Stage 3: Find the resonance (analysis only, no writes)
 
-逐一比對，產出候選清單。判準要能舉證，不能憑印象：
+Work through the material and produce a candidate list. Every judgement must be evidenced, not impressionistic.
 
-**Core orb 候選**——同時滿足：
+**Core orb candidates** — all of the following:
 
-1. 單一具體事件，講得出時間與場合（不是「這個月很忙」這種瀰漫狀態）
-2. 當下有明顯情緒強度
-3. **事後行為有改變**——這條最關鍵，沒有行為改變的強烈事件只是情緒，不是形成性經驗
-4. 能指向至少一座既有 Island；若指不到任何一座，先問使用者是不是該開新 Island（轉 `island-reclamation`），不要硬塞
+1. A single concrete event, with a time and a setting you can name (not a diffuse state like "busy month")
+2. Clear emotional intensity at the time
+3. **Behaviour changed afterwards** — this is the decisive one. An intense event that changed no behaviour is emotion, not a formative experience
+4. It points at at least one existing Island. If it points at none, ask the user whether an Island is missing (hand off to `island-reclamation`) rather than forcing it somewhere
 
-**Belief orb 候選**——同時滿足：
+**Belief orb candidates** — all of the following:
 
-1. 能寫成一句第一人稱陳述（「我在資訊不足時傾向先做再修」）
-2. 有 **≥2 個獨立來源 orb** 支撐，且來源不必是 Core——多數信念就是由一堆單獨看都不夠格當 Core 的小事累積出來的
-3. 不是外部量表貼上的標籤（MBTI、星座、測驗結果那類一律歸 `identity.md`）
+1. It can be written as one first-person sentence ("when I don't have enough information, I'd rather act and correct course")
+2. It is supported by **two or more independent source orbs**, and those sources need not be Core — most beliefs accumulate out of small things that would never qualify as Core individually
+3. It is not a label applied by an external instrument (MBTI, star signs, test results all belong in `identity.md`)
 
-**既有 Belief 的修訂訊號**：
+**Signals that an existing Belief needs revising:**
 
-| 訊號 | 建議處置 |
+| Signal | Suggested handling |
 |------|---------|
-| 新素材再次印證 | 強化：`derived_from` 補上新來源 |
-| 措辭與實際行為有落差 | 修訂措辭，保留 `formed_at`，內文加一段演變說明 |
-| 出現多筆矛盾證據 | **提出討論，不要直接改**。信念退役要慎重，見階段 5 |
+| New material confirms it again | Reinforce: add the new sources to `derived_from` |
+| The wording no longer matches the actual behaviour | Revise the wording, keep `formed_at`, and add a paragraph in the body explaining how it shifted |
+| Multiple pieces of contradicting evidence appear | **Raise it for discussion; do not just change it.** Retiring a belief is a serious act — see stage 5 |
 
-**Island 現況過時訊號**：MOC 的現況段落與期間內實際發生的事不符（主力焦點已轉移、目標已達成或已放棄）。
+**Signals that an Island's current state is stale**: the current-state section of its MOC does not match what actually happened during the period (the main focus has moved on, the goal has been reached or abandoned).
 
-### 階段 4：夢境報告 + 逐項確認（Gate，必經）
+### Stage 4: Dream report plus item-by-item confirmation (Gate, mandatory)
 
-在對話中呈現報告，**每一項都要單獨確認**，不可包裹成「以上全部執行嗎」：
+Present the report in conversation. **Every item is confirmed separately** — never bundled into a single "shall I do all of the above?":
 
 ```markdown
 ## 🌙 夢境報告：{起始日} – {結束日}
@@ -88,22 +88,22 @@ description: "夢工廠：每月重播 memorbs/log.md 的時間軸，找出反�
 - [[memorbs/Islands/{名稱}/000-MOC]]：{哪一段過時了、建議怎麼改}
 ```
 
-使用者可以逐項採納、修改措辭、或全部否決。**使用者自己寫的句子永遠優先於你擬的**——信念是他的，不是你的。
+The user may accept items one at a time, reword them, or reject everything. **A sentence the user wrote always beats one you drafted** — the belief is theirs, not yours.
 
-### 階段 5：寫入（僅限已確認項目）
+### Stage 5: Write (confirmed items only)
 
-1. **Core orb**：`memorbs/HQ/Core/{YYYY-MM-DD}-{slug}.md`，frontmatter 依 `memorb-conventions`（`orb_type: core`，不使用 `derived_from`）。內文寫事件本身與行為改變，不要抒情。
-2. **Belief orb**：`memorbs/HQ/Belief/{slug}.md`，`orb_type: belief`，`derived_from` 列出**所有**來源 orb 的完整路徑連結。
-3. **修訂既有 Belief**：`formed_at` 保持不變，內文加一段「演變」註記寫明日期、改了什麼、依據什麼。
-4. **信念退役**：不直接刪除。先在內文標註 `狀態：已被 [[新 orb]] 取代`，確認使用者同意後才交 `memorb-forgetter` 搬進 `memorbs/Dump/`。退役理由必須寫在 Dump 頁面裡。
-5. **Island 現況**：只改 `000-MOC.md` 的現況段落，其他段落不動。
-6. 確認每個新 orb 都被連到：Core orb 要有 Island 連得回去，Belief orb 要有 `derived_from` 來源。沒有索引檔，可達性只靠連結。
-7. **輪替時間軸**（夢工廠專屬職責，其他 skill 不得執行）：
+1. **Core orb**: `memorbs/HQ/Core/{YYYY-MM-DD}-{slug}.md`, frontmatter per `memorb-conventions` (`orb_type: core`, no `derived_from`). The body records the event itself and the change in behaviour. Do not wax lyrical.
+2. **Belief orb**: `memorbs/HQ/Belief/{slug}.md`, `orb_type: belief`, with `derived_from` listing full-path links to **every** source orb.
+3. **Revising an existing Belief**: leave `formed_at` untouched and add an evolution note to the body stating the date, what changed, and on what evidence.
+4. **Retiring a belief**: never delete it. Mark the body `狀態：已被 [[新 orb]] 取代` first, and only after the user agrees hand it to `memorb-forgetter` to move into `memorbs/Dump/`. The reason for retirement must be written on the Dump page.
+5. **Island current state**: edit only the current-state section of `000-MOC.md`; leave the rest of the page alone.
+6. Confirm every new orb is linked from somewhere: a Core orb needs an Island that links back to it, a Belief orb needs its `derived_from` sources. There is no index file; reachability rests entirely on links.
+7. **Rotate the timeline** (the dream studio's exclusive duty — no other skill may do this):
    ```bash
    mkdir -p "$VAULT/memorbs/log"
    mv "$VAULT/memorbs/log.md" "$VAULT/memorbs/log/{起始月 YYYY-MM}.md"
    ```
-   接著建立新的空 `memorbs/log.md`，檔頭寫入本次夢境結論當作新一期的起點：
+   Then create a fresh, empty `memorbs/log.md` whose header records this dream's conclusions as the starting point of the new period:
    ```markdown
    # Timeline — since {YYYY-MM-DD}
 
@@ -113,27 +113,27 @@ description: "夢工廠：每月重播 memorbs/log.md 的時間軸，找出反�
    - 更新 Island：[[...]]
    - 封存上期：[[memorbs/log/{YYYY-MM}]]
    ```
-   往期檔案一律保留，不刪除。
+   Past issues are always kept, never deleted.
 
-### 階段 6：驗證
+### Stage 6: Verify
 
-- 每個新 Belief 的 `derived_from` 連結都指得到實際檔案（grep 比對）
-- 每個新 Core orb 都有 Island 連得回去
-- `memorbs/log/{YYYY-MM}.md` 確實存在且內容完整、新的 `log.md` 已建立
-- 向使用者回報實際寫入的檔案路徑清單
+- Every new Belief's `derived_from` links resolve to real files (check with grep)
+- Every new Core orb has an Island linking back to it
+- `memorbs/log/{YYYY-MM}.md` exists and is complete, and the new `log.md` has been created
+- Report the list of paths actually written back to the user
 
 ## Red Flags
 
-| 藉口 | 真實情況 |
+| Excuse | What is actually true |
 |------|---------|
-| 「共振很明顯，直接建 Core orb」 | 階段 4 是鐵律。Core orb 會驅動 Island，建錯了整座島的敘事都會歪。 |
-| 「這個月情緒起伏很大，算形成性經驗」 | 沒有事後行為改變的強烈情緒只是情緒。第 3 條判準不能跳過。 |
-| 「使用者最近很低潮，幫他寫一條信念鼓勵一下」 | 信念是從證據提煉的，不是打氣。編造信念會污染自我認同，比污染筆記嚴重得多。 |
-| 「這條舊信念看起來不成立了，先刪掉」 | 信念不刪，走退役流程並保留理由。電影裡信念被連根拔起是災難場面，不是常規維運。 |
-| 「使用者的措辭有點粗糙，幫他潤飾成更好的句子」 | 用使用者自己的話。潤飾過的信念讀起來像別人的。 |
-| 「順便判斷一下使用者的性格傾向」 | 只做素材歸納，不做心理診斷、不做性格評判。證據只能是使用者自己寫下的內容。 |
-| 「每天跑一次比較即時」 | 以月為單位。跑太密會把普通日子誤判成形成性經驗，稀釋 Core orb 的意義。 |
-| 「Core orb 找不到對應的島，先放著」 | 指不到 Island 的 Core orb 是孤兒。先問要不要開新 Island，轉 `island-reclamation`。 |
-| 「順手把 OrbTrack 也清一清」 | 超出職責，那是 `orbtrack-triage`。夢工廠只讀不搬。 |
-| 「log.md 太長了，先砍掉舊的」 | 輪替是搬進 `memorbs/log/`，不是刪除。往期時間軸是唯一能還原「那陣子在發生什麼」的東西。 |
-| 「這期 log.md 內容很少，跳過輪替」 | 輪替照做。跳過會讓下次的區間邊界對不上，夢工廠會重複讀到已經處理過的素材。 |
+| "The resonance is obvious, just create the Core orb" | Stage 4 is the iron rule. Core orbs drive Islands; get one wrong and the whole island's narrative tilts. |
+| "It was an emotional month, that counts as formative" | Intense emotion with no subsequent change in behaviour is just emotion. Criterion 3 is not skippable. |
+| "The user has been low lately, write them an encouraging belief" | Beliefs are distilled from evidence, not from pep talks. A fabricated belief pollutes someone's identity — far worse than polluting their notes. |
+| "This old belief looks false now, delete it" | Beliefs are not deleted. Run the retirement process and keep the reason. In the film, a belief torn out by the roots is a disaster scene, not routine maintenance. |
+| "The user's wording is rough, polish it into a better sentence" | Use the user's own words. A polished belief reads like somebody else's. |
+| "While I'm at it, I'll assess the user's personality" | Summarize the material; do not diagnose and do not judge character. The only admissible evidence is what the user wrote themselves. |
+| "Running it daily would be more timely" | Monthly. Running too often mistakes ordinary days for formative experiences and dilutes what a Core orb means. |
+| "This Core orb has no matching island, leave it for now" | A Core orb that points at no Island is an orphan. Ask whether a new Island is needed and hand off to `island-reclamation`. |
+| "I'll tidy up OrbTrack while I'm here" | Out of scope — that belongs to `orbtrack-triage`. The dream studio reads; it does not move things. |
+| "log.md is getting long, trim the old parts" | Rotation moves it into `memorbs/log/`; it does not delete it. Past timelines are the only thing that can reconstruct what was going on back then. |
+| "This period's log.md is thin, skip the rotation" | Rotate anyway. Skipping it misaligns the next window's boundary, and the dream studio will re-read material it already processed. |

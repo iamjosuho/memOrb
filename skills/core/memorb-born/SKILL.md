@@ -22,16 +22,18 @@ description: "Phase 0 Vault Initialization Skill: setup user identity, AI adviso
      mkdir -p "$VAULT/memorbs/HQ/Core"
      mkdir -p "$VAULT/memorbs/HQ/Belief"
      mkdir -p "$VAULT/memorbs/HQ/OrbTrack"
+     mkdir -p "$VAULT/memorbs/Templates"
      mkdir -p "$VAULT/memorbs/Islands"
      mkdir -p "$VAULT/memorbs/Long-Term/Projects"
      mkdir -p "$VAULT/memorbs/Long-Term/People"
      mkdir -p "$VAULT/memorbs/Long-Term/Orgs"
      mkdir -p "$VAULT/memorbs/Dump"
      ```
-   - Ensure initial creation of the timeline `memorbs/log.md` if not present, seeded with a `# Timeline — since {YYYY-MM-DD}` header.
+   - Ensure initial creation of `memorbs/HQ/glossary.md` and timeline `memorbs/log.md` if not present, seeded with a `# Timeline — since {YYYY-MM-DD}` header.
 4. **Generate/Update HQ Hot Cache**:
    - `memorbs/HQ/persona.md`: AI tone/role from Q3 (<100 lines).
    - `memorbs/HQ/identity.md`: name, birthday, education/career history, role, organization, goals, and key relationships table from Q1/Q2/Q4 (<100 lines).
-   - Generate/Update `CLAUDE.md` and `AGENT.md`: add command "Must read `memorbs/HQ/persona.md` and `memorbs/HQ/identity.md`"
+   - `memorbs/HQ/glossary.md`: initial empty table for terms.
+   - **CLAUDE.md Snippet**: Provide or append the non-intrusive `<!-- memOrb:start -->` protected block into `CLAUDE.md` (never overwrite existing personal rules).
 5. **Log Event**:
    - Record initialization in `memorbs/log.md`.

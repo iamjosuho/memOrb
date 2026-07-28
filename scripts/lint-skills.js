@@ -202,6 +202,7 @@ function validateFixturesStructure() {
     'HQ/Core',
     'HQ/Belief',
     'HQ/OrbTrack',
+    'Templates',
     'Islands',
     'Long-Term/Projects',
     'Long-Term/People',
@@ -327,6 +328,12 @@ const DEPRECATED_PATTERNS = [
     reason: 'The memorbs/meeting-note/ namespace was abolished on 2026-07-26. A meeting record is not its own category — it is an orb with a source:, staged in OrbTrack like any other.',
     exemptFiles: [],
   },
+  {
+    pattern: /(m365-meeting-note|obsidian-cli)/,
+    suggestion: 'recording-transcription or core memory tools',
+    reason: 'm365-meeting-note and obsidian-cli were removed on 2026-07-28 to streamline core framework.',
+    exemptFiles: ['docs/skill-audit-2026-07-26.md', 'docs/worldview-mapping.md'],
+  },
 ];
 
 function validateDeprecatedPathReferences() {
@@ -367,6 +374,52 @@ function validateDeprecatedPathReferences() {
   if (hits === 0) {
     console.log(`  ✓ No deprecated path references found across ${filesToScan.length} Markdown file(s).`);
   }
+}
+
+/**
+ * ---------------------------------------------------------------------------
+ * Language guard
+ * ---------------------------------------------------------------------------
+ * SKILL.md instructions are written in English: they are read by contributors
+ * who install this plugin, not only by its author. Two things are exempt and
+ * deliberately so:
+ *
+ *   - the `description` frontmatter, whose trigger phrases must match what the
+ *     user actually says out loud, so they are listed in both languages;
+ *   - fenced code blocks, which carry sample vault content, filenames and
+ *     output templates — and vault content is Traditional Chinese by design.
+ *
+ * Everything else (prose, tables, Red Flags) must be English. The threshold is
+ * a ratio rather than zero so an inline term or a quoted trigger word does not
+ * trip the check.
+ */
+const CJK_BODY_MAX_PERCENT = 10;
+
+function validateSkillLanguage(filePath) {
+  const relativePath = path.relative(REPO_ROOT, filePath).split(path.sep).join('/');
+  const raw = fs.readFileSync(filePath, 'utf8');
+
+  const body = raw
+    .replace(/^---\n[\s\S]*?\n---\n/, '')   // drop frontmatter (trigger phrases)
+    .replace(/```[\s\S]*?```/g, '')          // drop fenced code blocks (sample content)
+    .replace(/`[^`\n]*`/g, '');              // drop inline code (paths, filenames)
+
+  const cjk = (body.match(/[一-鿿　-〿＀-￯]/g) || []).length;
+  const dense = body.replace(/\s/g, '').length;
+  if (dense === 0) return;
+
+  const percent = Math.round((cjk / dense) * 100);
+  if (percent > CJK_BODY_MAX_PERCENT) {
+    console.error(
+      `  ❌ ERROR: ${relativePath} body is ${percent}% CJK (limit ${CJK_BODY_MAX_PERCENT}%). ` +
+      `Rewrite the instructions in English.\n` +
+      `     ↳ Trigger phrases in the 'description' frontmatter stay bilingual, and sample vault ` +
+      `content inside code blocks stays Traditional Chinese — both are already exempt from this count.`
+    );
+    errors++;
+    return;
+  }
+  console.log(`  ✓ ${relativePath} (${percent}% CJK in body)`);
 }
 
 /**
@@ -411,6 +464,11 @@ const pluginData = validatePluginJson();
 validateSkillRegistration(pluginData, skillFiles);
 validateFixturesStructure();
 validateDeprecatedPathReferences();
+
+console.log(`\n🌐 Checking SKILL.md instruction language (English body, bilingual triggers)...`);
+for (const file of skillFiles) {
+  validateSkillLanguage(file);
+}
 
 console.log(`\n----------------------------------------`);
 console.log(`📊 Summary: Scanned ${scannedFiles} SKILL.md file(s).`);

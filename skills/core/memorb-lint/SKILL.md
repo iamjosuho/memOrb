@@ -1,6 +1,6 @@
 ---
 name: memorb-lint
-description: "Wiki Lint 工作流：memory 健檢，找出矛盾、過期、孤兒頁、缺頁、缺連結。觸發詞：整理 memory、檢查第二大腦、健檢、memory 有沒有要更新的。跑 dream-studio 之前主動建議執行。"
+description: "Wiki Lint workflow: a health check over the memory vault that surfaces contradictions, stale pages, orphans, missing pages, and missing links. Offer to run it before dream-studio. Triggers: tidy up memory, check the second brain, health check, does memory need updating, 整理 memory, 檢查第二大腦, 健檢, memory 有沒有要更新的."
 ---
 
 # Memorb Lint Skill
@@ -14,34 +14,34 @@ When scanning directories under `memorbs/Long-Term/` or `memorbs/HQ/Core/`, `mem
 
 Apply this check whenever scanning for orphan pages, broken links, or unregistered entries.
 
-## 動作順序
+## Order of operations
 
-1. 列出 `memorbs/Long-Term/`、`memorbs/HQ/Core`、`memorbs/HQ/Belief` 全部檔案 + 隨機抽 3-5 頁細看
-2. 依檢查清單與 **MUSTY 淘汰判準** 逐項核對：
+1. List every file under `memorbs/Long-Term/`, `memorbs/HQ/Core`, and `memorbs/HQ/Belief`, then pick 3-5 pages at random and read them closely
+2. Go down the checklist below, judging each item against the **MUSTY retirement criteria**:
 
-| 檢查項 | MUSTY 歸屬 | 說明 |
+| Check | MUSTY letter | What it means |
 |--------|-----------|------|
-| 矛盾 / 誤導 | **M** - Misleading | 同一人/專案在兩頁說法不一，或頁面內容與 log.md 最新事實矛盾 |
-| 損壞 / 格式破壞 | **U** - Ugly | 格式壞掉、連結全斷、孤兒頁（全庫沒有任何 `[[連結]]` 指向它） |
-| 被取代 / 已結束 | **S** - Superseded | 整頁對應實體已消失（專案完工結案、人員離職無互動） ➔ **提報交由 `memorb-forgetter` 歸檔** |
-| 價值太低 / 冷記憶 | **T** - Trivial | `recall_count` 極低（如 <2）且 `last_recalled` 極舊 ➔ **提報交由 `memorb-forgetter` 歸檔** |
-| 落單附件 | **U** - Ugly | bundle 資料夾裡有附件、卻找不到同名的 `{name}.md` 本體 ➔ 附件失去所屬 orb，提報處理 |
-| 媒體檔誤入庫 | **Y** - Your collection doesn't need | `memorbs/` 底下出現音訊或影片檔（`.m4a`／`.mp3`／`.wav`／`.mp4`…）➔ 只有文件檔該進 vault，提報移出並在 orb 內文記位置 |
-| 範疇外 | **Y** - Your collection doesn't need | 內容非屬記憶庫守備範圍，人工提報處理 |
-| 缺別名註冊 (Authority) | 權威控制 | `log.md` 出現、但未包含在任何頁面 `aliases` 清單的實體詞 ➔ 提報為潛在分裂筆記 |
-| 缺頁 / 缺交叉連結 | 結構完整度 | log.md 多次提及但無專屬頁，或 `memorbs/Long-Term/People/` 頁未連至 `memorbs/Long-Term/Projects/` 頁 |
-| 時間軸斷裂 | 結構完整度 | `log.md` 有連續多日空白，或 entry 普遍缺「訊號」欄位 ➔ 提醒使用者，夢工廠會因此無料可重播 |
+| Contradictory / misleading | **M** - Misleading | Two pages tell different stories about the same person or project, or a page contradicts the latest facts in log.md |
+| Broken / malformed | **U** - Ugly | Formatting has fallen apart, links are all dead, or the page is an orphan (nothing anywhere in the vault points a `[[link]]` at it) |
+| Superseded / finished | **S** - Superseded | The entity behind the whole page is gone (project shipped and closed, person left with no further contact) ➔ **report it and hand it to `memorb-forgetter` to archive** |
+| Too little value / cold memory | **T** - Trivial | `recall_count` is very low (say <2) and `last_recalled` is very old ➔ **report it and hand it to `memorb-forgetter` to archive** |
+| Stranded attachment | **U** - Ugly | A bundle folder holds attachments but no same-named `{name}.md` body ➔ the attachments have lost the orb they belonged to; report for handling |
+| Media file in the vault | **Y** - Your collection doesn't need | Audio or video has appeared under `memorbs/` (`.m4a` / `.mp3` / `.wav` / `.mp4` …) ➔ only documents belong in the vault; report it, move it out, and record its location in the orb body |
+| Out of scope | **Y** - Your collection doesn't need | The content is not something the memory vault is here to hold; report it for a human decision |
+| Unregistered alias (Authority) | authority control | An entity term shows up in `log.md` but appears in no page's `aliases` list ➔ report it as a potential split note |
+| Missing page / missing cross-link | structural integrity | Mentioned repeatedly in log.md but has no page of its own, or a `memorbs/Long-Term/People/` page is not linked to its `memorbs/Long-Term/Projects/` page |
+| Broken timeline | structural integrity | `log.md` has several consecutive blank days, or entries are generally missing the signal line ➔ tell the user, because dream-studio will have nothing to replay |
 
-3. **提出建議清單給使用者確認**：
-   - 頁面修正／擴充 ➔ 直接由 lint 協助修復。
-   - 頁面淘汰歸檔 ➔ 提示使用者確認後，呼叫 `memorb-forgetter` 執行 `memorbs/Dump/` 搬移與 Wiki Link 自動改寫。
-4. 修完在 `memorbs/log.md` append：
+3. **Bring the user a list of proposals to confirm**:
+   - Page fixes and expansions ➔ lint repairs them directly.
+   - Page retirement and archiving ➔ get the user's confirmation, then call `memorb-forgetter` to perform the move into `memorbs/Dump/` and rewrite the wiki links automatically.
+4. Once the fixes are in, append to `memorbs/log.md`:
    ```markdown
    ## [YYYY-MM-DD] lint | 範圍 — 修了 N 項
    ```
 
 
-## 附帶檢查（可選）
+## Side checks (optional)
 
-- `memorbs/HQ/persona.md` + `memorbs/HQ/identity.md` 合計是否超過 100 行（Hot Cache 上限）
-- `.claude/skills/` 路由表與實際目錄是否一致（見 writing-memorb-skills）
+- Whether `memorbs/HQ/persona.md` plus `memorbs/HQ/identity.md` exceed 100 lines combined (the Hot Cache ceiling)
+- Whether the `.claude/skills/` router table matches the actual directory (see `writing-memorb-skills`)

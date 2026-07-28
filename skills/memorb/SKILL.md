@@ -17,7 +17,7 @@ Before performing any file operation:
 1. Read this gateway file.
 2. Read `SKILL.md` for **every matching sub-skill** in the routing table below.
 3. All write operations must adhere to `memorb-conventions` (paths, naming, frontmatter).
-4. Load multiple sub-skills if needed (e.g., transcript processing = `m365-meeting-note` + `memorb-ingest`).
+4. Load multiple sub-skills if needed (e.g., transcript processing = `recording-transcription` + `memorb-ingest`).
 
 ### Ownership boundary
 **memOrb may read anything the user points it at; it writes only inside `memorbs/`.** No exceptions — this binds extensions too.
@@ -48,9 +48,8 @@ Extensions reside in `skills/extensions/{name}/SKILL.md`.
 ### Extension Skills (`memorb-extensions`)
 | Sub-skill | Location | Trigger / Scenario |
 | :--- | :--- | :--- |
-| **m365-meeting-note** | `extensions/m365-meeting-note` | Process Teams meeting transcripts & minutes |
 | **recording-transcription** | `extensions/recording-transcription` | Non-Teams voice recordings (phone, interview, m4a) to transcript |
-| **business-card-ingestion** | `extensions/business-card-ingestion` | Business cards to `memorbs/Long-Term/People/` Page Bundle |
+| **business-card-ingestion** | `extensions/business-card-ingestion` | Business cards to `memorbs/Long-Term/People/` entity notes |
 | **memorb-domain-query** | `extensions/memorb-domain-query` | Bi-directional domain/email lookup & M365/Outlook integration |
 
 ## Extension Interactive Installation & Fallback Protocol
