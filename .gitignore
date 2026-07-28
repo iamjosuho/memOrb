@@ -4,6 +4,9 @@
 .idea/
 *.swp
 
+# Node & Dependencies
+node_modules/
+
 # Local Agent sandbox testing directory (Git ignored)
 sandbox/
 test-vault/

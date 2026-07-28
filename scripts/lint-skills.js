@@ -220,6 +220,26 @@ function validateFixturesStructure() {
     }
   }
 
+  const requiredTemplates = [
+    'People Template.md',
+    'Org Template.md',
+    'Project Template.md',
+    'Core Template.md',
+    'Belief Template.md',
+    'Persona Template.md',
+    'Identity Template.md'
+  ];
+
+  for (const tpl of requiredTemplates) {
+    const tplPath = path.join(memorbsFixturesPath, 'Templates', tpl);
+    if (!fs.existsSync(tplPath)) {
+      console.error(`  ❌ ERROR: Missing required fixture template: fixtures/memorbs/Templates/${tpl}`);
+      errors++;
+    } else {
+      console.log(`  ✓ Template exists: fixtures/memorbs/Templates/${tpl}`);
+    }
+  }
+
   // Nothing may live at the fixtures root except memorbs/ — mirrors the "never write outside memorbs/" rule.
   const strayRootDirs = ['Long-Term', 'Islands', 'Resources', 'Daily Notes', 'WeeklyRetro'];
   for (const stray of strayRootDirs) {

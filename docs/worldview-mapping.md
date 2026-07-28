@@ -23,6 +23,8 @@ Read the tiers bottom-up: an orb is made, shelved, recalled, weeded — and what
 | **Ramp landing bay** | `memorbs/HQ/OrbTrack/` | Staging only. Holds **distilled** orbs awaiting triage — not a dumping ground for raw input. Emptied by triage, never left to accumulate. | `orbtrack-triage` |
 | **The timeline** | `memorbs/log.md` | The only layer that records *when*. Entity pages are living documents with no per-event dates and OrbTrack is emptied by design, so neither can reconstruct a period. Each entry carries a **signal** line — the user's own unpolished words for something that mattered but wasn't shaped enough to become an orb. | all write skills append here |
 | **Memory Ingest Worker** | The act of **distilling** | Crystallizes raw material (transcripts, articles, PDFs) into orbs, then encodes and shelves them. | `memorb-ingest` |
+| **Domain Glossary** | `memorbs/HQ/glossary.md` | Domain terminology & acronym authority control (Hot Cache, read by ingest/transcription to ground domain vocabulary, code words, and acronyms). | `memorb-ingest`, `recording-transcription` |
+| **Master Templates** | `memorbs/Templates/` | Master templates for entities & orbs (standard templates copied by `memorb-born`). | `memorb-born`, `memorb-conventions` |
 | **Long-Term Shelves** | `memorbs/Long-Term/` | Library classification: three shelves to start (People, Projects, Orgs), growing organically as OrbTrack clusters reveal recurring themes. Entity pages are *authority records* — one per entity, singular, with aliases and recall metrics. | `memorb-conventions` |
 
 > **Entities are singular; events carry dates.** An entity page (`Acme.md`) never multiplies. An event that happens twice becomes two dated orbs (`2026-07-26-Acme-應徵/`, `2027-03-11-Acme-應徵/`), both linked from the entity page, which accumulates the history. This is what keeps a recurring event from either colliding on filename or collapsing into a single undated page.
@@ -49,7 +51,7 @@ This is the tier that separates memOrb from a filing system. Everything above he
 | Film component | memOrb | How it works |
 | :--- | :--- | :--- |
 | **Headquarters** | The current AI session context | Where you and the agent actually think. `persona.md` and `identity.md` are the Hot Cache loaded into HQ at the start of every session (together under 100 lines). |
-| **The Emotions at the console** | `memorbs/HQ/persona.md` | The crew operating Headquarters — the AI advisor's tone, role, and how it talks to you. |
+| **The Emotions at the console** | `memorbs/HQ/persona.md` | The crew operating Headquarters — acts as a **Cinematic Multi-Persona Control Room** (managed by a Master Host) with a **Mood-Adaptive Counterweight System**. Dispatches complementary sub-personalities (Comforting Companion, Calm Anchor, Loyal Sidekick, Rational Architect, Spark Catalyst) via a Dual Switching Protocol (implicit mood detection + explicit tag overrides). Responses open with <code>[🎭 Active Alter: ... | Trigger: ...]</code>. |
 | **Sense of Self** | `memorbs/HQ/identity.md` | Who the user is: background, goals, key relationships, and self-descriptive attributes (MBTI and similar labels belong here, not in `Belief/`). |
 | **Core Memory Slot** | `memorbs/HQ/Core/` | One orb per file. Formative experiences that drive the Islands. |
 | **Belief System** | `memorbs/HQ/Belief/` | One orb per file. Value and principle statements distilled from lived experience. |
@@ -118,16 +120,6 @@ Listed for completeness — these have no memOrb counterpart and none is promise
 - **Imagination Land** — speculative and counterfactual thinking
 - **The Subconscious** — where troublesome memories are kept out of reach
 - **Mind Workers beyond the Forgetter** — the wider maintenance crew
-
-Removed *(all 2026-07-26)*:
-
-- `memorbs/MEMORY.md` — a hand-maintained index of what the filesystem already knows. Any index maintained by hand drifts, and the 200-line cap meant it could never scale with the vault. Lookup is now `ls` plus `grep`; reachability is guaranteed by bi-directional links, and an unlinked page is simply an orphan for the linter to catch
-- `Resources/` — PARA's R maps to Islands, so a separate reference folder was never needed. It also forced memOrb to write outside its own namespace, and "write there if the folder happens to exist" gave the same operation three different outcomes depending on what a user named their folders
-- `OrbTrack/Attachments/` and the `source:` field — two more ways to attach raw material, competing with bundle orbs. Consolidated onto bundles, where lifecycle is automatic
-- `memorbs/meeting-note/` — a meeting record is not its own category; it is an orb with its transcript bundled alongside
-- `session-closeout` — handled real-time writes and git operations, which sit outside the memory framework and overlapped with distillation
-- `daily-note` — a dated bucket holding many unrelated ideas is the opposite of an atomic note. The timeline role it was really performing moved to `memorbs/log.md`, which does it better: structured entries, a signal field, and automatic rotation
-- `weekly-retro` — task management (done / not done / next week's intentions) rather than memory work, and overlapping with `dream-studio`'s periodic review
 
 ---
 

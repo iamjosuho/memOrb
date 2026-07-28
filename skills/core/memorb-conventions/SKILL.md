@@ -42,7 +42,11 @@ So memOrb grows exactly **one** folder in the user's vault:
     ├── Templates/              ← standard templates for entities and orbs
     │   ├── People Template.md
     │   ├── Org Template.md
-    │   └── Project Template.md
+    │   ├── Project Template.md
+    │   ├── Core Template.md
+    │   ├── Belief Template.md
+    │   ├── Persona Template.md
+    │   └── Identity Template.md
     ├── Islands/                ← domains of long-term responsibility or interest: current state, goals, section notes, MOC only — no entity pages, links out to Long-Term/
     ├── Long-Term/              ← the shelves: actual content pages, one page per entity
     │   ├── Projects/           ← deadline-bound work with milestone history
@@ -274,6 +278,8 @@ Templates live in `memorbs/Templates/`:
 - `Project Template.md`: Standard layout for project pages (`type: project`, `status`, `target_date`).
 - `Core Template.md`: Standard layout for Core orbs.
 - `Belief Template.md`: Standard layout for Belief orbs.
+- `Persona Template.md`: Standard layout for AI Advisor persona & SOUL (`memorbs/HQ/persona.md`).
+- `Identity Template.md`: Standard layout for User profile & identity (`memorbs/HQ/identity.md`).
 
 ## Agent Instruction Snippet (`CLAUDE.md`)
 

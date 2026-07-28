@@ -9,23 +9,44 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![skills.sh](https://skills.sh/b/iamjosuho/memorb)](https://skills.sh/iamjosuho/memorb)
 
+[ English ](README.md) | [ 繁體中文 ](README.zh-TW.md)
+
 ---
 
-## What is memOrb?
+## 🔮 What is memOrb?
 
 memOrb is a suite of Agent Skills that turns your AI assistant's scattered session output into a structured, self-maintaining memory vault — markdown files you own, in a folder layout you can read without the agent.
 
+Most memory systems help you remember what you did. This one is built so that, a year in, you can see who you became. It works on the scale of months, not sessions.
+
+### 🎭 Flagship Feature: Cinematic Multi-Persona System
+
+Unlike static AI assistants with a single tone, memOrb's persona system acts as a **Cinematic Multi-Persona Control Room** inspired by movie split personalities.
+
+**Mood-Adaptive Counterweight Logic**: Rather than mirroring emotional instability, the AI dispatches the optimal complementary sub-personality (Alter) based on user's emotional state:
+- 🛡️ **The Comforting Companion**: Sadness / grief -> empathetic listening & gentle comfort.
+- ⚓ **The Calm Anchor**: Anger / frustration -> serene de-escalation & objective clarity.
+- 👯 **The Loyal Sidekick**: Explicit calls like "Stand by me and vent!" -> 100% standing shoulder-to-shoulder, venting together.
+- 🧠 **The Rational Architect**: Anxiety / overwhelm -> 3-step structured problem solving.
+- ⚡ **The Spark Catalyst**: Procrastination / stuck -> energetic spark & minimal viable action.
+
+**Dual Switching Protocol**: Automatic implicit sentiment detection by Master Host + explicit tag overrides like `[Switch: Sidekick]`.
+
+**Cinematic Header**: Responses open with `[🎭 Active Alter: ... | Trigger: ...]`.
+
+*(Reference `memorbs/HQ/persona.md` and `memorbs/Templates/Persona Template.md`)*
+
+### 🧠 Cognitive Memory Metaphor
+
 It fuses three established methods under one metaphor:
 
-|                 | Method                 | In memOrb                                                                            |
-| :-------------- | :--------------------- | :----------------------------------------------------------------------------------- |
-| **The unit**    | Atomic notes           | One memorb holds one idea — self-contained, bi-directionally linked                  |
+|                 | Method                 | In memOrb                                                                                      |
+| :-------------- | :--------------------- | :--------------------------------------------------------------------------------------------- |
+| **The unit**    | Atomic notes           | One memorb holds one idea — self-contained, bi-directionally linked                            |
 | **The shelves** | PARA                   | Triage sorts each memorb into Projects, Areas & Resources (both = Islands), or Archives (Dump) |
-| **The weeding** | Library MUSTY criteria | The Forgetter archives what's misleading, superseded, or trivial                     |
+| **The weeding** | Library MUSTY criteria | The Forgetter archives what's misleading, superseded, or trivial                               |
 
 The metaphor is a certain animated film about the inside of a mind, and it isn't decoration. In that film a person becomes whole when core memories power Islands of Personality, and when the mind is finally willing to let some memories go. memOrb runs that architecture literally: sessions distill into memorbs, memorbs consolidate into projects and people, and the ones that resonate become Core orbs, then Beliefs, then reshape your Islands.
-
-Most memory systems help you remember what you did. This one is built so that, a year in, you can see who you became. It works on the scale of months, not sessions.
 
 → [**Full worldview mapping**](docs/worldview-mapping.md) — every film component, its memOrb counterpart, and the skill that runs it.
 
@@ -99,19 +120,19 @@ Skills trigger from natural language — no slash commands required after setup.
 
 Core skills write only inside `memorbs/` and run to completion on a vault containing nothing else. They can read your existing notes when you point them at something, but they never create folders outside their own namespace and never depend on one existing. Anything that needs an outside system is an extension — and the same write boundary applies there.
 
-| Skill | What it does |
-|---|---|
-| `memorb` | Gateway router. Read first; dispatches to the right sub-skill. |
-| `memorb-conventions` | Base layer: paths, folder structure, naming, YAML frontmatter schema, templates. Prerequisite for every write skill. |
-| `memorb-born` | Phase 0 vault initialization — identity, advisor persona, communication preferences, core structure. |
-| `memorb-ingest` | Ingest raw material (transcripts, articles, PDFs) and update structured memory pages. |
-| `memorb-query` | Read memory before answering questions about people, projects, or decisions; backfill insights afterward. |
-| `memorb-lint` | Memory health check — contradictions, stale pages, orphans, missing pages and links. |
-| `memorb-forgetter` | Archive outdated or MUSTY-flagged pages to `memorbs/Dump/` and repair wiki-links. |
-| `orbtrack-triage` | Clear the OrbTrack staging area, classifying and moving notes by PARA. |
-| `dream-studio` | Monthly replay of the timeline — proposes Core orbs, adds or revises Beliefs, refreshes Island narrative, then rotates the log. Every write needs your confirmation. |
-| `island-reclamation` | Stand up a new Island — define scope and naming, agree the file list, then build and sync. |
-| `writing-memorb-skills` | Meta skill for adding or modifying any sub-skill in this suite. |
+| Skill                   | What it does                                                                                                                                                         |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `memorb`                | Gateway router. Read first; dispatches to the right sub-skill.                                                                                                       |
+| `memorb-conventions`    | Base layer: paths, folder structure, naming, YAML frontmatter schema, templates. Prerequisite for every write skill.                                                 |
+| `memorb-born`           | Phase 0 vault initialization — identity, advisor persona, communication preferences, core structure.                                                                 |
+| `memorb-ingest`         | Ingest raw material (transcripts, articles, PDFs) and update structured memory pages.                                                                                |
+| `memorb-query`          | Read memory before answering questions about people, projects, or decisions; backfill insights afterward.                                                            |
+| `memorb-lint`           | Memory health check — contradictions, stale pages, orphans, missing pages and links.                                                                                 |
+| `memorb-forgetter`      | Archive outdated or MUSTY-flagged pages to `memorbs/Dump/` and repair wiki-links.                                                                                    |
+| `orbtrack-triage`       | Clear the OrbTrack staging area, classifying and moving notes by PARA.                                                                                               |
+| `dream-studio`          | Monthly replay of the timeline — proposes Core orbs, adds or revises Beliefs, refreshes Island narrative, then rotates the log. Every write needs your confirmation. |
+| `island-reclamation`    | Stand up a new Island — define scope and naming, agree the file list, then build and sync.                                                                           |
+| `writing-memorb-skills` | Meta skill for adding or modifying any sub-skill in this suite.                                                                                                      |
 
 ### Extensions
 
@@ -154,9 +175,18 @@ Long-Term memory starts with three shelves — People, Projects, Orgs — and gr
     ├── HQ/                     # Headquarters: the console and what's beneath it
     │   ├── persona.md          # AI advisor tone & role (Hot Cache, always read)
     │   ├── identity.md         # Background, goals, key relationships (Hot Cache, always read)
+    │   ├── glossary.md         # Domain terminology, acronyms, code words (Hot Cache, read by ingest/transcription)
     │   ├── Core/               # Core Memory orbs — one formative experience per file
     │   ├── Belief/             # Belief orbs — values and principles distilled from lived experience
     │   └── OrbTrack/           # Fast capture & pending triage
+    ├── Templates/              # Standard templates for entities and orbs (copied by memorb-born)
+    │   ├── People Template.md
+    │   ├── Org Template.md
+    │   ├── Project Template.md
+    │   ├── Core Template.md
+    │   ├── Belief Template.md
+    │   ├── Persona Template.md
+    │   └── Identity Template.md
     ├── Islands/                # Islands of Personality — narrative layer only, never stores content
     │   └── {name}/             # 000-MOC.md + section notes, linking out to Long-Term/
     ├── Long-Term/              # Long-Term Memory — where the content pages live

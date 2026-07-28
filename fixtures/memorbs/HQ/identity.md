@@ -1,21 +1,29 @@
 ---
 title: HQ Identity
-updated: 2026-07-25
+updated: 2026-07-28
 ---
 
-# 🧑 使用者身分
+# 🧑 User Identity & Profile
 
-## 基本資料
-- 姓名：（範例）Josuho
-- 生日：（未提供）
-- 學經歷：
-  - 2026–至今　Engineering Lead / Architect @ AcmeCorp
+## Basic Information
+- **Name**: Josuho
+- **Contact**: josuho@example.com
 
-## 目前角色與目標
-- **User Role**: Engineering Lead / Architect
+## Role & Strategic Goals
+- **Current Title**: Engineering Lead / Architect
+- **Organization**: [[memorbs/Long-Term/Orgs/AcmeCorp|AcmeCorp]]
 - **Mission**: Build scalable, high-impact cognitive agent memory systems and personal knowledge vaults.
-- **Key Focus**: Architectural purity, agent-agnostic portability, library science MUSTY linting.
+- **Key Objectives**:
+  - Maintain architectural purity and agent-agnostic portability.
+  - Implement library science MUSTY linting for long-term memory maintenance.
 
-## 關鍵關係
-- **Alex**（Senior Engineer）— [[memorbs/Long-Term/People/Alex|Alex]]
-- **AcmeCorp**（Organization）— [[memorbs/Long-Term/Orgs/AcmeCorp|AcmeCorp]]
+## Background & Career Timeline
+- **2026–Present**: Engineering Lead / Architect @ [[memorbs/Long-Term/Orgs/AcmeCorp|AcmeCorp]]
+
+## Self-Descriptive Labels & Traits
+- **MBTI / Cognitive Type**: INTJ
+- **Core Strengths**: Systems architecture, deep focus, library science modeling.
+
+## Key Relationships
+- **[[memorbs/Long-Term/People/Alex|Alex]]** (Senior Engineer)
+- **[[memorbs/Long-Term/Orgs/AcmeCorp|AcmeCorp]]** (Organization)
