@@ -198,16 +198,6 @@ Long-Term memory starts with three shelves — People, Projects, Orgs — and gr
     └── log/{YYYY-MM}.md        # Archived periods, rotated by dream-studio
 ```
 
-That single boundary is deliberate. The moment a tool says "I'll write to your reference folder if you have one", the same command behaves three different ways depending on what you happened to name things. Reading is safe; conditional writing is not.
-
-Islands and Long-Term are deliberately split: Islands narrate a domain, Long-Term stores its pages, and wiki-links connect the two — mirroring how a mind keeps its Islands of Personality separate from the shelves of Long-Term Memory. There is no separate Resources folder: an island is a domain of responsibility *or interest*, so reference notes are simply orbs hanging off the island they belong to.
-
-Raw material — a transcript, a PDF, a scanned card — lives inside its orb's own folder, so archiving the orb carries the source with it. Documents only; audio and video stay outside the vault.
-
-**`log.md` is the timeline, and it does real work.** Entity pages are living documents with no per-event dates, and OrbTrack is emptied by design — so neither can answer "what was going on that month". The log can, which is why every state-changing action appends an entry, and why each entry carries a *signal* line: the user's own words for something that mattered but wasn't yet shaped enough to become an orb. That residue is what `dream-studio` replays, and it's where beliefs come from.
-
-Circulation metadata (`last_recalled`, `recall_count`, `aliases: [...]`) is backfilled silently on every query, giving you alias mapping and decay metrics visible right in your `memorbs/Long-Term/` pages rather than hidden in an index.
-
 ### The distillation pipeline
 
 ```text
@@ -234,16 +224,6 @@ Step 5: Evaluate  ← dream-studio, monthly, replaying log.md
 ```
 
 Steps 1–4 run continuously as you work. Step 5 runs monthly and is the only one that touches who you are.
-
----
-
-## 📖 Story & Vision
-
-Most AI agents live in the moment — losing context the second a session ends, or drowning in unorganized chat logs.
-
-memOrb was born from a realization borrowed from cinema: *our memories aren't flat storage logs; they are vibrant universes composed of core experiences, evolving values, and structured islands of responsibility.*
-
-Task trackers capture what you did. Journals capture how you felt. Neither connects the two, so long stretches of hard work can leave you productive and unrecognizable to yourself. By bridging task performance with personal values, memOrb aims to help you reach complex goals without losing your core identity — growing into a more complete, self-aware person rather than just a better-organized one.
 
 ---
 
