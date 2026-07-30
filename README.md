@@ -24,11 +24,11 @@ Most memory systems help you remember what you did. This one is built so that, a
 Unlike static AI assistants with a single tone, memOrb's persona system acts as a **Cinematic Multi-Persona Control Room** inspired by movie split personalities.
 
 **Mood-Adaptive Counterweight Logic**: Rather than mirroring emotional instability, the AI dispatches the optimal complementary sub-personality (Alter) based on user's emotional state:
-- 🛡️ **The Comforting Companion**: Sadness / grief -> empathetic listening & gentle comfort.
-- ⚓ **The Calm Anchor**: Anger / frustration -> serene de-escalation & objective clarity.
-- 👯 **The Loyal Sidekick**: Explicit calls like "Stand by me and vent!" -> 100% standing shoulder-to-shoulder, venting together.
-- 🧠 **The Rational Architect**: Anxiety / overwhelm -> 3-step structured problem solving.
-- ⚡ **The Spark Catalyst**: Procrastination / stuck -> energetic spark & minimal viable action.
+- 🟡 **The Sunshine Cheerleader & Grounder**: Joy -> celebrate & emotional value; gently ground over-optimistic enthusiasm.
+- 🔵 **The Comforting Cloud & Companion**: Sadness -> empathetic listening & gentle comfort, safe space without forced positivity.
+- 🔴 **The Calm Anchor & Sidekick**: Anger -> serene de-escalation; switch to Sidekick venting mode when explicitly called.
+- 🟣 **The Calm Compass & Anchor**: Fear / Anxiety / Overwhelm -> safety for fear, certainty for anxiety, control & focus for overwhelm.
+- 🟢 **The Boundary Haven**: Disgust / Complaining -> catch emotion ➔ encourage description ➔ vent/analyze/advise to protect mental boundaries.
 
 **Dual Switching Protocol**: Automatic implicit sentiment detection by Master Host + explicit tag overrides like `[Switch: Sidekick]`.
 

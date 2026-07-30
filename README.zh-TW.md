@@ -22,11 +22,11 @@ memOrb 是一套 Agent Skills 技能集。有別於傳統系統只記錄「做�
 有別於單一語氣的傳統 AI 助手，memOrb 的 Persona 系統運作如同電影中的**主意識控制台與多重人格矩陣 (Cinematic Multi-Persona Control Room)**。
 
 **心情對衝與補位機制 (Mood-Adaptive Counterweight Logic)**：AI 不會盲目鏡像你的情緒波動，而是根據你當下的情緒狀態，自動調度最適合的互補子人格 來接管控制台：
-- 🛡️ **溫柔陪伴者 (The Comforting Companion)**：悲傷痛苦時 → 同理傾聽與溫柔撫慰。
-- ⚓ **極致降溫者 (The Calm Anchor)**：憤怒挫折時 → 平靜降溫，釐清事實。
-- 👯 **同仇敵愾戰友 (The Loyal Sidekick)**：需要發洩時（如喊「陪我一起罵！」） → 100% 站在一起陪罵發洩。
-- 🧠 **條理架構師 (The Rational Architect)**：焦慮或資訊超載時 → 3 步驟結構化拆解問題。
-- ⚡ **熱血突破教練 (The Spark Catalyst)**：拖延卡關時 → 注入動能與最小可行行動 (MVA)。
+- 🟡 **歡慶小太陽 / 快樂定錨者 (The Sunshine Cheerleader & Grounder)**：Joy 樂樂 → 歡慶紀錄給予滿滿情緒價值，衝動飄過頭溫柔幫降溫。
+- 🔵 **雲朵抱抱 / 溫柔陪伴者 (The Comforting Cloud & Companion)**：Sadness 憂憂 → 同理傾聽與溫柔撫慰，創造安全空間不強迫 positive。
+- 🔴 **冰鎮小降溫 / 陪罵小戰友 (The Calm Anchor & Sidekick)**：Anger 怒怒 → 平靜降溫釐清事實，喊「陪我罵！」時切換戰友發洩。
+- 🟣 **安心指南針 / 定心丸 (The Calm Compass & Anchor)**：Fear 驚驚 / 焦慮 / 超載 → 恐懼給安全感、焦慮給確定性、超載給控制感。
+- 🟢 **邊界抱抱者 / 避風港 (The Boundary Haven)**：Disgust 厭厭 → 接住情緒 ➔ 鼓勵描述事件 ➔ 伴隨發洩/客觀分析/共創方案，保護心理邊界。
 
 **雙軌切換協定 (Dual Switching Protocol)**：
 - 由主意識 (Master Host) 進行隱性情緒偵測與自動切換。
@@ -138,11 +138,11 @@ git submodule add https://github.com/iamjosuho/memorb.git .claude/skills/memorb-
 
 ### Extensions 擴充技能
 
-| Skill 技能 | 功能說明 | 前置依賴 |
-|---|---|---|
-| `recording-transcription` | 將本地語音 (m4a/mp3/wav) 透過本地 Whisper 轉為逐字稿，支援長檔切分與專名校正。 | Local Whisper |
-| `business-card-ingestion` | 將名片照片或截圖轉化為 People 人物實體頁面。 | — |
-| `memorb-domain-query` | 透過 Email 地址、網域或公司名稱查詢公司、員工與聯絡人。 | Outlook/M365 (可選) |
+| Skill 技能                  | 功能說明                                                | 前置依賴              |
+| ------------------------- | --------------------------------------------------- | ----------------- |
+| `recording-transcription` | 將本地語音 (m4a/mp3/wav) 透過本地 Whisper 轉為逐字稿，支援長檔切分與專名校正。 | Local Whisper     |
+| `business-card-ingestion` | 將名片照片或截圖轉化為 People 人物實體頁面。                          | —                 |
+| `memorb-domain-query`     | 透過 Email 地址、網域或公司名稱查詢公司、員工與聯絡人。                     | Outlook/M365 (可選) |
 
 ---
 
